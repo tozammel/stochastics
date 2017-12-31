@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'sc'
 version = '7.0'
@@ -37,3 +38,7 @@ dependencies {
     compile group: 'junit', name: 'junit', version:'4.12'
     compile group: 'org.apache.commons', name: 'commons-math3', version:'3.6'
 }
+
+repositories {
+  mavenLocal()
+  }
