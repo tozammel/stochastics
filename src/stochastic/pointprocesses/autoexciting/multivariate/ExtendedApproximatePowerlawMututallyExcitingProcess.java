@@ -13,6 +13,8 @@ import java.io.IOException;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 
+import fastmath.DoubleColMatrix;
+import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess;
@@ -156,7 +158,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     {
       return 1;
     }
-    return m < M ? 1 / (τ.get(m) * pow(base, m)) : βS(j);
+    return m < M ? 1 / (τ.get(m) * pow(base, j)) : βS(j);
 
   }
 
@@ -305,6 +307,34 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
          λvector()
   {
     throw new UnsupportedOperationException("TODO");
+  }
+
+  public DoubleMatrix
+         getαMatrix(int j)
+  {
+    DoubleColMatrix alpha = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        alpha.set(m, n, α(j, m, n));
+      }
+    }
+    return alpha.setName("α" + j);
+  }
+
+  public DoubleMatrix
+         getβMatrix(int j)
+  {
+    DoubleColMatrix β = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        β.set(m, n, β(j, m, n));
+      }
+    }
+    return β.setName("β" + j);
   }
 
 }
