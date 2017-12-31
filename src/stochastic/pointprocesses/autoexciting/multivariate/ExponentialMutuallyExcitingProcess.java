@@ -30,7 +30,6 @@ import java.util.function.IntToDoubleFunction;
 import java.util.function.Supplier;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.integration.LegendreGaussIntegrator;
 import org.apache.commons.math3.analysis.solvers.BrentSolver;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.optim.MaxEval;
@@ -46,7 +45,6 @@ import fastmath.DoubleColMatrix;
 import fastmath.EigenDecomposition;
 import fastmath.Pair;
 import fastmath.Vector;
-import fastmath.VectorContainer;
 import fastmath.exceptions.FastMathException;
 import fastmath.exceptions.IllegalValueError;
 import fastmath.exceptions.SingularFactorException;
@@ -235,7 +233,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       for (int tk = 1; tk < n; tk++)
       {
         double t = T.get(tk);
-        double prevdt = tk == 1 ? 0 : (T.get(tk - 1) - T.get(tk - 2));
         double dt = t - T.get(tk - 1);
         double λ = evolveλ(type, dt, S);
 
@@ -454,7 +451,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return sum(k -> {
       double β = β(j, m, n);
       double dt = Tmi - T(n, k);
-      double e = exp(-β * dt);      
+      double e = exp(-β * dt);
       out.format("k=%d β=%f dt=%f e=%f\n", k, β, dt, e);
       return e;
     }, 0, l);
@@ -967,11 +964,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   }
 
-  private VectorContainer tmp5 = new VectorContainer();
-
   private ExponentialDistribution expDist = new ExponentialDistribution(1);
-
-  private final LegendreGaussIntegrator integrator = new LegendreGaussIntegrator(5, pow(10, -5), pow(10, -5));
 
   private int predictionIntegrationLimit = 25;
 
@@ -980,8 +973,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     return dim;
   }
-
-  private double lastInitialLambda2Guess = 0.0;
 
   private Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
 

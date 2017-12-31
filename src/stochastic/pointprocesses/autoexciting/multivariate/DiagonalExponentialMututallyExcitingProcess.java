@@ -114,7 +114,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
     for (int i = 1; i < n; i++)
     {
       double t = T.get(i);
-      double prevdt = i == 1 ? 0 : (T.get(i - 1) - T.get(i - 2));
       double dt = t - T.get(i - 1);
       λ.set(i, evolveλ(type, dt, S));
     }
