@@ -82,7 +82,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   /**
    * choose m such that m^M=1 minute, in milliseconds
    */
-  public double m = exp(log(60000) / M);
+  public double base = exp(log(60000) / M);
 
   public Vector dT;
 
@@ -133,19 +133,17 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
               int m,
               int n)
   {
-    assert j < dim() : format("i=%d j=%d k=%d order=%d dim=%d\n", m, j, n, order(), dim());
-
-    if (j != n)
+    if (m != n)
     {
       return 0;
     }
-    if (m == M)
+    if (j == M)
     {
-      return αS(j);
+      return αS(m);
     }
-    double τj = τ.get(j);
-    double εj = ε.get(j);
-    return pow(1 / (τj * pow(m, m)), 1 + εj);
+    double τdiag = τ.get(m);
+    double εdiag = ε.get(m);
+    return pow(1 / (τdiag * pow(base, j)), 1 + εdiag);
   }
 
   @Override
@@ -163,15 +161,15 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   }
 
   public double
-         αS(int j)
+         αS(int m)
   {
-    return b.get(j);
+    return b.get(m);
   }
 
   public double
-         βS(int j)
+         βS(int m)
   {
-    return 1 / τ.get(j);
+    return 1 / τ.get(m);
   }
 
   @Override
@@ -185,14 +183,14 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
          getαβString()
   {
     StringBuilder sb = new StringBuilder();
-    sb.append("{Z=" + Z());
-    for (int i = 0; i < order(); i++)
+    sb.append("{");
+    for (int j = 0; j < order(); j++)
     {
-      for (int j = 0; j < dim(); j++)
+      for (int m = 0; m < dim(); m++)
       {
-        for (int k = 0; k < dim(); k++)
+        for (int n = 0; n < dim(); n++)
         {
-          sb.append(format(", alpha[%d,%d,%d]=%s, beta[%d,%d,%d]=%s", i + 1, j + 1, k + 1, α(i, j, k), i + 1, j + 1, k + 1, β(i, j, k)));
+          sb.append(format(", alpha[%d,%d,%d]=%s, beta[%d,%d,%d]=%s", j + 1, m + 1, n + 1, α(j, m, n), j + 1, m + 1, n + 1, β(j, m, n)));
         }
       }
     }

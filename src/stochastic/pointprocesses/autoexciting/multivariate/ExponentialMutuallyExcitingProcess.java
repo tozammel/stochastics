@@ -446,19 +446,25 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
               int n,
               int i)
   {
-    if (i < 0)
-    {
-      return 0;
-    }
+    assert i >= 0;
     double Tmi = T(m, i);
-    return sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), 0, N(j, Tmi) - 1);
+    int l = N(n, Tmi) - 1;
+    out.printf("T(m=%d,i=%d)=%f\n", m, i, Tmi);
+    out.printf("N(n=%d,t=%f)=%d\n", n, Tmi, l);
+    return sum(k -> {
+      double β = β(j, m, n);
+      double dt = Tmi - T(n, k);
+      double e = exp(-β * dt);      
+      out.format("k=%d β=%f dt=%f e=%f\n", k, β, dt, e);
+      return e;
+    }, 0, l);
   }
 
   /**
    * counting function for the number of events of a specified type and occuring
    * before a specified time
    * 
-   * @param m
+   * @param base
    *          of event, integer in [0,dim)
    * @param t
    * 
@@ -490,7 +496,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     return val;
   }
-
 
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}
