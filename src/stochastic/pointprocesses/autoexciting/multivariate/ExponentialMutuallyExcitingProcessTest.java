@@ -11,7 +11,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.ε.set(new double[]
-    { 0, 0.3 });
+    { 0.01, 0.02 });
     out.println(process.getαβString());
     out.println();
 
