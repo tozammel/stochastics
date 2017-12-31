@@ -152,11 +152,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
               int m,
               int n)
   {
-    if (j != n)
+    if (m != n)
     {
       return 1;
     }
-    return m < M ? 1 / (τ.get(j) * pow(m, m)) : βS(j);
+    return m < M ? 1 / (τ.get(m) * pow(base, m)) : βS(j);
 
   }
 
