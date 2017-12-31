@@ -41,7 +41,6 @@ import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.commons.math3.random.RandomVectorGenerator;
-import org.arblib.Real;
 
 import fastmath.DoubleColMatrix;
 import fastmath.EigenDecomposition;
@@ -221,8 +220,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
   private double[][][] A;
-
-  private Real[][][] AReal;
 
   public final double
          logLik()
@@ -494,24 +491,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return val;
   }
 
-  public Real
-         AReal(int type,
-               int tk,
-               int j)
-  {
-    assert 0 <= type && type < dim() : format("type=%d tk=%d j=%d val=%d dim=%d order=%d\n", type, tk, j, dim(), order());
-    if (AReal == null)
-    {
-      AReal = new Real[dim()][T.size()][order()];
-    }
-    Real val = AReal[type][tk][j];
-    if (val == null)
-    {
-      val = tk == 0 ? Real.ONE : (Real.ONE.add((exp(-β(j, type, type) * (T.get(tk) - T.get(tk - 1))) * A(type, tk - 1, j))));
-      AReal[type][tk][j] = val;
-    }
-    return val;
-  }
 
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}

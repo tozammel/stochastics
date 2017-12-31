@@ -1,12 +1,9 @@
 package stochastic.pointprocesses.autoexciting;
 
-import static fastmath.Functions.realSum;
 import static fastmath.Functions.sum;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
-
-import org.arblib.Real;
 
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
@@ -76,26 +73,12 @@ public class ApproximatePowerlawAutoExcitingProcess extends ExponentialAutoExcit
     return pow(τ * pow(m, i), -(1 + ε));
   }
 
-  public Real
-         αReal(int i)
-  {
-    // Real copy = new Real(α(i));
-    Real hmm = new Real(τ).mul(new Real(m).pow(i)).pow(Real.ONE.add(new Real(ε)).neg());
-    return hmm;
-    // return new Real(α(i));
-  }
 
   @Override
   public double
          β(int i)
   {
     return τ * pow(m, -i);
-  }
-
-  public Real
-         βReal(int i)
-  {
-    return (i == 0 && τ == 1) ? Real.ONE : new Real(τ).div(new Real(m).pow(new Real(i)));
   }
 
   final public int M = 15;
@@ -129,13 +112,6 @@ public class ApproximatePowerlawAutoExcitingProcess extends ExponentialAutoExcit
          Z()
   {
     return sum(j -> α(j) / β(j), 0, order() - 1);
-  }
-
-  @Override
-  public Real
-         ZReal()
-  {
-    return realSum(j -> αReal(j).div(βReal(j)), 0, order() - 1);
   }
 
   @Override

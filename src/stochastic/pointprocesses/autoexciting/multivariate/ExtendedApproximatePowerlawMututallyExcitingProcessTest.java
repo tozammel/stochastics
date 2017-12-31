@@ -7,8 +7,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-import org.arblib.Real;
-
 import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
@@ -111,7 +109,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
           {
             double a = process.Asum(j, m, n, tk);
             double b = process.A(m, tk, j);
-            Real c = process.AReal(m, tk, j);
             double d = process.B(m, tk, j);
             // out.println("a=" + a + " b=" + b + " c=" + c + " d=" + d);
             assertEquals(a, b, 1E-14);
