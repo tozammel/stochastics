@@ -446,13 +446,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     assert i >= 0;
     double Tmi = T(m, i);
     int l = N(n, Tmi) - 1;
-    out.printf("T(m=%d,i=%d)=%f\n", m, i, Tmi);
-    out.printf("N(n=%d,t=%f)=%d\n", n, Tmi, l);
+
     return sum(k -> {
       double β = β(j, m, n);
       double dt = Tmi - T(n, k);
       double e = exp(-β * dt);
-      out.format("k=%d β=%f dt=%f e=%f\n", k, β, dt, e);
+      if (trace)
+      {
+        out.format("k=%d β=%f dt=%f e=%s\n", k, β, dt, e);
+      }
       return e;
     }, 0, l);
   }
@@ -1174,4 +1176,16 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       throw new UnsupportedOperationException("TODO: " + type);
     }
   }
+
+  /**
+   * 
+   * @param m
+   * @return number of time points in the m-th dimension
+   */
+  public int
+         N(int m)
+  {
+    return getTimes(m).size();
+  }
+
 }
