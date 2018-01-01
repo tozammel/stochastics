@@ -158,7 +158,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     {
       return 1;
     }
-    return m < M ? 1 / (τ.get(m) * pow(base, j)) : βS(j);
+    return j < M ? 1 / (τ.get(m) * pow(base, j)) : βS(m);
 
   }
 
@@ -168,10 +168,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return b.get(m);
   }
 
-  public double
+  public final double
          βS(int m)
   {
-    return 1 / τ.get(m);
+    return 1 / η.get(m);
   }
 
   @Override
@@ -320,7 +320,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
         alpha.set(m, n, α(j, m, n));
       }
     }
-    return alpha.setName("α" + j);
+    return alpha.setName("α[" + j + "]");
   }
 
   public DoubleMatrix
@@ -334,7 +334,21 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
         β.set(m, n, β(j, m, n));
       }
     }
-    return β.setName("β" + j);
+    return β.setName("β[" + j + "]");
+  }
+
+  public DoubleMatrix
+         getαβMatrix(int j)
+  {
+    DoubleColMatrix αβ = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        αβ.set(m, n, α(j, m, n) / β(j, m, n));
+      }
+    }
+    return αβ.setName("(α/β)[" + j + "]");
   }
 
 }

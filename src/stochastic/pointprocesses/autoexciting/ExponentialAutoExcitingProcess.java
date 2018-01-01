@@ -157,6 +157,12 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     return new Vector(seq(this::β, 0, order() - 1));
   }
 
+  public Vector
+         getαβVector()
+  {
+    return new Vector(seq((IntToDoubleFunction) k -> α(k) / β(k), 0, order() - 1));
+  }
+
   /**
    * product(j -> j == k ? α(j) : β(j), 0, order() - 1)
    * 
