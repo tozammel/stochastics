@@ -156,6 +156,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          T(int m,
            int i)
   {
+    assert i >= 0 : "t cannot be negative";
     assert m < dim() : "m=" + m + " >= dim";
 
     return getSubTimes().left[m].get(i);
@@ -217,7 +218,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
-  private double[][][] A;
+  private double[][][][] A;
 
   public final double
          logLik()
@@ -374,12 +375,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Λ(int type)
   {
 
-    final int n = N(type) - 1;
+    final int n = N(type);
 
     Vector compensator = new Vector(n).setName("Λ" + type);
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
-      compensator.set(i, Λ(type, i));
+      compensator.set(i - 1, Λ(type, i));
     }
 
     return compensator;
@@ -426,15 +427,16 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     assert lowerTimeIndex != null;
     assert upperTimeIndex != null;
     double interim = sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
-    return α(j, m, n) / β(j, m, n) * (1 - exp(-β * (upperTime - lowerTime))) * A(m, i, j) + interim;
+    return α(j, m, n) / β(j, m, n) * (1 - exp(-β * (upperTime - lowerTime))) * A(j, m, n, i) + interim;
   }
 
   public double
-         B(int type,
-           int tk,
-           int j)
+         B(int j,
+           int m,
+           int n,
+           int i)
   {
-    return A(type, tk, j) - 1;
+    return A(j, m, n, i) - 1;
   }
 
   public double
@@ -447,7 +449,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     double Tmi = T(m, i);
     int l = N(n, Tmi) - 1;
 
-    return sum(k -> {
+    return 1 + sum(k -> {
       double β = β(j, m, n);
       double dt = Tmi - T(n, k);
       double e = exp(-β * dt);
@@ -478,20 +480,27 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         A(int m,
-           int tk,
-           int j)
+         A(int j,
+           int m,
+           int n,
+           int i)
   {
-    assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, tk, j, dim(), order());
+    assert j < order();
+    assert m < dim();
+    assert n < dim();
+    assert i < N(m);
+
+    assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
     if (A == null)
     {
-      A = new double[dim()][T.size()][order()];
+      A = new double[dim()][dim()][T.size()][order()];
     }
-    double val = A[m][tk][j];
+    double val = A[m][n][i][j];
     if (val == 0)
     {
-      val = tk == 0 ? 1 : (1 + (exp(-β(j, m, m) * (T.get(tk) - T.get(tk - 1))) * A(m, tk - 1, j)));
-      A[m][tk][j] = val;
+      double interaction = sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), N(n, T(m, i - 1)), N(n, T(m, 1)));
+      val = i == 0 ? 1 : (interaction + (exp(-β(j, m, n) * (T(m, i) - T(m, i - 1))) * A(j, m, n, i - 1)));
+      A[m][n][i][j] = val;
     }
     return val;
   }

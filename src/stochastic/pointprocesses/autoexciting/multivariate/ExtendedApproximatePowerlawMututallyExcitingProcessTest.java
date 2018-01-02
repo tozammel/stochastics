@@ -108,11 +108,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
           for (int j = 0; j < process.order(); j++)
           {
             double a = process.Asum(j, m, n, tk);
-            double b = process.A(m, tk, j);
-            double d = process.B(m, tk, j);
+            double b = process.A(j, m, n, tk);
+            double d = process.B(j, m, n, tk);
             // out.println("a=" + a + " b=" + b + " c=" + c + " d=" + d);
-            assertEquals(a, b, 1E-14);
-            assertEquals(a, 1 + d, 1E-14);
+            assertEquals(a, b, 1E-8);
+            assertEquals(a, 1 + d, 1E-8);
           }
         }
       }
