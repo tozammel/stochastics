@@ -399,23 +399,23 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     assert 0 <= m;
     assert m < dim();
-    return sum(n -> sum(j -> V(m, n, j, tk), 0, order() - 1), 0, dim() - 1);
+    return sum(n -> sum(j -> V(j, m, n, tk), 0, order() - 1), 0, dim() - 1);
   }
 
   /**
    * 
+   * @param j
    * @param m
    * @param n
-   * @param j
    * @param i
    * @return α(j, m, n) / β(j, m, n) * (1 - e^(-β * (T(m,i) - T(m,i-1)))) * A(m,
    *         i, j) + sum(k -> 1 - e^(-β * (T(m, i) - T(n, k))), N(T(m,i-1)),
    *         N(T(m,i)))
    */
   public double
-         V(int m,
+         V(int j,
+           int m,
            int n,
-           int j,
            int i)
   {
     final double β = β(m, n, j);
@@ -575,7 +575,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         subTimeIndices.put(subTimes.get(j), j);
       }
-      timeVectors[i] = new Vector(timesSub[i]);
+      timeVectors[i] = new Vector(timesSub[i]).setName("T[" + i + "]");
     }
     cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
 

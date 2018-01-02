@@ -148,19 +148,19 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public Vector
          getαVector()
   {
-    return new Vector(seq(this::α, 0, order() - 1));
+    return new Vector(seq(this::α, 0, order() - 1)).setName("α");
   }
 
   public Vector
          getβVector()
   {
-    return new Vector(seq(this::β, 0, order() - 1));
+    return new Vector(seq(this::β, 0, order() - 1)).setName("β");
   }
 
   public Vector
          getαβVector()
   {
-    return new Vector(seq((IntToDoubleFunction) k -> α(k) / β(k), 0, order() - 1));
+    return new Vector(seq((IntToDoubleFunction) k -> α(k) / β(k), 0, order() - 1)).setName("α/β");
   }
 
   /**

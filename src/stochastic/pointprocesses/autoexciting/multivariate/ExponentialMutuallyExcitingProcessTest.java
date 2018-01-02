@@ -13,6 +13,19 @@ import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExc
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
+  
+  public void testN()
+  {
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+   
+    assertEquals( 0, process.N(0, 24) );
+    assertEquals( 1, process.N(0, 26) );
+    assertEquals( 1, process.N(0, 91) );
+    assertEquals( 2, process.N(0, 91.01) );
+    assertEquals( 0, process.N(1, 91) );
+    assertEquals( 3, process.N(1, 168) );
+  }
+  
   public void
          testA()
   {
@@ -21,22 +34,26 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.ε.set(new double[]
     { 0.0, 0.02 });
-    out.println(process.getαβString());
-    out.println();
 
+    out.println(uniprocess);
     out.println(uniprocess.getαVector().toString());
     out.println(uniprocess.getβVector().toString());
-    Vector αβvector = uniprocess.getαβVector();
-    out.println(αβvector.toString());
+    out.println(uniprocess.getαβVector());
 
     uniprocess.ε = 0.02;
     out.println();
 
+    out.println(uniprocess);
     out.println(uniprocess.getαVector().toString());
     out.println(uniprocess.getβVector().toString());
-    out.println(αβvector.toString());
+    out.println(uniprocess.getαβVector());
+    out.println();
 
-    out.println("T=" + Arrays.toString(process.getSubTimes().left));
+    for (Vector typeTimes : process.getSubTimes().left)
+    {
+      out.println(typeTimes);
+
+    }
 
     for (int j = 0; j < process.order(); j++)
     {
