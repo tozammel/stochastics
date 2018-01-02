@@ -156,10 +156,11 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          T(int m,
            int i)
   {
-    assert i >= 0 : "t cannot be negative";
+    assert i >= 0 : "t cannot be negative, was " + i;
     assert m < dim() : "m=" + m + " >= dim";
-
-    return getSubTimes().left[m].get(i);
+    Vector Tm = getSubTimes().left[m];
+    assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
+    return Tm.get(i);
   }
 
   public double
@@ -168,11 +169,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     double Tm = lastT(m);
 
-    double vol = sum(j -> sum(n -> {
-      double β = β(m, n, j);
-      out.println(format("β(m=%d,n=%d,j=%d)=%f", m, n, j, β));
-      return β;
-    }, 0, dim() - 1), 0, order() - 1);
+    double vol = sum(j -> sum(n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
 
     double measure = (dt + Tm) * vol;
     out.println("vol=" + vol + " dt=" + dt + " Tm=" + Tm + " measure=" + measure);
@@ -446,9 +443,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
               int i)
   {
     assert i >= 0;
+    if (i == 0)
+    {
+      return 0;
+    }
     double Tmi = T(m, i);
-    int l = N(n, Tmi) - 1;
-
+    int l = Nopen(n, Tmi) - 1;
     return 1 + sum(k -> {
       double β = β(j, m, n);
       double dt = Tmi - T(n, k);
@@ -461,24 +461,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }, 0, l);
   }
 
-  /**
-   * counting function for the number of events of a specified type and occuring
-   * before a specified time
-   * 
-   * @param base
-   *          of event, integer in [0,dim)
-   * @param t
-   * 
-   * @return number of events of type m before time t
-   */
-  public int
-         N(int type,
-           double t)
-  {
-    Entry<Double, Integer> entry = getSubTimes().right[type].lowerEntry(t);
-    return entry == null ? 0 : (entry.getValue() + 1);
-  }
-
   public double
          A(int j,
            int m,
@@ -489,20 +471,66 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     assert m < dim();
     assert n < dim();
     assert i < N(m);
-
     assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
+
     if (A == null)
     {
       A = new double[dim()][dim()][T.size()][order()];
     }
+    if (i == 0)
+    {
+      A[m][n][i][j] = 0;
+      return 0;
+    }
     double val = A[m][n][i][j];
     if (val == 0)
     {
-      double interaction = sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), N(n, T(m, i - 1)), N(n, T(m, 1)));
-      val = i == 0 ? 1 : (interaction + (exp(-β(j, m, n) * (T(m, i) - T(m, i - 1))) * A(j, m, n, i - 1)));
+      double Tmi = T(m, i);
+      double Tmi1 = T(m, i - 1);
+      int startIndex = Nopen(n, Tmi1);
+      int endIndex = Nopen(n, Tmi) - 1;
+
+      double interaction = 1 + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      val = interaction + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j, m, n, i - 1));
       A[m][n][i][j] = val;
     }
     return val;
+  }
+
+  /**
+   * counting function for the number of events of a specified type and occuring
+   * *strictly before* a specified time
+   * 
+   * @param base
+   *          of event, integer in [0,dim)
+   * @param t
+   * 
+   * @return number of events of type m before time t
+   */
+  public int
+         Nopen(int type,
+               double t)
+  {
+    Entry<Double, Integer> entry = getSubTimes().right[type].lowerEntry(t);
+    return entry == null ? 0 : (entry.getValue() + 1);
+  }
+
+  /**
+   * counting function for the number of events of a specified type and occuring
+   * at or before a specified time
+   * 
+   * @param base
+   *          of event, integer in [0,dim)
+   * @param t
+   * 
+   * @return number of events of type m before time t
+   */
+  public int
+         Nclosed(int type,
+                 double t)
+  {
+    Entry<Double, Integer> entry = getSubTimes().right[type].floorEntry(t);
+    return entry == null ? 0 : (entry.getValue() + 1);
   }
 
   /**

@@ -18,12 +18,12 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
    
-    assertEquals( 0, process.N(0, 24) );
-    assertEquals( 1, process.N(0, 26) );
-    assertEquals( 1, process.N(0, 91) );
-    assertEquals( 2, process.N(0, 91.01) );
-    assertEquals( 0, process.N(1, 91) );
-    assertEquals( 3, process.N(1, 168) );
+    assertEquals( 0, process.Nopen(0, 24) );
+    assertEquals( 1, process.Nopen(0, 26) );
+    assertEquals( 1, process.Nopen(0, 91) );
+    assertEquals( 2, process.Nopen(0, 91.01) );
+    assertEquals( 0, process.Nopen(1, 91) );
+    assertEquals( 3, process.Nopen(1, 168) );
   }
   
   public void
