@@ -78,7 +78,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
 
       out.println("y=" + y + " dt=" + dt + " q=" + q);
       out.flush();
-      assertEquals(y, q, 1E-14);
+      assertEquals(y, q, 1E-10);
     }
   }
 
