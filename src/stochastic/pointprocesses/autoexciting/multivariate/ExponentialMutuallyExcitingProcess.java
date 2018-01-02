@@ -374,15 +374,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Λ(int type)
   {
 
-    final int n = T.size() - 1;
+    final int n = N(type) - 1;
 
-    Vector compensator = new Vector(n);
+    Vector compensator = new Vector(n).setName("Λ" + type);
     for (int i = 0; i < n; i++)
     {
       compensator.set(i, Λ(type, i));
     }
 
-    return compensator.setName("Λ" + type);
+    return compensator;
 
   }
 
@@ -550,6 +550,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public Pair<Vector[], TreeMap<Double, Integer>[]>
          getSubTimes()
   {
+    assert T.size() == K.size();
     if (cachedSubTimes != null)
     {
       return cachedSubTimes;
@@ -565,7 +566,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     for (int i = 0; i < T.size(); i++)
     {
-      timesSub[K.get(i)].add(T.get(i));
+      int k = K.get(i);
+      assert k >= 0;
+      assert k < dim();
+      timesSub[k].add(T.get(i));
     }
     for (int i = 0; i < dim(); i++)
     {

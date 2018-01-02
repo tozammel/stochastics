@@ -159,12 +159,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testInvLambda()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     // process.ε = 0.05;
-
-    process.T = new Vector(new double[]
-    { 65, 67, 86, 140, 141, 149, 151, 163, 201, 205 }).setName("T");
-    int n = process.T.size();
 
     // process.T = process.T.subtract(process.T.get(0));
     process.trace = false;
