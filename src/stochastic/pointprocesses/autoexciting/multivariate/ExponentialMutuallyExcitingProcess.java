@@ -468,8 +468,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int i)
   {
     assert j < order();
-    assert m < dim();
-    assert n < dim();
+    assert 0 <= n && n < dim();
     assert i < N(m);
     assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
 
