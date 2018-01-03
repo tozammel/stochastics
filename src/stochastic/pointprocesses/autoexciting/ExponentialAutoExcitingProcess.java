@@ -854,14 +854,22 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
          A(int tk,
            int j)
   {
+    assert tk >= 0;
     if (A == null)
     {
       A = new double[T.size()][order()];
     }
+    if (tk == 0)
+    {
+      A[tk][j] = 1;
+      return 1;
+    }
     double val = A[tk][j];
     if (val == 0)
     {
-      val = tk == 0 ? 1 : (1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A(tk - 1, j)));
+      val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A[tk - 1][j]);
+      // out.format("A[%d][%d]=%s\n", tk, j, val);
+      assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
       A[tk][j] = val;
     }
     return val;

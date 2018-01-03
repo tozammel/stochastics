@@ -89,26 +89,31 @@ public class ProcessSimulator
       // out.println("T=" + process.T.toIntVector());
       // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
       // process.T.size() - 1));
-      String msg = "i=" + i
-                   + " y="
-                   + y
-                   + " = q = "
-                   + q
-                   + " dt="
-                   + dt
-                   + " marginal="
-                   + marginalΛ
-                   + " Λmean="
-                   + process.Λ().mean()
-                   + " Λvar="
-                   + process.Λ().variance()
-                   + " nextTime="
-                   + nextTime
-                   + " Edt="
-                   + Edt;
+      if (i % 100 == 0)
+      {
+        String msg = "i=" + i
+                     + " y="
+                     + y
+                     + " = q = "
+                     + q
+                     + " dt="
+                     + dt
+                     + " marginal="
+                     + marginalΛ
+                     + " Λmean="
+                     + process.Λ().mean()
+                     + " Λvar="
+                     + process.Λ().variance()
+                     + " nextTime="
+                     + nextTime
+                     + " Edt="
+                     + Edt;
+        out.println(msg);
+
+      }
+
       // String msg = "i=" + i + " y=" + y + " = q = " + q + " dt=" + dt + " dtReal="
       // + dtReal + " dtRealFpValue=" + dtRealFpValue + " nextTime=" + nextTime;
-      out.println(msg);
       if (abs(y - q) > 1E-8)
       {
         out.println(ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
