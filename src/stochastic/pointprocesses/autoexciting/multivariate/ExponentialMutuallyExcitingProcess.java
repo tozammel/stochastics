@@ -475,14 +475,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     if (A == null)
     {
-      A = new double[dim()][dim()][T.size()][order()];
+      A = new double[order()][dim()][dim()][T.size()];
     }
     if (i == 0)
     {
-      A[m][n][i][j] = 0;
+      A[j][m][n][i] = 0;
       return 0;
     }
-    double val = A[m][n][i][j];
+    double val = A[j][m][n][i];
     if (val == 0)
     {
       double Tmi = T(m, i);
@@ -490,9 +490,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       int startIndex = Nopen(n, Tmi1);
       int endIndex = Nopen(n, Tmi) - 1;
 
-      double interaction = 1 + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
-      val = interaction + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j, m, n, i - 1));
-      A[m][n][i][j] = val;
+      double intersection = 1 + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
+      A[j][m][n][i] = val;
     }
     return val;
   }
