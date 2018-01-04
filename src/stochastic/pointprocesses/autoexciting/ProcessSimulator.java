@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
 
@@ -45,14 +46,22 @@ public class ProcessSimulator
                              InterruptedException
   {
 
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
-    // process.ε = 0.05;
-    process.T = new Vector(new double[]
-    { 1 });
-    process.dT = new Vector(new double[] {});
+    int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
+    rangeClosed(0, Runtime.getRuntime().availableProcessors()).parallel().forEach(thread -> {
+      ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+      // process.ε = 0.05;
+      process.T = new Vector(new double[]
+      { 1 });
+      process.dT = new Vector(new double[] {});
+      simulateProcess(process, seed + thread);
+    });
+  }
 
+  public static void
+         simulateProcess(ExtendedApproximatePowerlawAutoExcitingProcess process,
+                         int seed)
+  {
     int rejects = 0;
-    int seed = args.length > 0 ? Integer.valueOf(args[0]) : 2;
     ExponentialDistribution expDist = new ExponentialDistribution(new JDKRandomGenerator(seed), 1);
     out.println("simulating " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points with seed=" + seed);
     int n = process.T.size();
@@ -68,7 +77,10 @@ public class ProcessSimulator
         int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
         lastRejectedPoint = i;
         rejects++;
-        out.println(ansi().fgBrightRed() + "rejecting dt="
+        out.println("seed " + seed
+                    + ":"
+                    + ansi().fgBrightRed()
+                    + "rejecting dt="
                     + dt
                     + " for y="
                     + y
@@ -103,7 +115,9 @@ public class ProcessSimulator
       // process.T.size() - 1));
       if (i % 100 == 0)
       {
-        String msg = "i=" + i
+        String msg = "seed=" + seed
+                     + " i="
+                     + i
                      + " y="
                      + y
                      + " = q = "
@@ -128,13 +142,15 @@ public class ProcessSimulator
       // + dtReal + " dtRealFpValue=" + dtRealFpValue + " nextTime=" + nextTime;
       if (abs(y - q) > 1E-8)
       {
-        out.println(ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
+        out.println(seed + ":" + ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
         continue;
       }
 
     }
 
-    MatFile.write("simulated.mat", process.T.setName("T").createMiMatrix());
+    String fn = "simulated." + seed + ".mat";
+    MatFile.write(fn, process.T.setName("T").createMiMatrix());
+    out.println("write " + fn);
 
     //
     // double y = 0.9;
