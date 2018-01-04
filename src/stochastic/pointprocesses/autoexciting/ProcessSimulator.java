@@ -37,6 +37,8 @@ public class ProcessSimulator
     this.process = (AbstractAutoExcitingProcess) process;
   }
 
+  public static int lastRejectedPoint = -1;
+
   public static void
          main(String[] args) throws IOException,
                              CloneNotSupportedException,
@@ -55,7 +57,7 @@ public class ProcessSimulator
     out.println("simulating " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points with seed=" + seed);
     int n = process.T.size();
     double nextTime = 0;
-    for (int i = 0; i < 280000; i++)
+    for (int i = 0; i < 500000; i++)
     {
       double y = expDist.sample();
       process.trace = false;
@@ -63,8 +65,18 @@ public class ProcessSimulator
       double dt = process.invΛ(y);
       if (dt > 10000)
       {
+        int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
+        lastRejectedPoint = i;
         rejects++;
-        out.println(ansi().fgBrightRed() + "rejecting dt=" + dt + " for y=" + y + "#" + rejects + ansi().fgDefault());
+        out.println(ansi().fgBrightRed() + "rejecting dt="
+                    + dt
+                    + " for y="
+                    + y
+                    + "#"
+                    + rejects
+                    + " points since last reject="
+                    + pointsSinceLastRejection
+                    + ansi().fgDefault());
         continue;
       }
       process.trace = false;
@@ -82,7 +94,7 @@ public class ProcessSimulator
       double marginalΛ = process.invΛ(1);
       // out.println("marginalΛ=" + marginalΛ);
 
-      TestCase.assertEquals("y != q", y, q, 1E-8);
+      TestCase.assertEquals("y != q", y, q, 1E-7);
       n++;
       process.appendTime(nextTime);
       double Edt = nextTime / n;

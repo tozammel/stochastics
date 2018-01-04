@@ -400,6 +400,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return sum(n -> sum(j -> V(j, m, n, tk), 0, order() - 1), 0, dim() - 1);
   }
 
+  public double
+         Vsum(int j,
+              int m,
+              int n,
+              int i)
+  {
+    return 0;
+  }
+
   /**
    * 
    * @param j
@@ -416,11 +425,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int n,
            int i)
   {
+    if (i == 0)
+    {
+      return 0;
+    }
     final double β = β(m, n, j);
     double lowerTime = T(m, i - 1);
     double upperTime = T(m, i);
-    Integer lowerTimeIndex = getSubTimes().right[m].get(lowerTime);
-    Integer upperTimeIndex = getSubTimes().right[m].get(upperTime);
+    Integer lowerTimeIndex = Nclosed(m, lowerTime);
+    Integer upperTimeIndex = Nopen(m, upperTime);
     assert lowerTimeIndex != null;
     assert upperTimeIndex != null;
     double interim = sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
