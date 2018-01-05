@@ -3,6 +3,6 @@
 /gradlew.bat
 /build/
 /build.gradle~
-/simulated.mat
+/*.mat
 /simulated.mat.bak
-/simulated.11.mat
+/simulated.11.mat.bak

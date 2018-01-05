@@ -406,7 +406,19 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
               int n,
               int i)
   {
-    return 0;
+    if (i == 0)
+    {
+      return 0;
+    }
+    final double β = β(m, n, j);
+    double lowerTime = T(m, i - 1);
+    double upperTime = T(m, i);
+    Integer lowerTimeIndex = Nclosed(m, lowerTime);
+    Integer upperTimeIndex = Nopen(m, upperTime);
+    assert lowerTimeIndex != null;
+    assert upperTimeIndex != null;
+    throw new UnsupportedOperationException( "...");
+    //return sum( n-> sum(j-> sum( α(j,m,n)*exp(-β(j,m,n)*(s-T(k,n)))), 0, dim() ), 0, order() ) ;
   }
 
   /**
