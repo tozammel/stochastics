@@ -10,6 +10,8 @@ import static util.Console.println;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.optim.PointValuePair;
@@ -45,19 +47,24 @@ public class ProcessSimulator
                              CloneNotSupportedException,
                              InterruptedException
   {
+    int threadCount = Runtime.getRuntime().availableProcessors();
 
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
-    rangeClosed(0, Runtime.getRuntime().availableProcessors()).parallel().forEach(thread -> {
+    Vector hello = new Vector(threadCount);
+    rangeClosed(0, threadCount).parallel().forEach(thread -> {
       ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
       // process.ε = 0.05;
       process.T = new Vector(new double[]
       { 1 });
       process.dT = new Vector(new double[] {});
-      simulateProcess(process, seed + thread);
+      hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
+    out.println("mean times: " + hello);
+    out.println("average mean time: " + hello.mean());
+
   }
 
-  public static void
+  public static Vector
          simulateProcess(ExtendedApproximatePowerlawAutoExcitingProcess process,
                          int seed)
   {
@@ -240,6 +247,7 @@ public class ProcessSimulator
     // // // {
     // // // Thread.sleep(1000);
     // // // }
+    return process.T;
   }
 
   public static void
