@@ -215,6 +215,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
 
   }
 
+
   public static ExtendedApproximatePowerlawAutoExcitingProcess
          constructProcess()
   {

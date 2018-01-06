@@ -1,9 +1,8 @@
 package stochastic.pointprocesses.autoexciting;
 
 import static java.lang.Math.abs;
+import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
@@ -46,6 +45,7 @@ public class ProcessSimulator
                              InterruptedException
   {
     int threadCount = Runtime.getRuntime().availableProcessors();
+    // int threadCount = 1;
 
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
@@ -53,7 +53,7 @@ public class ProcessSimulator
       ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
       // process.ε = 0.05;
       process.T = new Vector(new double[]
-      { 1 });
+      { 0 });
       process.dT = new Vector(new double[] {});
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
@@ -72,7 +72,8 @@ public class ProcessSimulator
     int n = process.T.size();
     double nextTime = 0;
     int sampleCount = 500000;
-    process.setAsize( sampleCount );
+    double startTime = currentTimeMillis();
+    process.setAsize(sampleCount);
     for (int i = 0; i < sampleCount; i++)
     {
       double y = expDist.sample();
@@ -154,10 +155,15 @@ public class ProcessSimulator
       }
 
     }
+    double duration = startTime - currentTimeMillis();
 
     String fn = "simulated." + seed + ".mat";
     MatFile.write(fn, process.T.setName("T").createMiMatrix());
     out.println("write " + fn);
+    double seconds = duration / 1000;
+    double pointsPerSecond = sampleCount / seconds;
+    out.println("simulation rate: " + pointsPerSecond + " points/second");
+    process.printA();
 
     return process.T;
   }

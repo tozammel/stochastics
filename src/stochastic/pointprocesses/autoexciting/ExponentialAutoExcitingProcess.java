@@ -131,7 +131,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     double dt = 0;
 
     double δ = 0;
-    double lastTime = T.getRightmostValue();
+    double lastTime = T == null ? 0 : T.getRightmostValue();
     double nextTime = lastTime;
 
     for (int i = 0; i <= 1000; i++)
@@ -787,7 +787,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
          Φδ(double t,
             double y)
   {
-    int tk = T.size() - 1;
+    int tk = T == null ? -1 : ( T.size() - 1 );
     return Φδ(t, y, tk);
   }
 
@@ -872,11 +872,14 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     return 1 + sum(k -> exp(-β(j) * (Ti - T.get(k))), 0, tk - 1);
   }
 
-  public double
+  public synchronized double
          A(int tk,
            int j)
   {
-    assert tk >= 0;
+    if ( tk < 0 )
+    {
+      return 0;
+    }
     if (A == null)
     {
       A = new double[T.size()][order()];
@@ -890,11 +893,20 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     if (val == 0)
     {
       val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A[tk - 1][j]);
-      // out.format("A[%d][%d]=%s\n", tk, j, val);
       assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
       A[tk][j] = val;
     }
     return val;
+  }
+
+  public void
+         printA()
+
+  {
+    for (int i = 0; i < A.length; i++)
+    {
+      out.println("A[" + i + "]=" + Arrays.toString(A[i]));
+    }
   }
 
   /**
@@ -951,7 +963,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public void
          expandA()
   {
-    if (trace)
+    //if (trace)
     {
       out.println("Expanding A to size " + (int) (T.size() * 1.2));
     }
@@ -959,7 +971,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
 
     for (int i = 0; i < A.length; i++)
     {
-      double[] bMatrix = newA[i];
+      double[] bMatrix = A[i];
       int aLength = bMatrix.length;
       newA[i] = new double[aLength];
       System.arraycopy(bMatrix, 0, newA[i], 0, aLength);
