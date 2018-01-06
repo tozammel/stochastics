@@ -1,4 +1,5 @@
 /target/
+/*.bak
 /gradlew
 /gradlew.bat
 /build/
@@ -6,3 +7,6 @@
 /*.mat
 /simulated.mat.bak
 /simulated.11.mat.bak
+/sim.hpl
+/sim1.hpl
+/simulated.20.mat.bak

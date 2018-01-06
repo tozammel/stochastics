@@ -72,6 +72,13 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     return sb.toString();
   }
 
+  public double
+         meanRecurrenceTime()
+  {
+
+    return sum(j -> γ(j, 2), 0, order() - 1) / ((product(this::β, 0, order() - 1)) * sum(k -> γ(k, 1), 0, order() - 1) * Z());
+  }
+
   /**
    * 
    * @param tk
@@ -167,23 +174,38 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
    * product(j -> j == k ? α(j) : β(j), 0, order() - 1)
    * 
    * @param k
-   * @return
+   * @return this{@link #γ(int, int)}(k,1)
    */
   public double
          γ(int k)
   {
-    return γsfp.getOrCreate(k);
+    return γ(k, 1);
+  }
+
+  /**
+   * product(j -> j == k ? α(j) : β(j), 0, order() - 1)
+   * 
+   * @param k
+   * @return
+   */
+  public double
+         γ(int k,
+           int p)
+  {
+    AutoArrayList<Double> a = γsfp.getOrCreate(p);
+    return a.getOrCreate(k);
   }
 
   public double
-         γproductfp(int k)
+         γproductfp(int k,
+                    int p)
   {
-    IntToDoubleFunction a = j -> j == k ? α(j) : β(j);
+    IntToDoubleFunction a = j -> j == k ? α(j) : pow(β(j), p);
 
     return product(a, 0, order() - 1);
   };
 
-  private AutoArrayList<Double> γsfp = new AutoArrayList<>(order(), this::γproductfp);
+  private AutoArrayList<AutoArrayList<Double>> γsfp = new AutoArrayList<AutoArrayList<Double>>(p -> new AutoArrayList<>(k -> γproductfp(k, p)));
 
   /**
    * The mean lifetime can be looked at as a "scaling time", because the

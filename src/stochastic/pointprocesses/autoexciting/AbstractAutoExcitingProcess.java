@@ -237,16 +237,23 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
     return getBoundedParameters().length;
   }
 
+  public abstract double
+         meanRecurrenceTime();
+
   public String
          getParamString()
   {
     return "{" + asList(getParameterFields()).stream().map(param -> param.getName() + "=" + Double.toString(getFieldValue(param))).collect(joining(","))
            + ",Z="
            + Z()
+           + ",Edt="
+           + meanRecurrenceTime()
            + "}";
+
   }
 
   public double
+
          getFieldValue(Field param)
   {
     try

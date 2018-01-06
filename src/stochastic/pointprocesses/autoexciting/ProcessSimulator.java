@@ -42,6 +42,7 @@ public class ProcessSimulator
 
   public static int lastRejectedPoint = -1;
 
+  
   public static void
          main(String[] args) throws IOException,
                              CloneNotSupportedException,
@@ -51,7 +52,7 @@ public class ProcessSimulator
 
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
-    rangeClosed(0, threadCount).parallel().forEach(thread -> {
+    rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
       ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
       // process.ε = 0.05;
       process.T = new Vector(new double[]
@@ -159,94 +160,6 @@ public class ProcessSimulator
     MatFile.write(fn, process.T.setName("T").createMiMatrix());
     out.println("write " + fn);
 
-    //
-    // double y = 0.9;
-    // double nextdt = process.invΛ(y, n - 2);
-    // process.trace = true;
-    // // Real nextdtReal = process.invΛReal(y, n - 2);
-    // process.trace = false;
-    // double shouldbe0 = process.Φ(nextdt, y, n - 2);
-    // // Real shouldbe0Real = process.ΛphaseReal(nextdtReal, y, n - 2);
-    // out.println("shouldbe0=" + shouldbe0 + "\nβproduct=" + process.βproduct() + "
-    // βproductReal=" + process.βproductReal());
-    // double shouldbey = process.Λ(n - 1, nextdt );
-    // out.println("shouldbey=" + shouldbey + " should be y=" + y);
-    // process.T = process.T.append(process.T.fmax() + nextdt);
-    //
-    // out.println("nextdt=" + nextdt );
-    //
-    // process.dT = null;
-    // out.println("comp (rec) " + ansi().fgBrightMagenta() + process.Λ() +
-    // ansi().fgDefault());
-    // process.recursive = false;
-    // out.println("comp (full) " + ansi().fgBrightMagenta() + process.Λ() +
-    // ansi().fgDefault());
-    //
-    // out.println("∫comp " + process.iΛ());
-
-    // ExponentialDistribution expDist = new ExponentialDistribution(1);
-    //
-    // int n = 1;
-    // Vector N = new Vector(n);
-    // Vector Λ = new Vector(n);
-    // Vector T = new Vector(n);
-    // Vector dT = new Vector(n);
-    // int i = 0;
-    // out.println("generating " + n + " samples of " + process);
-    // for (; i < n; i++)
-    // {
-    // double ε = expDist.sample();
-    // out.println("ε=" + ε);
-    // double dt = process.invΛ(ε);
-    //
-    // out.println("invΛ(ε=" + ε + ")=" + dt);
-    // process.dT = process.dT().append(dt);
-    // process.T = process.T.append(process.T.fmax() + dt);
-    // process.refreshCompensator();
-    //
-    // out.println("T=" + process.T);
-    // out.println("dT=" + process.dT);
-    // Vector compensated = process.Λ();
-    // out.println("compensated=" + compensated);
-    // double t = 0;
-    // N.set(i, i);
-    // Λ.set(i, ε);
-    // T.set(i, t += dt);
-    // dT.set(i, dt);
-    // }
-    // N = N.slice(0, i);
-    // Λ = Λ.slice(0, i);
-    // T = T.slice(0, i);
-    // dT = dT.slice(0, i);
-    //
-    // process.estimateParameters(Runtime.getRuntime().availableProcessors());
-    //
-    // out.println("generated point set spans " +
-    // DateUtils.convertTimeUnits(T.fmax(), TimeUnit.MILLISECONDS, TimeUnit.HOURS) +
-    // " hours");
-    //
-    // out.println("mean(dT)=" + dT.mean());
-    // out.println("process mean=" + process.mean());
-    //
-    // out.println("variance(dT)=" + dT.variance());
-    // out.println("process variance=" + process.variance());
-    //
-    // Vector ac = dT.autocor(50);
-    // out.println("ac=" + ac);
-    // // new SwingWrapper<>(Plotter.plot(ac, "autoocorrelation")).displayChart();
-    // // new SwingWrapper<>(Plotter.plot(T, N)).displayChart();
-    // //
-    // // AbstractSelfExcitingProcess estimatedProcess =
-    // //
-    // ProcessEstimator.estimateSelfExcitingProcess(Type.ExtendedApproximatePowerlaw,
-    // // Runtime.getRuntime().availableProcessors(),
-    // // T);
-    // // out.println("estimated " + process);
-    // //
-    // // // while(true)
-    // // // {
-    // // // Thread.sleep(1000);
-    // // // }
     return process.T;
   }
 

@@ -61,7 +61,7 @@ public class ProcessEstimator
     String symbol = "SPY";
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<AbstractAutoExcitingProcess> processes = estimateSelfExcitingProcess(type, filename, trajectoryCount, symbol);
+    ArrayList<AbstractAutoExcitingProcess> processes = estimateAutoExcitingProcess(type, filename, trajectoryCount, symbol);
 
   }
 
@@ -75,23 +75,23 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractAutoExcitingProcess>
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      String symbol) throws IOException
 
   {
-    return estimateSelfExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
+    return estimateAutoExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
   }
 
   public static ArrayList<AbstractAutoExcitingProcess>
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      int trajectoryCount,
                                      String symbol) throws IOException
   {
     Vector data = loadTimes(filename, symbol);
 
-    return estimateSelfExcitingProcesses(type, trajectoryCount, data);
+    return estimateAutoExcitingProcesses(type, trajectoryCount, data);
   }
 
   /**
@@ -109,7 +109,7 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractAutoExcitingProcess>
-         estimateSelfExcitingProcesses(AutoExcitingProcessFactory.Type type,
+         estimateAutoExcitingProcesses(AutoExcitingProcessFactory.Type type,
                                        int trajectoryCount,
                                        Vector times) throws IOException
   {
@@ -124,7 +124,11 @@ public class ProcessEstimator
 
     range(0, n).forEachOrdered(i -> {
       Vector slice = times.slice(i == 0 ? 0 : indexes[i - 1], indexes[i]);
-      AbstractAutoExcitingProcess process = estimateSelfExcitingProcess(type, trajectoryCount, slice);
+      double sliceEdt = slice.diff().mean();
+      
+      out.println("E_" + i + "[dt]=" + sliceEdt);
+
+      AbstractAutoExcitingProcess process = estimateAutoExcitingProcess(type, trajectoryCount, slice);
       processes.add(process);
 
       File testFile = new File("test" + i + ".mat");
@@ -138,7 +142,7 @@ public class ProcessEstimator
   }
 
   public static AbstractAutoExcitingProcess
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      int trajectoryCount,
                                      Vector slice)
   {
@@ -159,11 +163,11 @@ public class ProcessEstimator
     Vector intensity = process.λvector().setName("intensity");
     out.println("writing timestamp data, compensator, intensity, and innovation to " + testFile.getAbsolutePath() + " and parameters to " + modelFile);
     Vector innovation = process.getInnovationSequence().setName("innov");
-    
+
     try
     {
       process.storeParameters(modelFile);
-      MatFile.write(testFile, data.createMiMatrix(), compensator.createMiMatrix(), intensity.createMiMatrix(), innovation.createMiMatrix() );
+      MatFile.write(testFile, data.createMiMatrix(), compensator.createMiMatrix(), intensity.createMiMatrix(), innovation.createMiMatrix());
     }
     catch (IOException e)
     {

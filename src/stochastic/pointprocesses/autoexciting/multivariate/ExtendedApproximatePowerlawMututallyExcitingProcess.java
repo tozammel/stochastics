@@ -351,4 +351,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return αβ.setName("(α/β)[" + j + "]");
   }
 
+  @Override
+  public double
+         meanRecurrenceTime()
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
+
 }
