@@ -1,0 +1,635 @@
+-------------------------------------------------------------------------------
+Test set: stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 8, Skipped: 0, Time elapsed: 0.012 sec <<< FAILURE! - in stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest
+testInvLambda(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testInvLambda(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:37)
+
+testInvLambdaExpectation(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testInvLambdaExpectation(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:26)
+
+testSaveLoad(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testSaveLoad(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:108)
+
+testfandF(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testfandF(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:139)
+
+testinvΛ(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.003 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testinvΛ(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:150)
+
+testA(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testA(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:203)
+
+testNormalization(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.002 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testNormalization(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:98)
+
+testTotalΛ(stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest)  Time elapsed: 0.003 sec  <<< ERROR!
+java.lang.Error: Unresolved compilation problems: 
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	The method seq(IntFunction<?>, int, int) is ambiguous for the type ExponentialAutoExcitingProcess
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Method references are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	The target type of this expression must be a functional interface
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable progressMonitor defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	References to interface static methods are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable bounds defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	References to interface static methods are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable n defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tn defined in an enclosing scope
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable i defined in an enclosing scope
+	Cannot refer to the non-final local variable k defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable tk defined in an enclosing scope
+	Cannot refer to the non-final local variable dt defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable t defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable process defined in an enclosing scope
+	Lambda expressions are allowed only at source level 1.8 or above
+	Cannot refer to the non-final local variable j defined in an enclosing scope
+	Cannot refer to the non-final local variable Ti defined in an enclosing scope
+
+	at stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess.<init>(ExponentialAutoExcitingProcess.java:185)
+	at stochastic.pointprocesses.autoexciting.ApproximatePowerlawAutoExcitingProcess.<init>(ApproximatePowerlawAutoExcitingProcess.java:110)
+	at stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess.<init>(ExtendedApproximatePowerlawAutoExcitingProcess.java:22)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:227)
+	at stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest.testTotalΛ(ExtendedExponentialPowerlawAutoExcitingProcessTest.java:187)
+

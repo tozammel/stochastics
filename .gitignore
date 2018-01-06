@@ -1,4 +1,4 @@
-/target/
+/*.model
 /*.bak
 /gradlew
 /gradlew.bat
@@ -10,3 +10,4 @@
 /sim.hpl
 /sim1.hpl
 /simulated.20.mat.bak
+/test0.mat.eapl.model
