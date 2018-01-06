@@ -944,21 +944,27 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     dT = dT.copyAndAppend(dt);
     if (A.length < T.size())
     {
-      if (trace)
-      {
-        out.println("Expanding A to size " + (int) (T.size() * 1.2));
-      }
-      double[][] newA = new double[(int) (T.size() * 1.2)][order()];
-
-      for (int i = 0; i < A.length; i++)
-      {
-        double[] bMatrix = newA[i];
-        int aLength = bMatrix.length;
-        newA[i] = new double[aLength];
-        System.arraycopy(bMatrix, 0, newA[i], 0, aLength);
-      }
-      A = newA;
+      expandA();
     }
+  }
+
+  public void
+         expandA()
+  {
+    if (trace)
+    {
+      out.println("Expanding A to size " + (int) (T.size() * 1.2));
+    }
+    double[][] newA = new double[(int) (T.size() * 1.2)][order()];
+
+    for (int i = 0; i < A.length; i++)
+    {
+      double[] bMatrix = newA[i];
+      int aLength = bMatrix.length;
+      newA[i] = new double[aLength];
+      System.arraycopy(bMatrix, 0, newA[i], 0, aLength);
+    }
+    A = newA;
   }
 
 }

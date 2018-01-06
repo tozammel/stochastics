@@ -117,4 +117,10 @@ public class ExtendedApproximatePowerlawAutoExcitingProcess extends ApproximateP
     return 1 / η;
   }
 
+  public void
+         setAsize(int sampleCount)
+  {
+    A = new double[sampleCount][order()];
+  }
+
 }

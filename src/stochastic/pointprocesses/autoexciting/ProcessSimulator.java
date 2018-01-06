@@ -71,7 +71,9 @@ public class ProcessSimulator
     out.println("simulating " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points with seed=" + seed);
     int n = process.T.size();
     double nextTime = 0;
-    for (int i = 0; i < 500000; i++)
+    int sampleCount = 500000;
+    process.setAsize( sampleCount );
+    for (int i = 0; i < sampleCount; i++)
     {
       double y = expDist.sample();
       process.trace = false;
