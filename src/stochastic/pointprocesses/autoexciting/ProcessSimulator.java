@@ -10,8 +10,6 @@ import static util.Console.println;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.optim.PointValuePair;
@@ -42,7 +40,6 @@ public class ProcessSimulator
 
   public static int lastRejectedPoint = -1;
 
-  
   public static void
          main(String[] args) throws IOException,
                              CloneNotSupportedException,
@@ -191,9 +188,7 @@ public class ProcessSimulator
          printResults(ParallelMultistartMultivariateOptimizer multiopt)
   {
 
-    BoundedParameter[] params = process.getBoundedParameters();
-
-    println("estimated parameters for " + process.getClass().getSimpleName() + "[" + stream(params).map(param -> param.getName()).collect(joining(",")) + "]");
+    println("estimated parameters for " + process);
 
     PointValuePair[] optima = multiopt.getOptima().toArray(new PointValuePair[0]);
 
