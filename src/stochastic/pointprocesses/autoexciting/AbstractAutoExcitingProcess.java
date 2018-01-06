@@ -421,7 +421,7 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
 
     BoundedParameter[] params = getBoundedParameters();
 
-    println("parameter estimates for " + getClass().getSimpleName() + "[" + stream(params).map(param -> param.getName()).collect(joining(",")) + "]");
+    println("parameter estimates for " + toString());
 
     PointValuePair[] optima = multiopt.getOptima().toArray(new PointValuePair[0]);
 

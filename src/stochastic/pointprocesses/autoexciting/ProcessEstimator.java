@@ -226,12 +226,11 @@ public class ProcessEstimator
     process.T = data;
     ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), null);
     process.printResults(optimizer);
-    double averageError = process.getInnovationSequence().mean();
-    out.println("E(I)=" + process.getMeanPredictionError()
-                + " E(I^2)="
-                + process.getMeanSquaredPredictionError()
-                + " sqrt(E(I^2))="
-                + process.getRootMeanSquaredPredictionError());
+//    double averageError = process.getInnovationSequence().mean();
+//    out.println("E(I)=" + process.getMeanPredictionError()
+//               
+//                + " sqrt(E(I^2))="
+//                + process.getRootMeanSquaredPredictionError());
     return process;
 
   }
