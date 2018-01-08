@@ -402,6 +402,20 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
+         v(int j,
+           int m,
+           int n,
+           int i,
+           int k)
+  {
+    double β = β(j, m, n);
+    double b1 = exp(-β * (T(m, i - 1) - T(n, k)));
+    double b2 = exp(-β * (T(m, i) - T(n, k)));
+    double bah = b1 - b2;
+    return (α(j, m, n) / β) * bah;
+  }
+
+  public double
          Vsum(int j,
               int m,
               int n,
@@ -411,17 +425,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       return 0;
     }
-    double lowerTime = T(m, i - 1);
-    double upperTime = T(m, i);
-    int lowerTimeIndex = max( 0, Nclosed(n, lowerTime) - 1);// arrays are 0 indexed in Java&C
-    int upperTimeIndex = Nopen(n, upperTime)-1;// arrays are 0 indexed in Java&C
-    double β = β(j, m, n);
-    assert lowerTimeIndex < N(n): format("lowerTimeIndex=%s >= N(n)=%s", lowerTimeIndex, N(n));
-    assert upperTimeIndex < N(n);
-
-    // out.format("lowerIndex=%s upperIndex=%s lowerTime=%s upperTime=%s\n",
-    // lowerTimeIndex, upperTimeIndex, lowerTime, upperTime);
-    return (α(j, m, n) / β) * sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
+    return sum(k -> v(j, m, n, i, k), 0, Nopen(n, T(m, i)) - 1);
   }
 
   /**
@@ -447,14 +451,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     final double β = β(j, m, n);
     double lowerTime = T(m, i - 1);
     double upperTime = T(m, i);
-    Integer lowerTimeIndex = Nclosed(m, lowerTime);
-    Integer upperTimeIndex = Nopen(m, upperTime) - 1;
+    Integer lowerTimeIndex = Nclosed(n, lowerTime);
+    Integer upperTimeIndex = Nopen(n, upperTime) - 1;
     assert lowerTimeIndex != null;
     assert upperTimeIndex != null;
     assert i < N(m);
     assert upperTimeIndex < N(n);
     double interim = sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
-    return (α(j, m, n) / β) * (1 - exp(-β * (upperTime - lowerTime))) * (A(j, m, n, i-1)) + interim;
+    return (α(j, m, n) / β) * (1 - exp(-β * (upperTime - lowerTime))) * (A(j, m, n, i - 1)) + interim;
   }
 
   public double
