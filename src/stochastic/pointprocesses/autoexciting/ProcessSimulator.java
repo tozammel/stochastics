@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.autoexciting;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
 import static java.util.stream.IntStream.rangeClosed;
@@ -37,8 +38,6 @@ public class ProcessSimulator
     this.process = (AbstractAutoExcitingProcess) process;
   }
 
-  public static int lastRejectedPoint = -1;
-
   public static void
          main(String[] args) throws IOException,
                              CloneNotSupportedException,
@@ -53,7 +52,7 @@ public class ProcessSimulator
       ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
       // process.ε = 0.05;
       process.T = new Vector(new double[]
-      { 0 });
+      { process.meanRecurrenceTime() });
       process.dT = new Vector(new double[] {});
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
@@ -66,21 +65,23 @@ public class ProcessSimulator
          simulateProcess(ExtendedApproximatePowerlawAutoExcitingProcess process,
                          int seed)
   {
+    int lastRejectedPoint = -1;
     int rejects = 0;
     ExponentialDistribution expDist = new ExponentialDistribution(new JDKRandomGenerator(seed), 1);
     out.println("simulating " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points with seed=" + seed);
     int n = process.T.size();
     double nextTime = 0;
-    int sampleCount = 500000;
+    int sampleCount = 130000;
     double startTime = currentTimeMillis();
     process.setAsize(sampleCount);
     for (int i = 0; i < sampleCount; i++)
     {
+
       double y = expDist.sample();
       process.trace = false;
       // TODO: average over Λ and compare against the invariant projection
       double dt = process.invΛ(y);
-      if (dt > 10000)
+      if (dt > 10000 || dt < 0.001 )
       {
         int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
         lastRejectedPoint = i;
@@ -121,7 +122,7 @@ public class ProcessSimulator
       // out.println("T=" + process.T.toIntVector());
       // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
       // process.T.size() - 1));
-      if (i % 100 == 0)
+      if (i % 1000 == 0)
       {
         String msg = "seed=" + seed
                      + " i="
@@ -163,7 +164,7 @@ public class ProcessSimulator
     double seconds = duration / 1000;
     double pointsPerSecond = sampleCount / seconds;
     out.println("simulation rate: " + pointsPerSecond + " points/second");
-    process.printA();
+    // process.printA();
 
     return process.T;
   }

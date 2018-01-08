@@ -787,7 +787,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
          Φδ(double t,
             double y)
   {
-    int tk = T == null ? -1 : ( T.size() - 1 );
+    int tk = T == null ? -1 : (T.size() - 1);
     return Φδ(t, y, tk);
   }
 
@@ -875,10 +875,10 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public synchronized double
          A(int tk,
            int j)
-  {
-    if ( tk < 0 )
+  {   
+    if (tk < 0)
     {
-      return 0;
+      return 1;
     }
     if (A == null)
     {
@@ -963,7 +963,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public void
          expandA()
   {
-    //if (trace)
+    // if (trace)
     {
       out.println("Expanding A to size " + (int) (T.size() * 1.2));
     }

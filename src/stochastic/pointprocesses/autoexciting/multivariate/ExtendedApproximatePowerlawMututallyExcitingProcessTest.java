@@ -76,7 +76,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testV()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
     for (int m = 0; m < process.dim(); m++)
     {
@@ -88,7 +88,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
           {
             double a = process.Vsum(j, m, n, tk);
             double b = process.V(j, m, n, tk);
-            // out.println("a=" + a + " b=" + b + " c=" + c + " d=" + d);
+            out.format("m=%d n=%d tk=%d j=%d Vsum=%s V=%s\n", m, n, tk, j, a, b);
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Vsum=%s != V=%s", j, m, n, tk, a, b), a, b, 1E-8);
           }
         }

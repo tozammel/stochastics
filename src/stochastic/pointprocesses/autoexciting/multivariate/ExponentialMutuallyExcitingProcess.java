@@ -7,6 +7,7 @@ import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
+import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.String.format;
@@ -156,7 +157,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          T(int m,
            int i)
   {
-    assert i >= 0 : "t cannot be negative, was " + i;
+    assert i >= 0 : "i cannot be negative, was " + i;
     assert m < dim() : "m=" + m + " >= dim";
     Vector Tm = getSubTimes().left[m];
     assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
@@ -410,15 +411,17 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       return 0;
     }
-    final double β = β(m, n, j);
     double lowerTime = T(m, i - 1);
     double upperTime = T(m, i);
-    Integer lowerTimeIndex = Nclosed(m, lowerTime);
-    Integer upperTimeIndex = Nopen(m, upperTime);
-    assert lowerTimeIndex != null;
-    assert upperTimeIndex != null;
-    throw new UnsupportedOperationException( "...");
-    //return sum( n-> sum(j-> sum( α(j,m,n)*exp(-β(j,m,n)*(s-T(k,n)))), 0, dim() ), 0, order() ) ;
+    int lowerTimeIndex = max( 0, Nclosed(n, lowerTime) - 1);// arrays are 0 indexed in Java&C
+    int upperTimeIndex = Nopen(n, upperTime)-1;// arrays are 0 indexed in Java&C
+    double β = β(j, m, n);
+    assert lowerTimeIndex < N(n): format("lowerTimeIndex=%s >= N(n)=%s", lowerTimeIndex, N(n));
+    assert upperTimeIndex < N(n);
+
+    // out.format("lowerIndex=%s upperIndex=%s lowerTime=%s upperTime=%s\n",
+    // lowerTimeIndex, upperTimeIndex, lowerTime, upperTime);
+    return (α(j, m, n) / β) * sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
   }
 
   /**
@@ -441,15 +444,17 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       return 0;
     }
-    final double β = β(m, n, j);
+    final double β = β(j, m, n);
     double lowerTime = T(m, i - 1);
     double upperTime = T(m, i);
     Integer lowerTimeIndex = Nclosed(m, lowerTime);
-    Integer upperTimeIndex = Nopen(m, upperTime);
+    Integer upperTimeIndex = Nopen(m, upperTime) - 1;
     assert lowerTimeIndex != null;
     assert upperTimeIndex != null;
+    assert i < N(m);
+    assert upperTimeIndex < N(n);
     double interim = sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
-    return α(j, m, n) / β(j, m, n) * (1 - exp(-β * (upperTime - lowerTime))) * A(j, m, n, i) + interim;
+    return (α(j, m, n) / β) * (1 - exp(-β * (upperTime - lowerTime))) * (A(j, m, n, i-1)) + interim;
   }
 
   public double
