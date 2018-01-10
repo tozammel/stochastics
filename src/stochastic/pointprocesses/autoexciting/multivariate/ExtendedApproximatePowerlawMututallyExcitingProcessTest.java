@@ -21,9 +21,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
     process.ε.assign(0.02, 0.04);
     process.T = new Vector(new double[]
-    { 25, 91, 93, 112, 166, 167, 175, 176, 189, 227 });
+    { 25, 92, 93, 112, 166, 167, 175, 176, 189, 227 });
     process.K = new IntVector(new int[]
-    { 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 });
+    { 0, 0, 0, 1, 1, 1, 0, 0, 1, 1 });
     return process;
   }
 
