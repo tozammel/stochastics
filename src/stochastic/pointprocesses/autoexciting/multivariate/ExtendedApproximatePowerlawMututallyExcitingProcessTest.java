@@ -74,6 +74,27 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   }
 
   public void
+         testCalcCompensator()
+  {
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    Vector comp0 = process.calculateCompensator(process.getSubTimes(), 0);
+    Vector comp1 = process.calculateCompensator(process.getSubTimes(), 1);
+    out.println("comp0=" + comp0);
+    out.println("comp1=" + comp1);
+
+    Vector comp0slow = process.calculateCompensatorSlow(process.getSubTimes(), 0);
+    Vector comp1slow = process.calculateCompensatorSlow(process.getSubTimes(), 1);
+    out.println("comp0slow=" + comp0slow);
+    out.println("comp1slow=" + comp1slow);
+    
+    Vector alsoComp0 = process.Λ(0);
+    Vector alsoComp1 = process.Λ(1);
+    out.println("alsoComp0=" + alsoComp0);
+    out.println("alsoComp1=" + alsoComp1);
+
+  }
+
+  public void
          testV()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
@@ -89,7 +110,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
             double a = process.Vsum(j, m, n, tk);
             double b = process.V(j, m, n, tk);
             out.format("m=%d n=%d tk=%d j=%d Vsum=%s V=%s\n", m, n, tk, j, a, b);
-            //assertEquals(String.format("j=%s m=%s n=%s tk=%s Vsum=%s != V=%s", j, m, n, tk, a, b), a, b, 1E-8);
+            assertEquals(String.format("j=%s m=%s n=%s tk=%s Vsum=%s != V=%s", j, m, n, tk, a, b), a, b, 1E-8);
           }
         }
       }
