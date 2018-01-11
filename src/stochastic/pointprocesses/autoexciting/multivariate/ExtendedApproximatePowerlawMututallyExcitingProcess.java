@@ -251,7 +251,12 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          getLjungBoxMeasure()
   {
-    return pow(Λ().getLjungBoxStatistic(ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER) - (ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER - 2), 2);
+    double x = 0;
+    for (int type = 0; type < dim(); type++)
+    {
+      x += pow(Λ(type).getLjungBoxStatistic(ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER) - (ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER - 2), 2);
+    }
+    return x / dim();
   }
 
   @Override
