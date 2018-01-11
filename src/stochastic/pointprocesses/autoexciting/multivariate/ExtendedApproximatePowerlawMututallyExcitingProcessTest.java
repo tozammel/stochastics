@@ -91,10 +91,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     assertEquals(comp0slow.sum(), comp0.sum(), pow(10, -12));
     assertEquals(comp1slow.sum(), comp1.sum(), pow(10, -12));
 
-    Vector alsoComp0 = process.Λ(0);
-    Vector alsoComp1 = process.Λ(1);
-    out.println("alsoComp0=" + alsoComp0);
-    out.println("alsoComp1=" + alsoComp1);
 
   }
 
