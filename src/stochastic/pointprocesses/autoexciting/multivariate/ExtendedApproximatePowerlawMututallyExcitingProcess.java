@@ -35,22 +35,19 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     τ = new Vector(dim).setName("τ");
     ε = new Vector(dim).setName("ε");
     η = new Vector(dim).setName("η");
-    κ = new Vector(dim).setName("κ");
     b = new Vector(dim).setName("b");
   }
 
   public String
          toString()
   {
-    return format("ExtendedApproximatePowerlawMututallyExcitingProcess[%s,%s,%s,%s,%s]",
+    return format("ExtendedApproximatePowerlawMututallyExcitingProcess[%s,%s,%s,%s]",
                   τ.toString().trim(),
                   ε.toString().trim(),
                   η.toString().trim(),
-                  κ.toString().trim(),
                   b.toString().trim());
   }
 
-  public Vector κ;
 
   public Vector η;
 
@@ -366,6 +363,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
          meanRecurrenceTime()
   {
     throw new UnsupportedOperationException("TODO");
+  }
+
+  @Override
+  public double
+         totalΛ()
+  {
+    return sum(k -> Λ(k).sum(), 0, dim() - 1);
   }
 
 }

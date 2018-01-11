@@ -174,11 +174,7 @@ public class MutuallyExcitingProcessEstimator
     Vector intensities[] = seq((IntFunction<Vector>) type -> process.λvector(type).setName("intensity" + type), 0, process.dim() - 1).toArray(Vector[]::new);
 
     Vector innov = process.getInnovationSequence();
-    out.println("writing timestamp data, compensator, intensity, and innov to " + testFile.getAbsolutePath()
-                + " E[data.dt]="
-                + data.diff().mean()
-                + " 1/k="
-                + process.κ.pow(-1));
+    out.println("writing timestamp data, compensator, intensity, and innov to " + testFile.getAbsolutePath() + " E[data.dt]=" + data.diff().mean());
     MatFile outFile = new MatFile(testFile, MutuallyExcitingProcessEstimator.class.getSimpleName());
     outFile.write(data.createMiMatrix());
     outFile.write(compensator.createMiMatrix());

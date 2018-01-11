@@ -27,17 +27,21 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     assertEquals(a, b, 1E-15);
 
     ExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    mprocess.assignParameters(process.getParameters().toDoubleArray());
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());
 
+    out.println( "process=" + process );
+    out.println( "mprocess=" + mprocess );
+    
+    Vector comp = mprocess.Λ(0);
+    out.println("comp=" + comp);
     double c = mprocess.totalΛ();
     assertEquals(a, c, 1E-15);
 
     assertEquals(process.Λ(0), mprocess.Λ(0));
 
   }
-
-
 
   public void
          testN()

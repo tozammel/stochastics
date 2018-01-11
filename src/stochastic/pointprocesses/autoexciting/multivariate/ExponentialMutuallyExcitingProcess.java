@@ -1,7 +1,6 @@
 
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static fastmath.Functions.eye;
 import static fastmath.Functions.product;
 import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
@@ -46,8 +45,6 @@ import fastmath.EigenDecomposition;
 import fastmath.Pair;
 import fastmath.Vector;
 import fastmath.exceptions.FastMathException;
-import fastmath.exceptions.IllegalValueError;
-import fastmath.exceptions.SingularFactorException;
 import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
@@ -61,8 +58,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public abstract int
          order();
 
-  // baseline intensity parameters
-  Vector κ;
 
   public ExponentialMutuallyExcitingProcess()
   {
@@ -575,27 +570,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return cachedSubTimes;
   }
 
-  /**
-   * @return null if mean could not be calculated
-   */
-  public Vector
-         calculateMean()
-  {
-    try
-    {
-      return eye(dim()).subtract(calculateBranchingMatrix()).ldivide(κ.asMatrix().trans().copy(false)).asVector();
-    }
-    catch (SingularFactorException e)
-    {
-      System.err.println(e.getMessage());
-      return null;
-    }
-    catch (IllegalValueError e)
-    {
-      System.err.println(e.getMessage());
-      return null;
-    }
-  }
 
   /**
    * 
@@ -689,10 +663,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     final Vector mtimes = timesSub[m];
     final int Nm = mtimes.size();
     Vector intensity = new Vector(Nm - 1);
-    double kappa = this.κ.get(m);
     for (int i = 1; i < Nm; i++)
     {
-      double lambda = kappa;
+      double lambda = 0;
       final double mtime = mtimes.get(i);
 
       for (int n = 0; n < dim(); n++)
@@ -731,7 +704,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       final double upperTime = mtimes.get(i);
       final double lowerTime = mtimes.get(i - 1);
       double mtimeDiff = upperTime - lowerTime;
-      double logsum = κ.get(m) * getDeterministicIntensity(m, upperTime, i);
+      double logsum = 0;
 
       for (int n = 0; n < dim(); n++)
       {
@@ -963,7 +936,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     final Vector[] timesSub = timesSubPair.left;
     final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
-    final double kappa = this.κ.get(m);
     final Vector mtimes = timesSub[m].extend(1);
     final int N = mtimes.size();
     final double lastTime = mtimes.get(mtimes.size() - 2);
@@ -973,7 +945,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     for (int l = 0; l < inverses.size(); l++)
     {
       final double eta = expDist.sample();
-      UnivariateFunction integrand = getPredictiveDensity(m, timesSub, subTimeIndex, kappa, mtimes, N, eta);
+      UnivariateFunction integrand = getPredictiveDensity(m, timesSub, subTimeIndex, mtimes, N, eta);
       double nextTime = solver.solve(100000, integrand, lastTime - 0.0001, lastTime + 100);
       inverses.set(l, nextTime);
     }
@@ -984,7 +956,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          getPredictiveDensity(final int m,
                               final Vector[] timesSub,
                               final TreeMap<Double, Integer>[] subTimeIndex,
-                              final double kappa,
                               final Vector mtimes,
                               final int N,
                               final double eta)
@@ -1007,7 +978,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           double lowerTimeBeforeLast = i > 2 ? mtimes.get(i - 2) : Double.NEGATIVE_INFINITY;
           // assert upperTime >= lowerTime;
 
-          sum = getDeterministicCompensator(m, upperTime, lowerTime, i) * kappa;
+          sum = 0;
           for (int n = 0; n < dim(); n++)
           {
             final Vector ntimes = timesSub[n];
