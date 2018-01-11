@@ -253,7 +253,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
         ll = Double.NEGATIVE_INFINITY;
       }
     }
-
+    out.println(Thread.currentThread().getName() + " ll=" + ll);
     return ll;
 
   }
@@ -272,9 +272,16 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     SolutionValidator validator = point -> {
       ExponentialMutuallyExcitingProcess process = newProcess(point.getPoint());
-      double mean = process.Λ().mean();
-      out.println("process mean " + mean);
-      return mean > 0;
+      for (int i = 0; i < process.dim(); i++)
+      {
+        double mean = process.Λ(i).mean();
+        out.println("process mean dim " + i + mean);
+        if (mean < 0)
+        {
+          return false;
+        }
+      }
+      return true;
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> new BOBYQAOptimizer(getParamCount() * dim() * 2 + 1);
@@ -355,17 +362,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public Vector
          Λ()
   {
-    final int n = T.size() - 1;
-
-    Vector compensator = new Vector(n);
-    for (int i = 0; i < n; i++)
-    {
-      for (int type = 0; type < dim(); type++)
-      {
-        compensator.add(Λ(type, i));
-      }
-    }
-    return compensator;
+    throw new UnsupportedOperationException("this is a multivariate process, use Λ(i) instead");
   }
 
   /**

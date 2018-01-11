@@ -216,10 +216,15 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          getΛmomentMeasure()
   {
-    Vector dT = Λ();
-    Vector moments = dT().normalizedMoments(2);
-    Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
-    return normalizedSampleMoments.sum();
+    double x = 0;
+    for (int m = 0; m < dim(); m++)
+    {
+      Vector dT = Λ(m);
+      Vector moments = dT.normalizedMoments(2);
+      Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
+      x += normalizedSampleMoments.sum();
+    }
+    return x / dim();
   }
 
   /**
