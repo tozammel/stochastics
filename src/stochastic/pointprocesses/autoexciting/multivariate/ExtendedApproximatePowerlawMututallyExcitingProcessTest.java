@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -86,7 +87,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     Vector comp1slow = process.calculateCompensatorSlow(process.getSubTimes(), 1);
     out.println("comp0slow=" + comp0slow);
     out.println("comp1slow=" + comp1slow);
-    
+
+    assertEquals(comp0slow.sum(), comp0.sum(), pow(10, -12));
+    assertEquals(comp1slow.sum(), comp1.sum(), pow(10, -12));
+
     Vector alsoComp0 = process.Λ(0);
     Vector alsoComp1 = process.Λ(1);
     out.println("alsoComp0=" + alsoComp0);
