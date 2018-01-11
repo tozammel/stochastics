@@ -7,7 +7,6 @@ import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
-import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.String.format;
@@ -24,7 +23,6 @@ import static org.apache.commons.lang.ArrayUtils.addAll;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.IntConsumer;
@@ -160,7 +158,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     assert i >= 0 : "i cannot be negative, was " + i;
     assert m < dim() : "m=" + m + " >= dim";
-    Vector Tm = getSubTimes().left[m];
+    Vector Tm = getTimeSubsets().left[m];
     assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
     return Tm.get(i);
   }
@@ -183,7 +181,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     assert m < dim() : "m=" + m + " >= dim";
 
-    return getSubTimes().right[m].lastKey();
+    return getTimeSubsets().right[m].lastKey();
   }
 
   public double
@@ -370,22 +368,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return compensator;
   }
 
-  public Vector
-         Λ(int type)
-  {
-
-    final int n = N(type);
-
-    Vector compensator = new Vector(n).setName("Λ" + type);
-    for (int i = 1; i < n; i++)
-    {
-      compensator.set(i - 1, Λ(type, i));
-    }
-
-    return compensator;
-
-  }
-
   /**
    * 
    * @param m
@@ -397,69 +379,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Λ(int m,
            int tk)
   {
-    assert 0 <= m;
-    assert m < dim();
-    return sum(n -> sum(j -> V(j, m, n, tk), 0, order() - 1), 0, dim() - 1);
-  }
-
-  public double
-         v(int j,
-           int m,
-           int n,
-           int i,
-           int k)
-  {
-    double β = β(j, m, n);
-    double b1 = exp(-β * (T(m, i - 1) - T(n, k)));
-    double b2 = exp(-β * (T(m, i) - T(n, k)));
-    double bah = b1 - b2;
-    return (α(j, m, n) / β) * bah;
-  }
-
-  public double
-         Vsum(int j,
-              int m,
-              int n,
-              int i)
-  {
-    if (i == 0)
-    {
-      return 0;
-    }
-    return sum(k -> v(j, m, n, i, k), 0, Nopen(n, T(m, i)) - 1);
-  }
-
-  /**
-   * 
-   * @param j
-   * @param m
-   * @param n
-   * @param i
-   * @return α(j, m, n) / β(j, m, n) * (1 - e^(-β * (T(m,i) - T(m,i-1)))) * A(m,
-   *         i, j) + sum(k -> 1 - e^(-β * (T(m, i) - T(n, k))), N(T(m,i-1)),
-   *         N(T(m,i)))
-   */
-  public double
-         V(int j,
-           int m,
-           int n,
-           int i)
-  {
-    if (i == 0)
-    {
-      return 0;
-    }
-    final double β = β(j, m, n);
-    double lowerTime = T(m, i - 1);
-    double upperTime = T(m, i);
-    Integer lowerTimeIndex = Nclosed(n, lowerTime);
-    Integer upperTimeIndex = Nopen(n, upperTime) - 1;
-    assert lowerTimeIndex != null;
-    assert upperTimeIndex != null;
-    assert i < N(m);
-    assert upperTimeIndex < N(n);
-    double interim = sum(k -> 1 - exp(-β * (T(m, i) - T(n, k))), lowerTimeIndex, upperTimeIndex);
-    return (α(j, m, n) / β) * (1 - exp(-β * (upperTime - lowerTime))) * (A(j, m, n, i - 1)) + interim;
+    assert 0 <= m && m < dim();
+    return Λ(m).get(tk);
   }
 
   public double
@@ -545,7 +466,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Nopen(int type,
                double t)
   {
-    Entry<Double, Integer> entry = getSubTimes().right[type].lowerEntry(t);
+    Entry<Double, Integer> entry = getTimeSubsets().right[type].lowerEntry(t);
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
@@ -563,7 +484,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Nclosed(int type,
                  double t)
   {
-    Entry<Double, Integer> entry = getSubTimes().right[type].floorEntry(t);
+    Entry<Double, Integer> entry = getTimeSubsets().right[type].floorEntry(t);
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
@@ -607,7 +528,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public Vector
          getTimes(int type)
   {
-    return getSubTimes().left[type];
+    return getTimeSubsets().left[type];
   }
 
   /**
@@ -619,7 +540,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    */
   @SuppressWarnings("unchecked")
   public Pair<Vector[], TreeMap<Double, Integer>[]>
-         getSubTimes()
+         getTimeSubsets()
   {
     assert T.size() == K.size();
     if (cachedSubTimes != null)
@@ -918,22 +839,19 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public Vector
-         calculateCompensatorSlow(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                                  int m)
+         Λslow(int m)
   {
-    final Vector[] timesSub = timesSubPair.left;
-    double kappa = 0; // this.κ.get(m);
-    final Vector mtimes = timesSub[m];
+    final Vector mtimes = getTimes(m);
     final int N = mtimes.size();
     Vector compensator = new Vector(N - 1);
     for (int i = 1; i < N; i++)
     {
       double upperTime = mtimes.get(i);
       double lowerTime = mtimes.get(i - 1);
-      double sum = (upperTime - lowerTime) * kappa;
+      double sum = 0;
       for (int n = 0; n < dim(); n++)
       {
-        final Vector ntimes = timesSub[n];
+        final Vector ntimes = getTimes(n);
         final int Nn = ntimes.size();
 
         for (int j = 0; j < order(); j++)
@@ -942,23 +860,11 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           final double βjmn = β(j, m, n);
           double ktime;
           int k = 0;
-          // for (k = 0; k < Nn && (ktime = ntimes.get(k)) <
-          // lowerTime; k++)
+
           for (k = 0; k < Nn && (ktime = ntimes.get(k)) < upperTime; k++)
           {
             sum += (αjmn / βjmn) * (exp(-βjmn * (lowerTime - ktime)) - exp(-βjmn * (upperTime - ktime)));
           }
-
-          // for (; k < Nn && (ktime = ntimes.get(k)) < upperTime;
-          // k++)
-          // {
-          // if (lowerTime <= ktime && ktime < upperTime)
-          // {
-          // sum += (αjmn / βjmn) * (1 - exp(-βjmn *
-          // (upperTime -
-          // ktime)));
-          // }
-          // }
 
         }
       }
@@ -967,30 +873,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return compensator;
   }
 
-  /**
-   * @see this{@link #calculateCompensator(Pair, int)}
-   * @param prevdt
-   * @param dt
-   * @param d
-   * @param a
-   * @return
-   */
-  protected double
-            evolveΛ(double prevdt,
-                    double dt,
-                    double d,
-                    double[] a)
-  {
-    throw new UnsupportedOperationException("TODO: do as in calculateCompensator");
-  }
-
   public Vector
-         calculateCompensator(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                              int m)
+         Λ(int m)
   {
+    Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     final Vector[] timesSub = timesSubPair.left;
     final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
-    double kappa = 0; // this.κ.get(m);
     final Vector mtimes = timesSub[m];
     final int N = mtimes.size();
     Vector compensator = new Vector(N - 1);
@@ -1002,14 +890,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double lowerTime = mtimes.get(i - 1);
       double lowerTimeBeforeLast = i > 2 ? mtimes.get(i - 2) : Double.NEGATIVE_INFINITY;
 
-      double sum = getDeterministicCompensator(m, upperTime, lowerTime, i) * kappa;
+      double sum = 0;
       for (int n = 0; n < dim(); n++)
       {
         final Vector ntimes = timesSub[n];
         Entry<Double, Integer> lowerEntryBeforeLast = Double.isInfinite(lowerTimeBeforeLast) ? null
                                                                                              : getLowerEntry(subTimeIndex, lowerTimeBeforeLast, m, n, i - 1);
         Entry<Double, Integer> lowerEntry = getLowerEntry(subTimeIndex, lowerTime, m, n, i);
-        Entry<Double, Integer> upperEntry = getUpperEntry(subTimeIndex, upperTime, n, m, i);
+        Entry<Double, Integer> upperEntry = getUpperEntry(subTimeIndex, upperTime, m, n, i);
         int lowerkBeforeLast = lowerEntryBeforeLast != null ? lowerEntryBeforeLast.getValue() : 0;
         int lowerk = lowerEntry != null ? lowerEntry.getValue() : 0;
         int upperk = upperEntry != null ? upperEntry.getValue() : ntimes.size();

@@ -78,13 +78,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
          testCalcCompensator()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
-    Vector comp0 = process.calculateCompensator(process.getSubTimes(), 0);
-    Vector comp1 = process.calculateCompensator(process.getSubTimes(), 1);
+    Vector comp0 = process.Λ(0);
+    Vector comp1 = process.Λ(1);
     out.println("comp0=" + comp0);
     out.println("comp1=" + comp1);
 
-    Vector comp0slow = process.calculateCompensatorSlow(process.getSubTimes(), 0);
-    Vector comp1slow = process.calculateCompensatorSlow(process.getSubTimes(), 1);
+    Vector comp0slow = process.Λslow(0);
+    Vector comp1slow = process.Λslow(1);
     out.println("comp0slow=" + comp0slow);
     out.println("comp1slow=" + comp1slow);
 
@@ -95,30 +95,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     Vector alsoComp1 = process.Λ(1);
     out.println("alsoComp0=" + alsoComp0);
     out.println("alsoComp1=" + alsoComp1);
-
-  }
-
-  public void
-         testV()
-  {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
-
-    for (int m = 0; m < process.dim(); m++)
-    {
-      for (int n = 0; n < process.dim(); n++)
-      {
-        for (int tk = 0; tk < process.N(m); tk++)
-        {
-          for (int j = 0; j < process.order(); j++)
-          {
-            double a = process.Vsum(j, m, n, tk);
-            double b = process.V(j, m, n, tk);
-            out.format("m=%d n=%d tk=%d j=%d Vsum=%s V=%s\n", m, n, tk, j, a, b);
-            assertEquals(String.format("j=%s m=%s n=%s tk=%s Vsum=%s != V=%s", j, m, n, tk, a, b), a, b, 1E-8);
-          }
-        }
-      }
-    }
 
   }
 
@@ -189,7 +165,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     { 25, 91, 93, 112, 166, 167, 175, 176, 189, 227 });
     process.K = new IntVector(new int[]
     { 0, 0, 1, 0, 1, 1, 0, 0, 1, 1 });
-    Pair<Vector[], TreeMap<Double, Integer>[]> sliced = process.getSubTimes();
+    Pair<Vector[], TreeMap<Double, Integer>[]> sliced = process.getTimeSubsets();
 
     TreeMap<Double, Integer>[] timeIndices = sliced.right;
     out.println("sliced left= " + Arrays.toString(sliced.left) + " right=" + Arrays.toString(timeIndices));
@@ -233,7 +209,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
-    double x = process.Φ(0, 0.25, 1, process.getSubTimes().left[0].size() - 1);
+    double x = process.Φ(0, 0.25, 1, process.getTimeSubsets().left[0].size() - 1);
     assertTrue(Double.isFinite(x));
     out.println("x=" + x);
   }

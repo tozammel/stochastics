@@ -49,7 +49,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     out.println(uniprocess.getαβVector());
     out.println();
 
-    for (Vector typeTimes : process.getSubTimes().left)
+    for (Vector typeTimes : process.getTimeSubsets().left)
     {
       out.println(typeTimes);
 
