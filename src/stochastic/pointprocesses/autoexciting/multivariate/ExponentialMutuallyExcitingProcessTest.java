@@ -1,11 +1,9 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static java.awt.EventQueue.getMostRecentEventTime;
 import static java.lang.System.out;
 
-import java.util.Arrays;
-
 import fastmath.DoubleMatrix;
+import fastmath.IntVector;
 import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess;
@@ -13,19 +11,47 @@ import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExc
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
-  
-  public void testN()
+
+  public void
+         testTotalΛ() throws InterruptedException
+  {
+    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    process.T = new Vector(4);
+    process.T.set(0, 0);
+    process.T.set(1, 19);
+    process.T.set(2, 24);
+    process.T.set(3, 27);
+
+    double a = process.Λ().sum();
+    double b = process.totalΛ();
+    assertEquals(a, b, 1E-15);
+
+    ExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    mprocess.T = process.T;
+    mprocess.K = new IntVector(process.T.size());
+
+    double c = mprocess.totalΛ();
+    assertEquals(a, c, 1E-15);
+
+    assertEquals(process.Λ(0), mprocess.Λ(0));
+
+  }
+
+
+
+  public void
+         testN()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
-   
-    assertEquals( 0, process.Nopen(0, 24) );
-    assertEquals( 1, process.Nopen(0, 26) );
-    assertEquals( 1, process.Nopen(0, 91) );
-    assertEquals( 2, process.Nopen(0, 92.01) );
-    assertEquals( 0, process.Nopen(1, 91) );
-    assertEquals( 3, process.Nopen(1, 168) );
+
+    assertEquals(0, process.Nopen(0, 24));
+    assertEquals(1, process.Nopen(0, 26));
+    assertEquals(1, process.Nopen(0, 91));
+    assertEquals(2, process.Nopen(0, 92.01));
+    assertEquals(0, process.Nopen(1, 91));
+    assertEquals(3, process.Nopen(1, 168));
   }
-  
+
   public void
          testA()
   {

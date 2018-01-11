@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting;
 
+import static java.lang.Math.abs;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
@@ -18,6 +19,20 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
 {
 
   private double phasedt;
+
+  public void
+         testSimulation()
+  {
+    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    Vector points = process.simulate(5, 20000);
+    out.println("pdiff = " + points.diff().mean());
+    ExtendedApproximatePowerlawAutoExcitingProcess inferredProcess = process.copy();
+    inferredProcess.T = points;
+    inferredProcess.estimateParameters(10);
+    out.println("simulated " + process);
+    out.println("inferred " + inferredProcess);
+    assertTrue(abs(process.meanRecurrenceTime() - inferredProcess.meanRecurrenceTime()) < 10);
+  }
 
   public void
          testInvLambdaExpectation()
@@ -214,7 +229,6 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
     }
 
   }
-
 
   public static ExtendedApproximatePowerlawAutoExcitingProcess
          constructProcess()

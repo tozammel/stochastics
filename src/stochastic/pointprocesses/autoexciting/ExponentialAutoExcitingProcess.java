@@ -953,7 +953,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   {
     double dt = nextTime - T.getRightmostValue();
     T = T.copyAndAppend(nextTime);
-    dT = dT.copyAndAppend(dt);
+    dT = dT().copyAndAppend(dt);
     if (A.length < T.size())
     {
       expandA();
