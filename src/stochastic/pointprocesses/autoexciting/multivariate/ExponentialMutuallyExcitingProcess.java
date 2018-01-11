@@ -222,12 +222,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     double tn = T.getRightmostValue();
     double ll = tn - T.getLeftmostValue() - totalΛ();
-    final int n = T.size();
 
     double S[][] = new double[order()][dim()];
     for (int type = 0; type < dim(); type++)
-
     {
+      final int n = N(type);
+
+      Vector compensator = Λ(type);
       for (int tk = 1; tk < n; tk++)
       {
         double t = T.get(tk);
@@ -239,8 +240,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           ll += log(λ);
         }
 
-        // ll -= Λ;
-
+        ll -= compensator.get(tk - 1);
       }
 
       if (Double.isNaN(ll))
@@ -560,7 +560,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       int k = K.get(i);
       assert k >= 0;
-      assert k < dim();
+      assert k < dim() : format("k=%d dim=%d", k, dim());
       timesSub[k].add(T.get(i));
     }
     for (int i = 0; i < dim(); i++)
@@ -810,7 +810,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
       if (upperEntries == null)
       {
-        upperEntries = new Entry[dim()][dim()][order()];
+        upperEntries = new Entry[dim()][dim()][T.size()];
       }
       upperEntries[m][n][i] = upperEntry;
     }
@@ -831,7 +831,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
       if (lowerEntries == null)
       {
-        lowerEntries = new Entry[dim()][dim()][order()];
+        lowerEntries = new Entry[dim()][dim()][T.size()];
       }
       lowerEntries[m][n][i] = lowerEntry;
     }

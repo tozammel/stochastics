@@ -205,7 +205,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
-    double x = process.Φ(0, 0.25, 1, process.getTimeSubsets().left[0].size() - 1);
+    double x = process.Φ(0, 0.25, 1, process.N(0) - 1);
     assertTrue(Double.isFinite(x));
     out.println("x=" + x);
   }

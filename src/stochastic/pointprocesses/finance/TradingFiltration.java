@@ -1,5 +1,7 @@
 package stochastic.pointprocesses.finance;
 
+import static java.lang.System.out;
+
 import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
@@ -24,12 +26,14 @@ public class TradingFiltration
     classifyTradeSequences();
   }
 
-  public void classifyTradeSequences()
+  public void
+         classifyTradeSequences()
   {
     TradeClassifier classifier = new TradeClassifier();
 
     int buyCount = 0;
     int sellCount = 0;
+    int unclassifiedCount = 0;
     for (int i = 0; i < times.size(); i++)
     {
       double price = prices.get(i);
@@ -37,6 +41,12 @@ public class TradingFiltration
       types.set(i, side.ordinal());
       classifier.record(price);
       double t = times.get(i);
+      if (side == Side.Unknown)
+      {
+        unclassifiedCount++;
+        side = Side.Buy;
+        types.set(i, side.ordinal());
+      }
       if (side == Side.Buy)
       {
         buyTimes.set(buyCount++, t);
@@ -45,6 +55,7 @@ public class TradingFiltration
       {
         sellTimes.set(sellCount++, t);
       }
+
     }
     buyTimes = buyTimes.slice(0, buyCount);
     sellTimes = sellTimes.slice(0, sellCount);
@@ -52,7 +63,7 @@ public class TradingFiltration
     tradeIndexes = TradingStrategy.getIndices(times);
     buyIndexes = TradingStrategy.getIndices(buyTimes);
     sellIndexes = TradingStrategy.getIndices(sellTimes);
-
+    out.println("unclassified " + unclassifiedCount);
   }
 
   public Vector times;
