@@ -91,7 +91,7 @@ public class ProcessEstimator
   {
     Vector data = loadTimes(filename, symbol);
 
-    return estimateAutoExcitingProcesses(type, trajectoryCount, data);
+    return estimateSelfExcitingProcesses(type, trajectoryCount, data);
   }
 
   /**
@@ -109,7 +109,7 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateAutoExcitingProcesses(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcesses(AutoExcitingProcessFactory.Type type,
                                        int trajectoryCount,
                                        Vector times) throws IOException
   {
@@ -128,7 +128,7 @@ public class ProcessEstimator
       
       out.println("E_" + i + "[dt]=" + sliceEdt);
 
-      AbstractSelfExcitingProcess process = estimateAutoExcitingProcess(type, trajectoryCount, slice);
+      AbstractSelfExcitingProcess process = estimateSelfExcitingProcess(type, trajectoryCount, slice);
       processes.add(process);
 
       File testFile = new File("test" + i + ".mat");
@@ -142,7 +142,7 @@ public class ProcessEstimator
   }
 
   public static AbstractSelfExcitingProcess
-         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      int trajectoryCount,
                                      Vector slice)
   {

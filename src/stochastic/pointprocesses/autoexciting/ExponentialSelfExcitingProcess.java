@@ -829,7 +829,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   }
 
   public static String[] statisticNames =
-  { "Log-Lik", "KS(Λ)", "mean(Λ)", "var(Λ)", "MM(Λ)", "LB(Λ)", "MMLB(Λ)" };
+  { "Log-Lik", "KS(Λ)", "mean(Λ)", "var(Λ)", "MM(Λ)", "LB(Λ)", "MMLB(Λ)", "E[dt]" };
 
   double A[][];
 
@@ -855,7 +855,8 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
       compensated.variance(),
       process.getΛmomentMeasure(),
       process.getLjungBoxMeasure(),
-      process.getΛmomentLjungBoxMeasure() };
+      process.getΛmomentLjungBoxMeasure(),
+      process.meanRecurrenceTime() };
 
     return addAll(stream(getParameterFields()).map(param -> process.getFieldValue(param)).toArray(), statisticsVector);
   }
