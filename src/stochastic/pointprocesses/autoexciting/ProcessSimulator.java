@@ -31,11 +31,11 @@ public class ProcessSimulator
     System.setProperty("java.util.concurrent.ForkJoinPool.common.threadFactory", TerseThreadFactory.class.getName());
   }
 
-  private AbstractAutoExcitingProcess process;
+  private AbstractSelfExcitingProcess process;
 
-  public ProcessSimulator(AutoExcitingProcess process)
+  public ProcessSimulator(SelfExcitingProcess process)
   {
-    this.process = (AbstractAutoExcitingProcess) process;
+    this.process = (AbstractSelfExcitingProcess) process;
   }
 
   public static void
@@ -172,7 +172,7 @@ public class ProcessSimulator
   public static void
          storeParameterEstimationResults(File testFile,
                                          Vector data,
-                                         AbstractAutoExcitingProcess process)
+                                         AbstractSelfExcitingProcess process)
   {
     Vector compensator = process.Λ().setName("comp");
     Vector intensity = process.λvector().setName("intensity");

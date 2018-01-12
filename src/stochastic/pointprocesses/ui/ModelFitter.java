@@ -27,7 +27,7 @@ import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingStrategy;
@@ -44,7 +44,7 @@ public class ModelFitter
 
   public JFrame frame;
   private JTable table;
-  private List<AbstractAutoExcitingProcess> processes;
+  private List<AbstractSelfExcitingProcess> processes;
   private XChartPanel<XYChart> priceChartPanel;
   private JPanel bottomPanel;
 
@@ -55,13 +55,13 @@ public class ModelFitter
     final String symbol = args.length > 1 ? args[1] : "SPY";
 
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix(matFile, symbol));
-    ArrayList<AbstractAutoExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
+    ArrayList<AbstractSelfExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
 
     CalibratedTradingStrategyViewer.launchModelViewer(processes);
 
   }
 
-  public ModelFitter(List<AbstractAutoExcitingProcess> processes)
+  public ModelFitter(List<AbstractSelfExcitingProcess> processes)
   {
     Object[][] data = getProcessParametersAndStatisticsMatrix(processes);
 
@@ -84,7 +84,7 @@ public class ModelFitter
   }
 
   public static Object[][]
-         getProcessParametersAndStatisticsMatrix(List<AbstractAutoExcitingProcess> processes)
+         getProcessParametersAndStatisticsMatrix(List<AbstractSelfExcitingProcess> processes)
   {
     List<Object[]> processStats = processes.stream()
                                            .map(process -> process.evaluateParameterStatistics(process.getParameters().toDoubleArray()))
@@ -142,14 +142,14 @@ public class ModelFitter
   public void
          plotData()
   {
-    AbstractAutoExcitingProcess firstProcess = processes.get(0);
+    AbstractSelfExcitingProcess firstProcess = processes.get(0);
 
     plotProcess(firstProcess);
 
   }
 
   public void
-         plotProcess(AbstractAutoExcitingProcess process)
+         plotProcess(AbstractSelfExcitingProcess process)
   {
 
     XChartPanel<XYChart> impulseResponseChartPanel = plot("t (ms)", "ν(t)", process::f, 0, 100);
@@ -181,7 +181,7 @@ public class ModelFitter
   }
 
   public XChartPanel<XYChart>
-         getIntensityChartPanel(AbstractAutoExcitingProcess process)
+         getIntensityChartPanel(AbstractSelfExcitingProcess process)
   {
     double firstTime = process.T.fmin();
     double intensityPlotLengthInSeconds = 5;
@@ -199,7 +199,7 @@ public class ModelFitter
   }
 
   public XYChart
-         getLogPriceChart(AbstractAutoExcitingProcess process)
+         getLogPriceChart(AbstractSelfExcitingProcess process)
   {
     double millisecondsToHours = DateUtils.convertTimeUnits(1, TimeUnit.MILLISECONDS, TimeUnit.HOURS);
     double millisecondsToSeconds = DateUtils.convertTimeUnits(1, TimeUnit.MILLISECONDS, TimeUnit.SECONDS);

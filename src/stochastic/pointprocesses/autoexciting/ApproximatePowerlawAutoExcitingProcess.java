@@ -8,7 +8,7 @@ import static java.lang.Math.pow;
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
-public class ApproximatePowerlawAutoExcitingProcess extends ExponentialAutoExcitingProcess
+public class ApproximatePowerlawAutoExcitingProcess extends ExponentialSelfExcitingProcess
 {
 
   public ApproximatePowerlawAutoExcitingProcess(double ε, double τ)

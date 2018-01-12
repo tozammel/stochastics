@@ -22,16 +22,16 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import util.SpringLayoutUtils;
 
 public class ParameterPanel extends JPanel
 {
-  private AbstractAutoExcitingProcess process;
+  private AbstractSelfExcitingProcess process;
   private Runnable callback;
 
-  public ParameterPanel(AbstractAutoExcitingProcess process, Runnable callback)
+  public ParameterPanel(AbstractSelfExcitingProcess process, Runnable callback)
   {
     super(new SpringLayout());
     this.callback = callback;

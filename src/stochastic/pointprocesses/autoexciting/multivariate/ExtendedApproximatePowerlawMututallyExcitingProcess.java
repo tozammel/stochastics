@@ -17,7 +17,7 @@ import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
@@ -251,7 +251,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     double x = 0;
     for (int type = 0; type < dim(); type++)
     {
-      x += pow(Λ(type).getLjungBoxStatistic(ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER) - (ExponentialAutoExcitingProcess.LJUNG_BOX_ORDER - 2), 2);
+      x += pow(Λ(type).getLjungBoxStatistic(ExponentialSelfExcitingProcess.LJUNG_BOX_ORDER) - (ExponentialSelfExcitingProcess.LJUNG_BOX_ORDER - 2), 2);
     }
     return x / dim();
   }

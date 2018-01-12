@@ -12,7 +12,7 @@ import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.Vector.Condition;
 import fastmath.matfile.MatFile;
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ProcessEstimator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.ui.CalibratedTradingStrategyViewer;
@@ -29,7 +29,7 @@ public class TradingStrategy
 
     TradingFiltration data = new TradingFiltration(MatFile.loadMatrix(matFile, symbol));
 
-    ArrayList<AbstractAutoExcitingProcess> processes = getCalibratedProcesses(matFile, data, Type.ExtendedApproximatePowerlaw);
+    ArrayList<AbstractSelfExcitingProcess> processes = getCalibratedProcesses(matFile, data, Type.ExtendedApproximatePowerlaw);
 
     CalibratedTradingStrategyViewer.launchModelViewer(processes).frame.setTitle(CalibratedTradingStrategyViewer.class.getSimpleName() + ": " + matFile);
 
@@ -55,19 +55,19 @@ public class TradingStrategy
    * @return an {@link ArrayList}
    * @throws IOException 
    */
-  public static ArrayList<AbstractAutoExcitingProcess>
+  public static ArrayList<AbstractSelfExcitingProcess>
          getCalibratedProcesses(final String matFile,
                                 TradingFiltration filtration, Type type ) throws IOException
   {
     int n = filtration.tradeIndexes.length;
-    ArrayList<AbstractAutoExcitingProcess> processes = new ArrayList<>();
+    ArrayList<AbstractSelfExcitingProcess> processes = new ArrayList<>();
     for (int i = 0; i < n; i++)
     {
       DoubleMatrix markedPointSlice = filtration.markedPoints.sliceRows(i == 0 ? 0 : filtration.tradeIndexes[i - 1],
                                                                                filtration.tradeIndexes[i]);
       Vector timeSlice = markedPointSlice.col(0);
 
-      AbstractAutoExcitingProcess process = type.instantiate(1);
+      AbstractSelfExcitingProcess process = type.instantiate(1);
       
       process.X = markedPointSlice;
       process.T = timeSlice;

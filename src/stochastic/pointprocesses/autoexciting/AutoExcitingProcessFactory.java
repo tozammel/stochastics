@@ -25,14 +25,14 @@ public class AutoExcitingProcessFactory
       }
     }
 
-    public AbstractAutoExcitingProcess
+    public AbstractSelfExcitingProcess
            instantiate(int dim)
     {
       return spawnNewProcess(this, dim);
     }
   };
 
-  public static AbstractAutoExcitingProcess
+  public static AbstractSelfExcitingProcess
          spawnNewProcess(Type type,
                          int dim)
   {

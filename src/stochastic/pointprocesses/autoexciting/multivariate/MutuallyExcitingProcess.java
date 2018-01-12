@@ -8,10 +8,10 @@ import org.apache.commons.math3.optim.SimpleBounds;
 
 import fastmath.IntVector;
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 
-public abstract class MutuallyExcitingProcess extends AbstractAutoExcitingProcess
+public abstract class MutuallyExcitingProcess extends AbstractSelfExcitingProcess
 {
 
   protected int dim;

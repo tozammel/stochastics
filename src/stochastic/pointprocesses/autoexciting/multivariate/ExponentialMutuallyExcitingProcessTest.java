@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.lang.Math.abs;
 import static java.lang.System.out;
 
 import fastmath.DoubleMatrix;
@@ -11,6 +12,28 @@ import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExc
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
+
+  public void
+         testMeanRecurrentTime()
+  {
+    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    double mrt = process.meanRecurrenceTime();
+    
+    //Vector points = process.simulate(5, 20000);
+    //out.println("pdiff = " + points.diff().mean());
+    ExtendedApproximatePowerlawMututallyExcitingProcess multidimProcess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    multidimProcess.assignParameters(process.getParameters().toDoubleArray());
+    
+    double multiMrt = multidimProcess.meanRecurrenceTime();
+    
+    assertEquals( mrt, multiMrt );
+    
+    //inferredProcess.T = points;
+    //inferredProcess.estimateParameters(10);
+    //out.println("simulated " + process);
+    //out.println("inferred " + inferredProcess);
+    //assertTrue(abs(process.meanRecurrenceTime() - inferredProcess.meanRecurrenceTime()) < 10);
+  }
 
   public void
          testTotalΛ() throws InterruptedException
@@ -31,9 +54,9 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());
 
-    out.println( "process=" + process );
-    out.println( "mprocess=" + mprocess );
-    
+    out.println("process=" + process);
+    out.println("mprocess=" + mprocess);
+
     Vector comp = mprocess.Λ(0);
     out.println("comp=" + comp);
     double c = mprocess.totalΛ();

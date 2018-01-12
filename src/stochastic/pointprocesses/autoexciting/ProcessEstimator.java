@@ -34,13 +34,13 @@ public class ProcessEstimator
     System.setProperty("java.util.concurrent.ForkJoinPool.common.threadFactory", TerseThreadFactory.class.getName());
   }
 
-  private AbstractAutoExcitingProcess process;
+  private AbstractSelfExcitingProcess process;
 
   private int trajectoryCount = Runtime.getRuntime().availableProcessors();
 
-  public ProcessEstimator(AutoExcitingProcess process)
+  public ProcessEstimator(SelfExcitingProcess process)
   {
-    this.process = (AbstractAutoExcitingProcess) process;
+    this.process = (AbstractSelfExcitingProcess) process;
   }
 
   public static void
@@ -61,7 +61,7 @@ public class ProcessEstimator
     String symbol = "SPY";
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<AbstractAutoExcitingProcess> processes = estimateAutoExcitingProcess(type, filename, trajectoryCount, symbol);
+    ArrayList<AbstractSelfExcitingProcess> processes = estimateAutoExcitingProcess(type, filename, trajectoryCount, symbol);
 
   }
 
@@ -74,7 +74,7 @@ public class ProcessEstimator
    * @return
    * @throws IOException
    */
-  public static ArrayList<AbstractAutoExcitingProcess>
+  public static ArrayList<AbstractSelfExcitingProcess>
          estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      String symbol) throws IOException
@@ -83,7 +83,7 @@ public class ProcessEstimator
     return estimateAutoExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
   }
 
-  public static ArrayList<AbstractAutoExcitingProcess>
+  public static ArrayList<AbstractSelfExcitingProcess>
          estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      int trajectoryCount,
@@ -108,7 +108,7 @@ public class ProcessEstimator
    * @return
    * @throws IOException
    */
-  public static ArrayList<AbstractAutoExcitingProcess>
+  public static ArrayList<AbstractSelfExcitingProcess>
          estimateAutoExcitingProcesses(AutoExcitingProcessFactory.Type type,
                                        int trajectoryCount,
                                        Vector times) throws IOException
@@ -118,7 +118,7 @@ public class ProcessEstimator
 
     out.println("E[dt]=" + Edt);
 
-    ArrayList<AbstractAutoExcitingProcess> processes = new ArrayList<>();
+    ArrayList<AbstractSelfExcitingProcess> processes = new ArrayList<>();
     int n = (int) (TradingProcess.tradingDuration / W);
     int indexes[] = TradingStrategy.getIndices(times);
 
@@ -128,7 +128,7 @@ public class ProcessEstimator
       
       out.println("E_" + i + "[dt]=" + sliceEdt);
 
-      AbstractAutoExcitingProcess process = estimateAutoExcitingProcess(type, trajectoryCount, slice);
+      AbstractSelfExcitingProcess process = estimateAutoExcitingProcess(type, trajectoryCount, slice);
       processes.add(process);
 
       File testFile = new File("test" + i + ".mat");
@@ -141,12 +141,12 @@ public class ProcessEstimator
     return processes;
   }
 
-  public static AbstractAutoExcitingProcess
+  public static AbstractSelfExcitingProcess
          estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      int trajectoryCount,
                                      Vector slice)
   {
-    AbstractAutoExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type, 1);
+    AbstractSelfExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type, 1);
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
@@ -156,7 +156,7 @@ public class ProcessEstimator
   public static void
          storeParameterEstimationResults(File testFile,
                                          Vector data,
-                                         AbstractAutoExcitingProcess process,
+                                         AbstractSelfExcitingProcess process,
                                          File modelFile)
   {
     Vector compensator = process.Λ().setName("comp");
@@ -195,7 +195,7 @@ public class ProcessEstimator
     return trajectoryCount;
   }
 
-  public AbstractAutoExcitingProcess
+  public AbstractSelfExcitingProcess
          estimate(Vector data)
   {
     if (verbose)

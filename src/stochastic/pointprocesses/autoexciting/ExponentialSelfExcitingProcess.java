@@ -55,7 +55,7 @@ import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
 import util.AutoArrayList;
 
-public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitingProcess implements MultivariateFunction, Cloneable, AutoExcitingProcess
+public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitingProcess implements MultivariateFunction, Cloneable, SelfExcitingProcess
 {
   private static final int MAX_ITERS = 1000;
 
@@ -250,8 +250,8 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public double
          getΛmomentMeasure()
   {
-    Vector dT = Λ();
-    Vector moments = dT().normalizedMoments(2);
+    Vector dΛ = Λ();
+    Vector moments = dΛ.normalizedMoments(2);
     Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
     return normalizedSampleMoments.sum();
   }
@@ -309,7 +309,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     SimpleBounds simpleBounds = getParameterBounds();
 
     SolutionValidator validator = point -> {
-      ExponentialAutoExcitingProcess process = newProcess(point.getPoint());
+      ExponentialSelfExcitingProcess process = newProcess(point.getPoint());
       return process.Λ().mean() > 0;
     };
 
@@ -321,8 +321,8 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
 
     PointValuePairComparator momentMatchingAutocorrelationComparator = (a,
                                                                         b) -> {
-      ExponentialAutoExcitingProcess processA = newProcess(a.getPoint());
-      ExponentialAutoExcitingProcess processB = newProcess(b.getPoint());
+      ExponentialSelfExcitingProcess processA = newProcess(a.getPoint());
+      ExponentialSelfExcitingProcess processB = newProcess(b.getPoint());
       double mma = processA.getΛmomentLjungBoxMeasure();
       double mmb = processB.getΛmomentLjungBoxMeasure();
       return Double.compare(mma, mmb);
@@ -510,7 +510,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
 
          logLikelihood(Vector t)
   {
-    ExponentialAutoExcitingProcess spawn = copy();
+    ExponentialSelfExcitingProcess spawn = copy();
     spawn.T = t;
     return spawn.logLik();
   }
@@ -525,10 +525,10 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
     return nthNormalizedMoment(1);
   }
 
-  public ExponentialAutoExcitingProcess
+  public ExponentialSelfExcitingProcess
          newProcess(double[] point)
   {
-    ExponentialAutoExcitingProcess process = (ExponentialAutoExcitingProcess) this.clone();
+    ExponentialSelfExcitingProcess process = (ExponentialSelfExcitingProcess) this.clone();
     process.assignParameters(point);
     return process;
   }
@@ -841,7 +841,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public Object[]
          evaluateParameterStatistics(double[] point)
   {
-    ExponentialAutoExcitingProcess process = newProcess(point);
+    ExponentialSelfExcitingProcess process = newProcess(point);
     double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
 
     Vector compensated = process.Λ();
@@ -875,7 +875,7 @@ public abstract class ExponentialAutoExcitingProcess extends AbstractAutoExcitin
   public synchronized double
          A(int tk,
            int j)
-  {   
+  {
     if (tk < 0)
     {
       return 1;

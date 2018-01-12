@@ -2,7 +2,7 @@ package stochastic.pointprocesses.autoexciting;
 
 import fastmath.Vector;
 
-public interface AutoExcitingProcess
+public interface SelfExcitingProcess
 {
 
   double getBranchingRatio();

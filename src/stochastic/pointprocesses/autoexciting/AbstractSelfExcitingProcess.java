@@ -27,7 +27,7 @@ import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 
-public abstract class AbstractAutoExcitingProcess implements MultivariateFunction, AutoExcitingProcess
+public abstract class AbstractSelfExcitingProcess implements MultivariateFunction, SelfExcitingProcess
 {
 
   public abstract AutoExcitingProcessFactory.Type
@@ -54,7 +54,7 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
   {
     try
     {
-      AbstractAutoExcitingProcess spawn = getClass().getDeclaredConstructor().newInstance();
+      AbstractSelfExcitingProcess spawn = getClass().getDeclaredConstructor().newInstance();
       spawn.assignParameters(getParameters().toDoubleArray());
       spawn.T = T;
       spawn.X = X;
@@ -78,7 +78,7 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
   }
 
   @SuppressWarnings("unchecked")
-  public final <E extends AbstractAutoExcitingProcess>
+  public final <E extends AbstractSelfExcitingProcess>
          E
          copy()
   {
@@ -132,7 +132,7 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
     }
   }
 
-  public AbstractAutoExcitingProcess()
+  public AbstractSelfExcitingProcess()
   {
     super();
   }
@@ -173,7 +173,7 @@ public abstract class AbstractAutoExcitingProcess implements MultivariateFunctio
   public abstract double
          getΛKolmogorovSmirnovStatistic();
 
-  public abstract AbstractAutoExcitingProcess
+  public abstract AbstractSelfExcitingProcess
          newProcess(double[] point);
 
   public final synchronized Field[]

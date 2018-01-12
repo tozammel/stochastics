@@ -45,10 +45,10 @@ import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExponentialAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
@@ -95,7 +95,7 @@ public class ProcessModeller
   private JFrame frame;
   private JComboBox<AutoExcitingProcessFactory.Type> processTypeComboBox;
   private ParameterPanel parameterPanel;
-  private ExponentialAutoExcitingProcess process;
+  private ExponentialSelfExcitingProcess process;
   private Container contentPane;
   private KernelPanel kernelPanel;
   private DefaultTableModel coeffecientModel;
@@ -227,7 +227,7 @@ public class ProcessModeller
     topLeftPanel.add(buttonPanel);
     topPanel.add(topLeftPanel, BorderLayout.WEST);
 
-    process = (ExponentialAutoExcitingProcess) Type.values()[0].instantiate(1);
+    process = (ExponentialSelfExcitingProcess) Type.values()[0].instantiate(1);
 
     coeffecientModel = new DefaultTableModel(process != null ? process.order() : 0, tableColumnNames.length);
     coeffecientModel.setColumnIdentifiers(tableColumnNames);
@@ -315,7 +315,7 @@ public class ProcessModeller
       times = markedPoints.col(0);
       out.println("Loaded the first 30 minutes of data containing " + markedPoints.getRowCount() + " points");
 
-      ArrayList<AbstractAutoExcitingProcess> processes = new ArrayList<>();
+      ArrayList<AbstractSelfExcitingProcess> processes = new ArrayList<>();
       ;
       times = times.copy().subtract(times.get(0));
       process.T = times;
@@ -400,15 +400,15 @@ public class ProcessModeller
 
   }
 
-  public AbstractAutoExcitingProcess
+  public AbstractSelfExcitingProcess
          refreshProcess()
   {
     Type type = getSelectedType();
     if (process == null || !process.getType().equals(type))
     {
       out.println("Switched kernel to " + type);
-      ExponentialAutoExcitingProcess prevProcess = process;
-      process = (ExponentialAutoExcitingProcess) type.instantiate(1);
+      ExponentialSelfExcitingProcess prevProcess = process;
+      process = (ExponentialSelfExcitingProcess) type.instantiate(1);
       if ( prevProcess != null )
       {
         process.T = prevProcess.T;

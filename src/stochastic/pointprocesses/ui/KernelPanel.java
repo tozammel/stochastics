@@ -13,7 +13,7 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Pair;
-import stochastic.pointprocesses.autoexciting.AbstractAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import util.Plotter;
 import util.RelativeLayout;
 
@@ -27,7 +27,7 @@ public class KernelPanel extends JPanel
   private static final int SAMPLES = 1000;
 
   private static final String ANTI_F = "anti(F)";
-  private AbstractAutoExcitingProcess process;
+  private AbstractSelfExcitingProcess process;
   private XChartPanel<XYChart> inverseIntegratedImpulseResponseChartPanel;
   private XChartPanel<XYChart> impulseResponseChartPanel;
   private XYChart impulseResponseChart;
@@ -36,7 +36,7 @@ public class KernelPanel extends JPanel
   double H = 0;
   private XChartPanel<XYChart> integratedImpulseResponseChartPanel;
 
-  public KernelPanel(AbstractAutoExcitingProcess process)
+  public KernelPanel(AbstractSelfExcitingProcess process)
   {
     super(new RelativeLayout());
     this.process = process;
@@ -70,7 +70,7 @@ public class KernelPanel extends JPanel
   }
 
   public void
-         setProcess(AbstractAutoExcitingProcess process)
+         setProcess(AbstractSelfExcitingProcess process)
   {
     this.process = process;
     // chart.updateXYSeries("sine", data[0], data[1], null);
