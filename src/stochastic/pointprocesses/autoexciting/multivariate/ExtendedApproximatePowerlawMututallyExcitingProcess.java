@@ -48,7 +48,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
                   b.toString().trim());
   }
 
-
   public Vector η;
 
   public Vector b;
@@ -279,13 +278,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
 
   @Override
   public double
-         Z()
+         Z(int type)
   {
-    return sum(j -> sum(m -> sum(n -> {
-      double a = α(j, m, n);
-      double b = β(j, m, n);
+    return sum(j -> sum(m -> {
+      double a = α(j, m, type);
+      double b = β(j, m, type);
       return a / b;
-    }, 0, dim() - 1), 0, dim() - 1), 0, order() - 1);
+    }, 0, dim() - 1), 0, order() - 1);
   }
 
   @Override

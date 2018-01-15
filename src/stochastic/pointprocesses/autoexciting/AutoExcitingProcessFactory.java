@@ -36,7 +36,7 @@ public class AutoExcitingProcessFactory
     switch (type)
     {
     case ApproximatePowerlaw:
-      return new ApproximatePowerlawAutoExcitingProcess();
+      return new ApproximatePowerlawSelfExcitingProcess();
     case ExtendedApproximatePowerlaw:
       return new ExtendedApproximatePowerlawAutoExcitingProcess();
     default:

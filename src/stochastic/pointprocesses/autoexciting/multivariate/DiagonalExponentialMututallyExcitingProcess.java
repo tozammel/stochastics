@@ -12,9 +12,9 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
 {
   @Override
   public double
-         Z()
+         Z( int type )
   {
-    return sum(j -> sum(k -> α(j, k, k) / β(j, k, k), 0, dim() - 1), 0, order() - 1);
+    return sum(j -> sum(k -> α(j, type, k) / β(j, type, k), 0, dim() - 1), 0, order() - 1);
   }
 
   /**
@@ -40,7 +40,7 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
         λ += α(j, type, k) * S[j][k];
       }
     }
-    return λ / Z();
+    return λ / Z(type);
   }
 
 //  @Override

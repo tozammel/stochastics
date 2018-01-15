@@ -238,8 +238,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
          getParamString()
   {
     return "{" + asList(getParameterFields()).stream().map(param -> param.getName() + "=" + Double.toString(getFieldValue(param))).collect(joining(","))
-           + ",Z="
-           + Z()
            + ",Edt="
            + meanRecurrenceTime()
            + "}";
@@ -303,7 +301,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
    * @return
    */
   public abstract double
-         Z();
+         Z(int type);
 
   /**
    * @see this{@link #getFieldValue(Field)} and this{@link #getField(String)}

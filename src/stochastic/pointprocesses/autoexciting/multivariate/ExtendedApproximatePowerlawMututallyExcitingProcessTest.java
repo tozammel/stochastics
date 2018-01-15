@@ -91,7 +91,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     assertEquals(comp0slow.sum(), comp0.sum(), pow(10, -12));
     assertEquals(comp1slow.sum(), comp1.sum(), pow(10, -12));
 
-
   }
 
   public void
@@ -183,9 +182,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
 
-    double z = process.Z();
-    out.println("z=" + z);
-    assertTrue(Double.isFinite(z));
+    double z0 = process.Z(0);
+    out.println("z0=" + z0);
+    assertEquals(20.34, z0);
+
+    double z1 = process.Z(1);
+    out.println("z1=" + z1);
+    assertEquals(19.488945713548063, z1);
   }
 
   public void
