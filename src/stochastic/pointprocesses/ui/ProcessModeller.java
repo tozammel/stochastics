@@ -47,9 +47,9 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
+import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import util.Plotter;
@@ -227,7 +227,7 @@ public class ProcessModeller
     topLeftPanel.add(buttonPanel);
     topPanel.add(topLeftPanel, BorderLayout.WEST);
 
-    process = (ExponentialSelfExcitingProcess) Type.values()[0].instantiate(1);
+    process = (ExponentialSelfExcitingProcess) Type.values()[0].instantiate();
 
     coeffecientModel = new DefaultTableModel(process != null ? process.order() : 0, tableColumnNames.length);
     coeffecientModel.setColumnIdentifiers(tableColumnNames);
@@ -408,8 +408,8 @@ public class ProcessModeller
     {
       out.println("Switched kernel to " + type);
       ExponentialSelfExcitingProcess prevProcess = process;
-      process = (ExponentialSelfExcitingProcess) type.instantiate(1);
-      if ( prevProcess != null )
+      process = (ExponentialSelfExcitingProcess) type.instantiate();
+      if (prevProcess != null)
       {
         process.T = prevProcess.T;
         process.X = prevProcess.X;

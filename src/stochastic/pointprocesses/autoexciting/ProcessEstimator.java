@@ -125,7 +125,7 @@ public class ProcessEstimator
     range(0, n).forEachOrdered(i -> {
       Vector slice = times.slice(i == 0 ? 0 : indexes[i - 1], indexes[i]);
       double sliceEdt = slice.diff().mean();
-      
+
       out.println("E_" + i + "[dt]=" + sliceEdt);
 
       AbstractSelfExcitingProcess process = estimateSelfExcitingProcess(type, trajectoryCount, slice);
@@ -146,7 +146,7 @@ public class ProcessEstimator
                                      int trajectoryCount,
                                      Vector slice)
   {
-    AbstractSelfExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type, 1);
+    AbstractSelfExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type);
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
@@ -226,11 +226,11 @@ public class ProcessEstimator
     process.T = data;
     ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), null);
     process.printResults(optimizer);
-//    double averageError = process.getInnovationSequence().mean();
-//    out.println("E(I)=" + process.getMeanPredictionError()
-//               
-//                + " sqrt(E(I^2))="
-//                + process.getRootMeanSquaredPredictionError());
+    // double averageError = process.getInnovationSequence().mean();
+    // out.println("E(I)=" + process.getMeanPredictionError()
+    //
+    // + " sqrt(E(I^2))="
+    // + process.getRootMeanSquaredPredictionError());
     return process;
 
   }

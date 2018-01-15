@@ -11,7 +11,7 @@ import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 
-public abstract class MutuallyExcitingProcess extends AbstractSelfExcitingProcess
+public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingProcess
 {
 
   protected int dim;

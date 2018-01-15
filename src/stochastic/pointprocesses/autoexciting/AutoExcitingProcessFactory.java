@@ -1,7 +1,5 @@
 package stochastic.pointprocesses.autoexciting;
 
-import stochastic.pointprocesses.autoexciting.multivariate.ExtendedApproximatePowerlawMututallyExcitingProcess;
-
 public class AutoExcitingProcessFactory
 {
   public static enum Type
@@ -26,36 +24,23 @@ public class AutoExcitingProcessFactory
     }
 
     public AbstractSelfExcitingProcess
-           instantiate(int dim)
+           instantiate()
     {
-      return spawnNewProcess(this, dim);
+      return spawnNewProcess(this);
     }
   };
 
   public static AbstractSelfExcitingProcess
-         spawnNewProcess(Type type,
-                         int dim)
+         spawnNewProcess(Type type)
   {
-    switch (dim)
+    switch (type)
     {
-    case 1:
-      switch (type)
-      {
-      case ApproximatePowerlaw:
-        return new ApproximatePowerlawAutoExcitingProcess();
-      case ExtendedApproximatePowerlaw:
-        return new ExtendedApproximatePowerlawAutoExcitingProcess();
-      default:
-        throw new UnsupportedOperationException("TODO: " + type);
-      }
+    case ApproximatePowerlaw:
+      return new ApproximatePowerlawAutoExcitingProcess();
+    case ExtendedApproximatePowerlaw:
+      return new ExtendedApproximatePowerlawAutoExcitingProcess();
     default:
-      switch (type)
-      {
-      case MultivariateExtendedApproximatePowerlaw:
-        return new ExtendedApproximatePowerlawMututallyExcitingProcess(dim);
-      default:
-        throw new UnsupportedOperationException("TODO: " + type);
-      }
+      throw new UnsupportedOperationException("TODO: " + type);
     }
   }
 }

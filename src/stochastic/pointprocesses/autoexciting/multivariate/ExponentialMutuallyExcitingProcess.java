@@ -71,7 +71,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     int tk = T.size() - 1;
     throw new UnsupportedOperationException("TODO");
-    // return Φ(t, y, tk) / Φdt(t, tk);
   }
 
   public double

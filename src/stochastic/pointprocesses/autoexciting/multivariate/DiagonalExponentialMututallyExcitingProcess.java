@@ -59,19 +59,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
     throw new UnsupportedOperationException("TODO");
   }
 
-  @Override
-  public double
-         getStationaryλ()
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
-
-  @Override
-  public double
-         λ(double t)
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
 
   @Override
   public double

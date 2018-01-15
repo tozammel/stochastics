@@ -67,7 +67,7 @@ public class TradingStrategy
                                                                                filtration.tradeIndexes[i]);
       Vector timeSlice = markedPointSlice.col(0);
 
-      AbstractSelfExcitingProcess process = type.instantiate(1);
+      AbstractSelfExcitingProcess process = type.instantiate();
       
       process.X = markedPointSlice;
       process.T = timeSlice;

@@ -1,4 +1,4 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.seq;
 import static java.lang.Math.sqrt;
@@ -25,13 +25,12 @@ import dnl.utils.text.table.TextTable;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
-import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
+import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
+import stochastic.pointprocesses.autoexciting.BoundedParameter;
 
-public abstract class AbstractSelfExcitingProcess implements MultivariateFunction, SelfExcitingProcess
+public abstract class AbstractMutuallyExcitingProcess implements MultivariateFunction
 {
-
-  public abstract AutoExcitingProcessFactory.Type
-         getType();
 
   public Vector T;
 
@@ -54,11 +53,11 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
   {
     try
     {
-      AbstractSelfExcitingProcess spawn = getClass().getDeclaredConstructor().newInstance();
+      AbstractMutuallyExcitingProcess spawn = getClass().getDeclaredConstructor().newInstance();
       spawn.assignParameters(getParameters().toDoubleArray());
       spawn.T = T;
       spawn.X = X;
-      
+
       return spawn;
     }
     catch (Exception e)
@@ -127,7 +126,7 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
     }
   }
 
-  public AbstractSelfExcitingProcess()
+  public AbstractMutuallyExcitingProcess()
   {
     super();
   }
@@ -168,7 +167,7 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
   public abstract double
          getΛKolmogorovSmirnovStatistic();
 
-  public abstract AbstractSelfExcitingProcess
+  public abstract AbstractMutuallyExcitingProcess
          newProcess(double[] point);
 
   public final synchronized Field[]
@@ -438,4 +437,22 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
   public abstract Vector
          λvector(int type);
 
-};
+  public abstract double
+         getBranchingRatio();
+
+  public abstract double
+         logLikelihood(Vector t);
+
+  public abstract Type
+         getType();
+
+  public abstract double
+         Φδ(double t,
+            double y,
+            int tk);
+
+  public abstract double
+         Φδ(double t,
+            double y);
+
+}
