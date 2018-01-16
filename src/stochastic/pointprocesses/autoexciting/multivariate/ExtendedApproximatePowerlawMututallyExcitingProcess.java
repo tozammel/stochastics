@@ -277,6 +277,18 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return sum(m -> sum(j -> α(j, m, type) * exp(-β(j, m, type) * t), 0, order() - 1), 0, dim() - 1) / Z(type);
   }
 
+  /**
+   * @return 1+(∑_m∑_j(α[j,m,n]/β[j,m,n])*exp(-β[j,m,n]*t))/Z(type) <br>
+   *         m=0..dim-1 j=0..order-1
+   */
+  @Override
+  public double
+         F(int type,
+           double t)
+  {
+    return 1 - sum(m -> sum(j -> (α(j, m, type) / β(j, m, type)) * exp(-β(j, m, type) * t), 0, order() - 1), 0, dim() - 1) / Z(type);
+  }
+
   @Override
   public double
          Z(int type)
@@ -286,14 +298,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
       double b = β(j, m, type);
       return a / b;
     }, 0, dim() - 1), 0, order() - 1);
-  }
-
-  @Override
-  public double
-         F(int type,
-           double t)
-  {
-    throw new UnsupportedOperationException("TODO");
   }
 
   @Override
