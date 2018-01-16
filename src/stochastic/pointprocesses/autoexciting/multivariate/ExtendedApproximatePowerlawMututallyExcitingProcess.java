@@ -18,12 +18,12 @@ import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
 /**
  * a multivariate version of
- * {@link ExtendedApproximatePowerlawAutoExcitingProcess} with null
+ * {@link ExtendedApproximatePowerlawSelfExcitingProcess} with null
  * cross-terms.. that is, the branching matrix is a diagonal vector
  */
 public class ExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMututallyExcitingProcess
@@ -95,7 +95,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public BoundedParameter[]
          getBoundedParameters()
   {
-    return ExtendedApproximatePowerlawAutoExcitingProcess.Parameter.values();
+    return ExtendedApproximatePowerlawSelfExcitingProcess.Parameter.values();
   }
 
   @Override
@@ -271,9 +271,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
 
   @Override
   public double
-         f(double t)
+         f(int type,
+           double t)
   {
-    throw new UnsupportedOperationException("TODO");
+    return sum(m -> sum(j -> α(j, m, type) * exp(-β(j, m, type) * t), 0, order() - 1), 0, dim() - 1) / Z(type);
   }
 
   @Override
@@ -289,7 +290,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
 
   @Override
   public double
-         F(double t)
+         F(int type,
+           double t)
   {
     throw new UnsupportedOperationException("TODO");
   }

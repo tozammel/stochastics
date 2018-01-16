@@ -178,6 +178,20 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   }
 
   public void
+         testf()
+  {
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    out.println("testing f for " + process);
+    double val0 = process.f(0, 6.5);
+    double val1 = process.f(1, 6.5);
+    /**
+     * see MultivariateInverseCompensator.mw
+     */
+    assertEquals(0.021354862160664107589, val0, pow(10, -10));
+    assertEquals(0.022194945435683109689, val1, pow(10, -10));
+  }
+
+  public void
          testZ()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
@@ -189,6 +203,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     double z1 = process.Z(1);
     out.println("z1=" + z1);
     assertEquals(19.488945713548063, z1);
+
   }
 
   public void

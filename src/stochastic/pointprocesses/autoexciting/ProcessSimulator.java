@@ -49,7 +49,7 @@ public class ProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+      ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
       // process.ε = 0.05;
       process.T = new Vector(new double[]
       { process.meanRecurrenceTime() });
@@ -62,7 +62,7 @@ public class ProcessSimulator
   }
 
   public static Vector
-         simulateProcess(ExtendedApproximatePowerlawAutoExcitingProcess process,
+         simulateProcess(ExtendedApproximatePowerlawSelfExcitingProcess process,
                          int seed)
   {
     int lastRejectedPoint = -1;

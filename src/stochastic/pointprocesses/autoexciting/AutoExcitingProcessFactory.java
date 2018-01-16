@@ -38,7 +38,7 @@ public class AutoExcitingProcessFactory
     case ApproximatePowerlaw:
       return new ApproximatePowerlawSelfExcitingProcess();
     case ExtendedApproximatePowerlaw:
-      return new ExtendedApproximatePowerlawAutoExcitingProcess();
+      return new ExtendedApproximatePowerlawSelfExcitingProcess();
     default:
       throw new UnsupportedOperationException("TODO: " + type);
     }

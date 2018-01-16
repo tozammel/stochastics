@@ -7,7 +7,7 @@ import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
 import junit.framework.TestCase;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawAutoExcitingProcess;
+import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest;
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
@@ -16,7 +16,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testMeanRecurrentTime()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
     double mrt = process.meanRecurrenceTime();
     
     //Vector points = process.simulate(5, 20000);
@@ -38,7 +38,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testTotalΛ() throws InterruptedException
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
     process.T = new Vector(4);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -82,7 +82,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testA()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess uniprocess = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
 
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.ε.set(new double[]

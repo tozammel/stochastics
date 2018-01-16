@@ -23,10 +23,10 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testSimulation()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
     Vector points = process.simulate(5, 20000);
     out.println("pdiff = " + points.diff().mean());
-    ExtendedApproximatePowerlawAutoExcitingProcess inferredProcess = process.copy();
+    ExtendedApproximatePowerlawSelfExcitingProcess inferredProcess = process.copy();
     inferredProcess.T = points;
     inferredProcess.estimateParameters(10);
     out.println("simulated " + process);
@@ -37,7 +37,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testInvLambdaExpectation()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]
@@ -48,7 +48,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testInvLambda()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]
@@ -107,7 +107,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testNormalization()
   {
-    final ExtendedApproximatePowerlawAutoExcitingProcess process = constructProcess();
+    final ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
 
     double z = process.Z();
     assertEquals(20.34, z, 1E-5);
@@ -117,7 +117,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testSaveLoad() throws IOException
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = new ExtendedApproximatePowerlawAutoExcitingProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
     process.b = 1;
     process.η = 1;
     process.ε = 0.25;
@@ -125,7 +125,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
     File tempFile = File.createTempFile("test", "params");
     out.println("Wrote params to " + tempFile.getAbsolutePath());
     process.storeParameters(tempFile);
-    ExtendedApproximatePowerlawAutoExcitingProcess loaded = new ExtendedApproximatePowerlawAutoExcitingProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess loaded = new ExtendedApproximatePowerlawSelfExcitingProcess();
     loaded.loadParameters(tempFile);
     assertEquals(process.getParameters(), loaded.getParameters());
   }
@@ -148,7 +148,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
          testfandF()
   {
 
-    final ExtendedApproximatePowerlawAutoExcitingProcess process = constructProcess();
+    final ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
 
     println(process.getParamString());
     assertEquals(0.07971548, process.f(1.9), 1E-7);
@@ -159,7 +159,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testinvΛ() throws InterruptedException
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
     process.T = new Vector(3);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -194,7 +194,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testTotalΛ() throws InterruptedException
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
     process.T = new Vector(4);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -210,7 +210,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testA()
   {
-    ExtendedApproximatePowerlawAutoExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
     process.T = new Vector(3);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -230,10 +230,10 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
 
   }
 
-  public static ExtendedApproximatePowerlawAutoExcitingProcess
+  public static ExtendedApproximatePowerlawSelfExcitingProcess
          constructProcess()
   {
-    final ExtendedApproximatePowerlawAutoExcitingProcess process = new ExtendedApproximatePowerlawAutoExcitingProcess();
+    final ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
 
     process.assignParameters(new double[]
     { 1, 0, 3, 1.78 });

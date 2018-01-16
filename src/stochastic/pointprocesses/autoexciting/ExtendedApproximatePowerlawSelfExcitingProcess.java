@@ -17,7 +17,7 @@ import fastmath.matfile.MatFile;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
-public class ExtendedApproximatePowerlawAutoExcitingProcess extends ApproximatePowerlawSelfExcitingProcess implements MultivariateFunction, Serializable
+public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximatePowerlawSelfExcitingProcess implements MultivariateFunction, Serializable
 {
 
   @Override
@@ -27,7 +27,7 @@ public class ExtendedApproximatePowerlawAutoExcitingProcess extends ApproximateP
     return Type.ExtendedApproximatePowerlaw;
   }
 
-  public ExtendedApproximatePowerlawAutoExcitingProcess()
+  public ExtendedApproximatePowerlawSelfExcitingProcess()
   {
   }
 
