@@ -61,7 +61,7 @@ public class ProcessEstimator
     String symbol = "SPY";
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<AbstractSelfExcitingProcess> processes = estimateAutoExcitingProcess(type, filename, trajectoryCount, symbol);
+    ArrayList<AbstractSelfExcitingProcess> processes = estimateSelfExcitingProcess(type, filename, trajectoryCount, symbol);
 
   }
 
@@ -75,16 +75,16 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      String symbol) throws IOException
 
   {
-    return estimateAutoExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
+    return estimateSelfExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
   }
 
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateAutoExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      String filename,
                                      int trajectoryCount,
                                      String symbol) throws IOException
@@ -225,7 +225,7 @@ public class ProcessEstimator
 
     process.T = data;
     ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), null);
-    process.printResults(optimizer);
+
     // double averageError = process.getInnovationSequence().mean();
     // out.println("E(I)=" + process.getMeanPredictionError()
     //

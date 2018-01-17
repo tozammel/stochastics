@@ -302,7 +302,6 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          estimateParameters(int numStarts,
                             IntConsumer progressNotifier)
   {
-    int digits = 15;
     int maxIters = Integer.MAX_VALUE;
 
     MaxEval maxEval = new MaxEval(maxIters);
@@ -347,6 +346,8 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
     // plot("λ(t)", this::λ, T.fmin(), T.fmax(), 5000 );
 
+    printResults(multiopt);
+    
     return multiopt;
   }
 

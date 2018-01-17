@@ -24,14 +24,14 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
          testSimulation()
   {
     ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
-    Vector points = process.simulate(5, 20000);
+    Vector points = process.simulate(5, 30000);
     out.println("pdiff = " + points.diff().mean());
     ExtendedApproximatePowerlawSelfExcitingProcess inferredProcess = process.copy();
     inferredProcess.T = points;
     inferredProcess.estimateParameters(10);
     out.println("simulated " + process);
     out.println("inferred " + inferredProcess);
-    assertTrue(abs(process.meanRecurrenceTime() - inferredProcess.meanRecurrenceTime()) < 10);
+    assertTrue(abs(process.meanRecurrenceTime() - inferredProcess.meanRecurrenceTime()) < 1);
   }
 
   public void
