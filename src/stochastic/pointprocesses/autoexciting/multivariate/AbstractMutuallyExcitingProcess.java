@@ -276,34 +276,43 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   /**
    * kernel function
-   * @param type TODO
-   * @param t
+   * 
    * 
    * @return
    */
   public abstract double
-         f(int type, double t);
+         f(int m,
+           int n,
+           double t);
 
   /**
    * integrated kernel function, regarded as a cumulative distribution function
    * when this{@link #ρ()}=1, it gives the probability that an event happens
    * before time t
-   * @param type TODO
+   * 
+   * @param type
+   *          TODO
    * @param t
    * 
    * @return ∫ν(s)ds(0,t) integral of this{@link #f(int, double)} over s=0..t
    */
   public abstract double
-         F(int type, double t);
+         F(int m,
+           int n,
+           double t);
 
   /**
-   * normalization factor which ensures the integral of this{@link #f(int, double)}
-   * over [0,∞] is equal to this#ρ()
+   * normalization factor which ensures the integral of
+   * this{@link #f(int, double)} over [0,∞] is equal to this#ρ()
+   * 
+   * @param n
+   *          TODO
    * 
    * @return
    */
   public abstract double
-         Z(int type);
+         Z(int m,
+           int n);
 
   /**
    * @see this{@link #getFieldValue(Field)} and this{@link #getField(String)}

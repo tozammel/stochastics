@@ -12,9 +12,10 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
 {
   @Override
   public double
-         Z( int type )
+         Z(int m,
+           int n)
   {
-    return sum(j -> sum(k -> α(j, type, k) / β(j, type, k), 0, dim() - 1), 0, order() - 1);
+    return sum(j -> sum(k -> α(j, m, k) / β(j, m, k), 0, dim() - 1), 0, order() - 1);
   }
 
   /**
@@ -25,32 +26,33 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
    */
   @Override
   protected double
-            evolveλ(int type,
+            evolveλ(int m,
                     double dt,
                     double[][] S)
   {
-    assert type < dim() : format("type=%d dt=%f order=%d dim=%d\n", type, dt, order(), dim());
+    assert m < dim() : format("type=%d dt=%f order=%d dim=%d\n", m, dt, order(), dim());
 
     double λ = 0;
     for (int j = 0; j < order(); j++)
     {
-      for (int k = 0; k < dim(); k++)
+      for (int n = 0; n < dim(); n++)
       {
-        S[j][k] = exp(-β(j, type, k) * dt) * (1 + S[j][k]);
-        λ += α(j, type, k) * S[j][k];
+        S[j][n] = exp(-β(j, m, n) * dt) * (1 + S[j][n]);
+        λ += α(j, m, n) * S[j][n] / Z(m, n);
       }
     }
-    return λ / Z(type);
+    return λ;
   }
 
-//  @Override
-//  public double
-//         totalΛ()
-//  {
-//    double tn = T.getRightmostValue();
-//
-//    return (sum(i -> sum(j -> (α(i, j, j) / β(i, j, j)) * (1 - exp(-β(i, j, j) * (tn - T.get(i)))), 0, dim() - 1), 0, T.size() - 1)) / Z();
-//  }
+  // @Override
+  // public double
+  // totalΛ()
+  // {
+  // double tn = T.getRightmostValue();
+  //
+  // return (sum(i -> sum(j -> (α(i, j, j) / β(i, j, j)) * (1 - exp(-β(i, j, j) *
+  // (tn - T.get(i)))), 0, dim() - 1), 0, T.size() - 1)) / Z();
+  // }
 
   @Override
   public double
@@ -58,7 +60,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
   {
     throw new UnsupportedOperationException("TODO");
   }
-
 
   @Override
   public double
@@ -86,7 +87,8 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
       }
 
     }
-    return dt;  }
+    return dt;
+  }
 
   @Override
   public Vector

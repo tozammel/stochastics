@@ -689,7 +689,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public Vector
-         calculateIntensity(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
+         λvector(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
                             int m)
   {
     double R[][][] = new double[order()][dim()][dim()];

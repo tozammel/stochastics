@@ -271,10 +271,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
 
   @Override
   public double
-         f(int type,
+         f(int m,
+           int n,
            double t)
   {
-    return sum(m -> sum(j -> α(j, m, type) * exp(-β(j, m, type) * t), 0, order() - 1), 0, dim() - 1) / Z(type);
+    return sum(j -> α(j, m, n) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
   }
 
   /**
@@ -283,21 +284,23 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
    */
   @Override
   public double
-         F(int type,
+         F(int m,
+           int n,
            double t)
   {
-    return 1 - sum(m -> sum(j -> (α(j, m, type) / β(j, m, type)) * exp(-β(j, m, type) * t), 0, order() - 1), 0, dim() - 1) / Z(type);
+    return 1 - sum(j -> (α(j, m, n) / β(j, m, n)) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
   }
 
   @Override
   public double
-         Z(int type)
+         Z(int m,
+           int n)
   {
-    return sum(j -> sum(m -> {
-      double a = α(j, m, type);
-      double b = β(j, m, type);
+    return sum(j -> {
+      double a = α(j, m, m);
+      double b = β(j, m, m);
       return a / b;
-    }, 0, dim() - 1), 0, order() - 1);
+    }, 0, order() - 1);
   }
 
   @Override

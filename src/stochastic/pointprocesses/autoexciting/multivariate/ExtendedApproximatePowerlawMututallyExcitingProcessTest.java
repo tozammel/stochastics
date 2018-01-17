@@ -74,6 +74,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
   }
 
+  public void testIntensity()
+  {
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    Vector intensity = process.λvector(process.getTimeSubsets(), 0);
+    out.println( "intensity=" + intensity );
+  }
+  
   public void
          testCalcCompensator()
   {
@@ -182,8 +189,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     out.println("testing f for " + process);
-    double val0 = process.f(0, 6.5);
-    double val1 = process.f(1, 6.5);
+    double val0 = process.f(0, 0, 6.5);
+    double val1 = process.f(1, 1, 6.5);
     /**
      * see MultivariateInverseCompensator.mw
      */
@@ -196,16 +203,16 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     out.println("testing F for " + process);
-    double val0 = process.F(0, 6.5);
-    double val1 = process.F(1, 6.5);
+    double val0 = process.F(0, 0, 6.5);
+    double val1 = process.F(1, 1, 6.5);
     /**
      * see MultivariateInverseCompensator.mw
      */
     assertEquals(0.44789085456473543591, val0, pow(10, -10));
     assertEquals(0.47192399850061964076, val1, pow(10, -10));
 
-    val0 = process.F(0, 650000);
-    val1 = process.F(1, 650000);
+    val0 = process.F(0, 0, 650000);
+    val1 = process.F(1, 1, 650000);
     /**
      * see MultivariateInverseCompensator.mw
      */
@@ -218,11 +225,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
 
-    double z0 = process.Z(0);
+    double z0 = process.Z(0, 0);
     out.println("z0=" + z0);
     assertEquals(20.34, z0);
 
-    double z1 = process.Z(1);
+    double z1 = process.Z(1, 1);
     out.println("z1=" + z1);
     assertEquals(19.488945713548063, z1);
 
