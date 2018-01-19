@@ -291,16 +291,21 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return 1 - sum(j -> (α(j, m, n) / β(j, m, n)) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
   }
 
+  /**
+   * 
+   * @return normalizing constant such that the branching rate equals 1
+   */
   @Override
   public double
          Z(int m,
            int n)
   {
-    return sum(j -> {
-      double a = α(j, m, m);
-      double b = β(j, m, m);
+    double c = sum(j -> {
+      double a = α(j, m, n);
+      double b = β(j, m, n);
       return a / b;
     }, 0, order() - 1);
+    return c != 0.0 ? c : 1;
   }
 
   @Override
@@ -385,13 +390,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
    * 
    * @param m
    * @param d
-   * @return 
+   * @return
    */
   public double
          λ(int m,
            double d)
   {
-    
+
     throw new UnsupportedOperationException("TODO");
   }
 
