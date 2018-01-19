@@ -76,7 +76,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     assertEquals(1, process.Nopen(0, 91));
     assertEquals(2, process.Nopen(0, 92.01));
     assertEquals(0, process.Nopen(1, 91));
-    assertEquals(3, process.Nopen(1, 168));
+    assertEquals(4, process.Nopen(1, 168));
   }
 
   public void
