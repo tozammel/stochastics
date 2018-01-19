@@ -275,6 +275,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
            int n,
            double t)
   {
+    assert t >= 0 : "t cannot be negative, was " + t + " m=" + m + " n=" + n;
     return sum(j -> α(j, m, n) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
   }
 
@@ -394,10 +395,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
    */
   public double
          λ(int m,
-           double d)
+           double t)
   {
+    assert t >= 0 : "t cannot be negative, was " + t;
 
-    throw new UnsupportedOperationException("TODO");
+    return sum(n -> sum(k -> f(m, n, t - T(n, k)), 0, Nopen(n, t) - 1), 0, dim() - 1);
   }
 
 }
