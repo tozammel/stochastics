@@ -79,6 +79,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     Vector intensity = process.λvector(process.getTimeSubsets(), 0);
     out.println( "intensity=" + intensity );
+    
+    double λ = process.λ(0, 127.2 );
+    assertEquals( 31.337, λ, pow(10,-10 ) );
   }
   
   public void

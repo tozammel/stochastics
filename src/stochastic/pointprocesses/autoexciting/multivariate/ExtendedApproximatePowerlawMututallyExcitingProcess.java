@@ -380,4 +380,19 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return sum(k -> Λ(k).sum(), 0, dim() - 1);
   }
 
+  /**
+   * the conditional intensity of the m-th dimension of the process at time t
+   * 
+   * @param m
+   * @param d
+   * @return 
+   */
+  public double
+         λ(int m,
+           double d)
+  {
+    
+    throw new UnsupportedOperationException("TODO");
+  }
+
 }
