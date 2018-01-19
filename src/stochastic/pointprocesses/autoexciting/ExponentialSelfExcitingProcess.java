@@ -958,6 +958,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          appendTime(double nextTime)
   {
     double dt = nextTime - T.getRightmostValue();
+    assert dt >= 0 : "dt cannot be negative, dt=" + dt + " where nextTime=" + nextTime + " and max(T)=" + T.getRightmostValue();
     T = T.copyAndAppend(nextTime);
     dT = dT().copyAndAppend(dt);
     if (A.length < T.size())
