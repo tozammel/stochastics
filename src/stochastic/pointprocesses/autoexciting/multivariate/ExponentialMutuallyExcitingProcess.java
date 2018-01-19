@@ -58,7 +58,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public abstract int
          order();
 
-
   public ExponentialMutuallyExcitingProcess()
   {
 
@@ -569,7 +568,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return cachedSubTimes;
   }
 
-
   /**
    * 
    * @param j
@@ -690,7 +688,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   public Vector
          λvector(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                            int m)
+                 int m)
   {
     double R[][][] = new double[order()][dim()][dim()];
     Vector[] timesSub = timesSubPair.left;
@@ -822,6 +820,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         final Vector ntimes = getTimes(n);
         final int Nn = ntimes.size();
+        final double Z = Z(m, n);
 
         for (int j = 0; j < order(); j++)
         {
@@ -832,7 +831,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
           for (k = 0; k < Nn && (ktime = ntimes.get(k)) < upperTime; k++)
           {
-            sum += (αjmn / βjmn) * (exp(-βjmn * (lowerTime - ktime)) - exp(-βjmn * (upperTime - ktime)));
+            sum += ((αjmn / βjmn) * (exp(-βjmn * (lowerTime - ktime)) - exp(-βjmn * (upperTime - ktime)))) / Z;
           }
 
         }
@@ -898,7 +897,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             }
           }
 
-          sum += (αjmn / βjmn) * innerSum;
+          sum += (αjmn / βjmn) * innerSum / Z(m, n);
 
         }
       }

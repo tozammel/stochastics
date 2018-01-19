@@ -79,15 +79,15 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     Vector intensity = process.λvector(process.getTimeSubsets(), 0);
-//    out.println(ansi().fgBrightGreen() + "process="
-//                + process
-//                + "\nT[0]="
-//                + process.getTimes(0)
-//                + "\nT[1]="
-//                + process.getTimes(1)
-//                + "\nintensity="
-//                + intensity
-//                + ansi().fgDefault());
+    // out.println(ansi().fgBrightGreen() + "process="
+    // + process
+    // + "\nT[0]="
+    // + process.getTimes(0)
+    // + "\nT[1]="
+    // + process.getTimes(1)
+    // + "\nintensity="
+    // + intensity
+    // + ansi().fgDefault());
 
     double λ0 = process.λ(0, 116);
     assertEquals(0.006488609684355583, λ0, pow(10, -11));
@@ -98,12 +98,17 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   }
 
   public void
-         testCalcCompensator()
+         testCompensator()
   {
+    Vector correctComp0 = new Vector(new double[]
+    { .6367558268, .155201254, 1.197807576, .156229219 });
+    Vector correctComp1 = new Vector(new double[]
+    { .4998888423, .8070096157, .165624490, 1.059560873, .805224444, .278509920 });
+
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     Vector comp0 = process.Λ(0);
     Vector comp1 = process.Λ(1);
-    out.println("comp0=" + comp0);
+    out.println("process " + process + "\ncomp0=" + comp0);
     out.println("comp1=" + comp1);
 
     Vector comp0slow = process.Λslow(0);
@@ -111,8 +116,14 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     out.println("comp0slow=" + comp0slow);
     out.println("comp1slow=" + comp1slow);
 
+    out.println("correctcomp0=" + correctComp0);
+    out.println("correctcomp1=" + correctComp1);
+
     assertEquals(comp0slow.sum(), comp0.sum(), pow(10, -12));
     assertEquals(comp1slow.sum(), comp1.sum(), pow(10, -12));
+
+    assertTrue(correctComp0.equals(comp0, pow(10, -7)));
+    assertTrue(correctComp1.equals(comp1, pow(10, -7)));
 
   }
 
