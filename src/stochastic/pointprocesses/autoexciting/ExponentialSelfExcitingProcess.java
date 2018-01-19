@@ -347,7 +347,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     // plot("λ(t)", this::λ, T.fmin(), T.fmax(), 5000 );
 
     printResults(multiopt);
-    
+
     return multiopt;
   }
 
@@ -355,6 +355,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
             Λ(double dt,
               int tk)
   {
+    assert dt >= 0 : "dt cannot be negative, was " + dt + " at tk=" + tk;
     double Λ = dt * κ;
     for (int j = 0; j < order(); j++)
     {
@@ -677,6 +678,8 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public final double
          λ(double t)
   {
+    assert t >= 0 : "t cannot be negative, was " + t;
+
     DoubleAdder sum = new DoubleAdder();
     sum.add(κ);
     double s;
@@ -929,6 +932,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
                     double t,
                     double[] S)
   {
+    assert dt >= 0 : "dt cannot be negative, was " + dt + " at t=" + t;
     double λ = κ;
     for (int j = 0; j < order(); j++)
     {

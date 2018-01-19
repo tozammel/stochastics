@@ -22,9 +22,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
     process.ε.assign(0.02, 0.04);
     process.T = new Vector(new double[]
-    { 25, 92, 93, 112, 166, 167, 175, 176, 189, 227 });
+    { 25, 92, 93, 104, 112, 166, 167, 175, 176, 189, 227, 229 });
     process.K = new IntVector(new int[]
-    { 0, 0, 0, 1, 1, 1, 0, 0, 1, 1 });
+    { 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1 });
     return process;
   }
 
@@ -74,16 +74,17 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
   }
 
-  public void testIntensity()
+  public void
+         testIntensity()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     Vector intensity = process.λvector(process.getTimeSubsets(), 0);
-    out.println( "intensity=" + intensity );
-    
-    double λ = process.λ(0, 127.2 );
-    assertEquals( 31.337, λ, pow(10,-10 ) );
+    out.println("T[0]=" + process.getTimes(0) + " intensity=" + intensity);
+
+    double λ = process.λ(0, 127.2);
+    assertEquals(31.337, λ, pow(10, -10));
   }
-  
+
   public void
          testCalcCompensator()
   {
