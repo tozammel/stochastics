@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static fastmath.Functions.sum;
 import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
@@ -7,6 +8,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 import java.util.Arrays;
 import java.util.TreeMap;
+
+import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 
 import fastmath.IntVector;
 import fastmath.Pair;
@@ -204,8 +207,16 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testTotalΛ()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
+    //SimpsonIntegrator integrator = new SimpsonIntegrator();
+    //out.println("integrating total compensator");
+    double total = sum(m -> {
+      //Vector mtimes = process.getTimes(m);
+      return process.Λ(m).sum();
+      //return integrator.integrate(10000000, t -> process.λ(m, t), mtimes.getLeftmostValue(), mtimes.getRightmostValue());
+    }, 0, process.dim() - 1);
+    out.println("total is " + total);
     double tl = process.totalΛ();
     out.println("totalΛ=" + tl);
     assertTrue(Double.isFinite(tl));
