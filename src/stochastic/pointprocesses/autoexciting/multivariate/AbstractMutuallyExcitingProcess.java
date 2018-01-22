@@ -234,15 +234,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract double
          meanRecurrenceTime();
 
-  public String
-         getParamString()
-  {
-    return "{" + asList(getParameterFields()).stream().map(param -> param.getName() + "=" + Double.toString(getFieldValue(param))).collect(joining(","))
-           + ",Edt="
-           + meanRecurrenceTime()
-           + "}";
-
-  }
 
   public double
 

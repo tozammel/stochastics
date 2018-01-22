@@ -5,16 +5,21 @@ import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
+import static util.Plotter.addSeriesToChart;
+import static util.Plotter.chart;
+import static util.Plotter.display;
 
 import java.util.Arrays;
 import java.util.TreeMap;
 
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
+import org.knowm.xchart.XYChart;
 
 import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
+import util.Plotter;
 
 public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends TestCase
 {
@@ -78,19 +83,39 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   }
 
   public void
-         testIntensity()
+         testIntensity() throws InterruptedException
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     Vector intensity = process.λvector(0);
+    Vector intensity1 = process.λvector(1);
     out.println(ansi().fgBrightGreen() + "process="
                 + process
+                + "\nparams="
+                + process.getParamString()
+                + "\nαβstring="
+                + process.getαβString()
                 + "\nT[0]="
                 + process.getTimes(0)
                 + "\nT[1]="
                 + process.getTimes(1)
-                + "\nintensity="
+                + "\nintensity0="
                 + intensity
+                + "\nintensity1="
+                + intensity1
                 + ansi().fgDefault());
+
+    XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
+    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1, t), 10000, 0, 300, t -> t);
+    chart.addSeries("λ1", sample.left, sample.right);
+    display(chart);
+    double cnt = 1;
+    while (cnt > 0)
+    {
+      Thread.sleep(1000);
+    }
+
+    double λt1 = process.λ(0, process.T(0, 1));
+    out.println("λt1=" + λt1);
 
     double λ0 = process.λ(0, 116);
     // double λ0r = process.λrecursive(0, 116);

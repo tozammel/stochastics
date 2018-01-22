@@ -1,5 +1,7 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 
 import java.lang.reflect.Field;
@@ -166,6 +168,16 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
                        int j)
   {
     return getVectorField(field).get(j);
+  }
+
+  public final String
+         getParamString()
+  {
+    return "{" + asList(getParameterFields()).stream().map(param -> getVectorField(param).toString()).collect(joining(","))
+           + ",Edt="
+           + meanRecurrenceTime()
+           + "}";
+
   }
 
 }

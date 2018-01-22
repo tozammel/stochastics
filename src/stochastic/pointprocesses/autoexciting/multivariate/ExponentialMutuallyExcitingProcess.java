@@ -18,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Stream.concat;
 import static org.apache.commons.lang.ArrayUtils.addAll;
+import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -224,8 +225,18 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       Vector lslice = λvector.copy().log();
       Vector comp = Λ(m);
       double compsum = comp.sum();
-      out.println("λvector for m=" + m + " λvector=" + λvector + "\n slice=" + lslice + "\n  comp=" + comp + " compsum=" + compsum);
-      
+      out.println(ansi().fgBrightGreen() + "λvector for m="
+                  + m
+                  + " λvector="
+                  + λvector
+                  + "\n slice="
+                  + lslice
+                  + "\n  comp="
+                  + comp
+                  + " compsum="
+                  + compsum
+                  + ansi().fgDefault());
+
       return lslice.sum() - compsum;
     }, 0, dim() - 1);
     out.println(Thread.currentThread().getName() + " ll=" + ll);
@@ -711,7 +722,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Vector[] timesSub = timesSubPair.left;
     TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
     final Vector mtimes = timesSub[m];
-    
+
     Vector intensity = new Vector(mtimes.size() - 1);
     final int Nm = mtimes.size();
     for (int i = 1; i < Nm; i++)
@@ -725,7 +736,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         final Vector ntimes = timesSub[n];
         Entry<Double, Integer> floorEntry = getLowerEntry(subTimeIndex, lowerTime, m, n, i);
-        Entry<Double, Integer> ceilEntry = getUpperEntry(subTimeIndex, upperTime, n, m, i);
+        Entry<Double, Integer> ceilEntry = getUpperEntry(subTimeIndex, upperTime, m, n, i);
 
         for (int j = 0; j < order(); j++)
         {
@@ -735,7 +746,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           {
             r = exp(-βjmn * mtimeDiff) * R[j][m][n];
             int initialk = floorEntry != null ? floorEntry.getValue() : 0;
-            int finalk = ( ceilEntry != null ? ( ceilEntry.getValue() - 1 ) :  ntimes.size() ) ;
+            int finalk = (ceilEntry != null ? (ceilEntry.getValue()) : ntimes.size());
             for (int k = initialk; k < finalk; k++)
             {
               final Double ktime = ntimes.get(k);
@@ -792,7 +803,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
     if (upperEntry == null)
     {
-      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
+      upperEntry = subTimeIndex[n].higherEntry(upperTime);
       if (upperEntries == null)
       {
         upperEntries = new Entry[dim()][dim()][T.size()];
@@ -813,7 +824,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Entry<Double, Integer> lowerEntry = lowerEntries == null ? null : lowerEntries[m][n][i];
     if (lowerEntry == null)
     {
-      lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
+      lowerEntry = subTimeIndex[n].lowerEntry(lowerTime);
       if (lowerEntries == null)
       {
         lowerEntries = new Entry[dim()][dim()][T.size()];

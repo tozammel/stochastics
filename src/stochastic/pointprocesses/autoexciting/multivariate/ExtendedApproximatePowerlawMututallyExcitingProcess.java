@@ -377,7 +377,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          meanRecurrenceTime()
   {
-    throw new UnsupportedOperationException("TODO");
+    return Double.NaN;
+    //throw new UnsupportedOperationException("TODO");
   }
 
   @Override
