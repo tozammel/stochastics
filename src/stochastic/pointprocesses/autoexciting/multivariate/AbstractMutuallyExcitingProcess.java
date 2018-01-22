@@ -72,7 +72,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   }
 
   @SuppressWarnings("unchecked")
-  public final <E extends AbstractSelfExcitingProcess>
+  public final <E extends AbstractMutuallyExcitingProcess>
          E
          copy()
   {

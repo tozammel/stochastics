@@ -6,6 +6,7 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
 import static java.lang.System.out;
+import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
 import java.io.IOException;
@@ -419,15 +420,24 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     assert t >= 0 : "t cannot be negative, was " + t;
 
     // out.println("λ(m=" + m + ", t=" + t);
-    return sum(n -> sum(j -> α(j, m, n) * R(j, m, n, Nopen(n, t)), 0, order() - 1) + f(m, n, t - T(n, N(n))), 0, dim() - 1);
+    return sum(n -> {
+      int Nn = Nopen(n, t);
+      double leftover = f(m, n, t - T(n, Nn - 1));
+      out.println(ansi().fgBrightCyan() + " leftover n=" + n + " leftover " + leftover + " " + ansi().fgDefault());
+      return sum(j -> {
+        double rj = α(j, m, n) * R(j, m, n, Nn - 1);
+        out.println(" j=" + j + " m=" + m + " n=" + n + " rj=" + rj);
+        return rj;
+      }, 0, order() - 1) + leftover;
+    }, 0, dim() - 1);
   }
 
-  private double
-          R(int j,
-            int m,
-            int n,
-            int i)
+  public double
+         R(int j,
+           int m,
+           int n,
+           int i)
   {
-    throw new UnsupportedOperationException("TODO");
+    return sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), 0, Nopen(n, T(m, i-i) - 1));
   }
 }

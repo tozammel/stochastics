@@ -210,44 +210,61 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private double[][][][] A;
 
+  /**
+   * the log-likelihood, without the additive constant T so its not exactly the
+   * true LL but the result is the same
+   * 
+   */
   public final double
          logLik()
   {
-    double tn = T.getRightmostValue();
-    double ll = tn - T.getLeftmostValue() - totalΛ();
+    double ll = sum(m -> {
+      Vector λvector = λvector(m);
 
-    double S[][] = new double[order()][dim()];
-    for (int type = 0; type < dim(); type++)
-    {
-      final int n = N(type);
-
-      Vector compensator = Λ(type);
-      for (int tk = 1; tk < n; tk++)
-      {
-        double t = T.get(tk);
-        double dt = t - T.get(tk - 1);
-        double λ = evolveλ(type, dt, S);
-
-        if (λ > 0)
-        {
-          ll += log(λ);
-        }
-
-        ll -= compensator.get(tk - 1);
-      }
-
-      if (Double.isNaN(ll))
-
-      {
-        if (verbose)
-        {
-          out.println(Thread.currentThread().getName() + " NaN for LL ");
-        }
-        ll = Double.NEGATIVE_INFINITY;
-      }
-    }
+      Vector lslice = λvector.copy().log();
+      Vector comp = Λ(m);
+      double compsum = comp.sum();
+      out.println("λvector for m=" + m + " λvector=" + λvector + "\n slice=" + lslice + "\n  comp=" + comp + " compsum=" + compsum);
+      
+      return lslice.sum() - compsum;
+    }, 0, dim() - 1);
     out.println(Thread.currentThread().getName() + " ll=" + ll);
     return ll;
+    // double tn = T.getRightmostValue();
+    // double ll = tn - T.getLeftmostValue() - totalΛ();
+    //
+    // double S[][] = new double[order()][dim()];
+    // for (int type = 0; type < dim(); type++)
+    // {
+    // final int n = N(type);
+    //
+    // Vector compensator = Λ(type);
+    // for (int tk = 1; tk < n; tk++)
+    // {
+    // double t = T.get(tk);
+    // double dt = t - T.get(tk - 1);
+    // double λ = evolveλ(type, dt, S);
+    //
+    // if (λ > 0)
+    // {
+    // ll += log(λ);
+    // }
+    //
+    // ll -= compensator.get(tk - 1);
+    // }
+    //
+    // if (Double.isNaN(ll))
+    //
+    // {
+    // if (verbose)
+    // {
+    // out.println(Thread.currentThread().getName() + " NaN for LL ");
+    // }
+    // ll = Double.NEGATIVE_INFINITY;
+    // }
+    // }
+    // out.println(Thread.currentThread().getName() + " ll=" + ll);
+    // return ll;
 
   }
 
@@ -268,7 +285,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       for (int i = 0; i < process.dim(); i++)
       {
         double mean = process.Λ(i).mean();
-        out.println("process mean dim " + i + mean);
+        out.println("process mean dim " + i + " is " + mean);
         if (mean < 0)
         {
           return false;
@@ -686,14 +703,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return intensity;
   }
 
-  public Vector
-         λvector(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                 int m)
+  public final Vector
+         λvector(int m)
   {
+    final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     double R[][][] = new double[order()][dim()][dim()];
     Vector[] timesSub = timesSubPair.left;
     TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
     final Vector mtimes = timesSub[m];
+    
     Vector intensity = new Vector(mtimes.size() - 1);
     final int Nm = mtimes.size();
     for (int i = 1; i < Nm; i++)
@@ -717,7 +735,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           {
             r = exp(-βjmn * mtimeDiff) * R[j][m][n];
             int initialk = floorEntry != null ? floorEntry.getValue() : 0;
-            int finalk = ceilEntry != null ? ceilEntry.getValue() : ntimes.size();
+            int finalk = ( ceilEntry != null ? ( ceilEntry.getValue() - 1 ) :  ntimes.size() ) ;
             for (int k = initialk; k < finalk; k++)
             {
               final Double ktime = ntimes.get(k);

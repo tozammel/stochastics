@@ -81,18 +81,20 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
          testIntensity()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
-    Vector intensity = process.λvector(process.getTimeSubsets(), 0);
-    // out.println(ansi().fgBrightGreen() + "process="
-    // + process
-    // + "\nT[0]="
-    // + process.getTimes(0)
-    // + "\nT[1]="
-    // + process.getTimes(1)
-    // + "\nintensity="
-    // + intensity
-    // + ansi().fgDefault());
+    Vector intensity = process.λvector(0);
+    out.println(ansi().fgBrightGreen() + "process="
+                + process
+                + "\nT[0]="
+                + process.getTimes(0)
+                + "\nT[1]="
+                + process.getTimes(1)
+                + "\nintensity="
+                + intensity
+                + ansi().fgDefault());
 
     double λ0 = process.λ(0, 116);
+    // double λ0r = process.λrecursive(0, 116);
+    // out.println( "λ0=" + λ0 + "\nλ0r=" + λ0r);
     assertEquals(0.006488609684355583, λ0, pow(10, -11));
 
     double λ1 = process.λ(1, 116);
@@ -182,10 +184,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testLikelihood()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
     double ll = process.logLik();
-    out.println("ll=" + ll);
+    out.println(ansi().fgBrightCyan() + "ll for " + process + " is " + ll + ansi().fgDefault());
     assertTrue(Double.isFinite(ll));
   }
 
@@ -209,12 +211,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
-    //SimpsonIntegrator integrator = new SimpsonIntegrator();
-    //out.println("integrating total compensator");
+    // SimpsonIntegrator integrator = new SimpsonIntegrator();
+    // out.println("integrating total compensator");
     double total = sum(m -> {
-      //Vector mtimes = process.getTimes(m);
+      // Vector mtimes = process.getTimes(m);
       return process.Λ(m).sum();
-      //return integrator.integrate(10000000, t -> process.λ(m, t), mtimes.getLeftmostValue(), mtimes.getRightmostValue());
+      // return integrator.integrate(10000000, t -> process.λ(m, t),
+      // mtimes.getLeftmostValue(), mtimes.getRightmostValue());
     }, 0, process.dim() - 1);
     out.println("total is " + total);
     double tl = process.totalΛ();
