@@ -401,8 +401,33 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     /**
      * TODO: recursive intensity
      */
-    //out.println("λ(m=" + m + ", t=" + t);
+    // out.println("λ(m=" + m + ", t=" + t);
     return sum(n -> sum(k -> f(m, n, t - T(n, k)), 0, Nopen(n, t) - 1), 0, dim() - 1);
   }
 
+  /**
+   * the conditional intensity of the m-th dimension of the process at time t
+   * 
+   * @param m
+   * @param d
+   * @return
+   */
+  public double
+         λrecursive(int m,
+                    double t)
+  {
+    assert t >= 0 : "t cannot be negative, was " + t;
+
+    // out.println("λ(m=" + m + ", t=" + t);
+    return sum(n -> sum(j -> α(j, m, n) * R(j, m, n, Nopen(n, t)) + f(m, n, t - T(n, N(n))), 0, order() - 1), 0, dim() - 1);
+  }
+
+  private double
+          R(int j,
+            int m,
+            int n,
+            int i)
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
 }
