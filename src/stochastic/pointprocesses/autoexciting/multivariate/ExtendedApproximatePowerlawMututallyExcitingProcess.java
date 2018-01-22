@@ -419,7 +419,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     assert t >= 0 : "t cannot be negative, was " + t;
 
     // out.println("λ(m=" + m + ", t=" + t);
-    return sum(n -> sum(j -> α(j, m, n) * R(j, m, n, Nopen(n, t)) + f(m, n, t - T(n, N(n))), 0, order() - 1), 0, dim() - 1);
+    return sum(n -> sum(j -> α(j, m, n) * R(j, m, n, Nopen(n, t)), 0, order() - 1) + f(m, n, t - T(n, N(n))), 0, dim() - 1);
   }
 
   private double
