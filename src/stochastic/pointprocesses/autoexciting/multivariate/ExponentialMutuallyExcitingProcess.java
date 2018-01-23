@@ -5,7 +5,6 @@ import static fastmath.Functions.product;
 import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
 import static java.lang.Math.exp;
-import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.String.format;
@@ -150,6 +149,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          T(int m,
            int i)
   {
+    if (i < 0)
+    {
+      return 0;
+    }
     assert i >= 0 : "i cannot be negative, was " + i;
     assert m < dim() : "m=" + m + " >= dim";
     Vector Tm = getTimeSubsets().left[m];
@@ -460,8 +463,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
-      int startIndex = Nopen(n, Tmi1);
-      int endIndex = Nopen(n, Tmi) - 1;
+      int startIndex = Nclosed(n, Tmi1)-1;
+      int endIndex = Nopen(n, Tmi)-1;
 
       double intersection = 1 + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
@@ -719,56 +722,26 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          λvector(int m)
   {
     final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
-    double R[][][] = new double[order()][dim()][dim()];
-    Vector[] timesSub = timesSubPair.left;
-    final Vector mtimes = timesSub[m];
+    final Vector[] timesSub = timesSubPair.left;
 
-    Vector intensity = new Vector(mtimes.size() - 1);
+    final Vector mtimes = timesSub[m];
     final int Nm = mtimes.size();
-    for (int i = 1; i < Nm; i++)
+    Vector intensity = new Vector(Nm);
+    for (int i = 0; i < Nm; i++)
     {
-      final double upperTime = mtimes.get(i);
-      final double lowerTime = mtimes.get(i - 1);
-      double mtimeDiff = upperTime - lowerTime;
-      assert mtimeDiff > 0;
-      double logsum = 0;
-      out.format("lowerTime=T(%d,%d)=%f ", m, i - 1, lowerTime);
-      out.format("upperTime=T(%d,%d)=%f ", m, i, upperTime);
-      out.format("mtimeDiff=%f\n", mtimeDiff);
+      double lambda = 0;
 
       for (int n = 0; n < dim(); n++)
       {
-        final Vector ntimes = timesSub[n];
+        final double z = Z(m, n);
         for (int j = 0; j < order(); j++)
         {
-          double r;
-          double βjmn = β(j, m, n);
-          if (m != n)
-          {
-            r = exp(-βjmn * mtimeDiff) * R[j][m][n];
-            for (int k = Nclosed(n, T(m, i - 1)); k < Nopen(n, T(m, i)); k++)
-            {
-              final Double ktime = ntimes.get(k);
-              if (ktime >= lowerTime && ktime < upperTime)
-              {
-                r += exp(-βjmn * (upperTime - ktime));
-              }
-              else
-              {
-                err.println("unnecessary looop at k=" + k);
-              }
-            }
-
-          }
-          else
-          {
-            r = exp(-βjmn * mtimeDiff) * (1 + R[j][m][n]);
-          }
-          logsum += α(j, m, n) * r;
-          R[j][m][n] = r;
+          final double αjmn = α(j, m, n);
+          lambda += (αjmn / z) * A(j, m, n, i);
         }
       }
-      intensity.set(i - 1, logsum);
+
+      intensity.set(i, lambda);
     }
     return intensity;
   }
@@ -777,97 +750,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          λvectorSlow(int m)
   {
     return calculateIntensitySlow(getTimeSubsets(), m);
-    // final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair =
-    // getTimeSubsets();
-    // double R[][][] = new double[order()][dim()][dim()];
-    // Vector[] timesSub = timesSubPair.left;
-    // final Vector mtimes = timesSub[m];
-    //
-    // Vector intensity = new Vector(mtimes.size());
-    // final int Nm = mtimes.size();
-    // for (int i = 0; i < Nm; i++)
-    // {
-    // double logsum = 0;
-    //
-    // for (int n = 0; n < dim(); n++)
-    // {
-    // for (int j = 0; j < order(); j++)
-    // {
-    // double r = Rsum(j, m, n, i - 1);
-    // logsum += α(j, m, n) * r / Z(m, n);
-    // R[j][m][n] = r;
-    // }
-    // }
-    // intensity.set(i, logsum);
-    // }
-    // return intensity;
-  }
 
-  public double
-         Rsum(int j,
-              int m,
-              int n,
-              int i)
-  {
-    if (i < 0)
-    {
-      return 0;
-    }
-    double Ti = T(m, i);
-    int hmm = Nopen(n, Ti);
-    double result = 1 + sum(k -> exp(-β(j, m, n) * (Ti - T(n, k))), 0, hmm - 1);
-    out.format("Rsum[j=%d,m=%d,n=%d,i=%d]=%f   Nopen(n,Ti)=%d\n", j, m, n, i, result, hmm);
-    return result;
   }
-
-  // public double
-  // A(int tk,
-  // int j)
-  // {
-  // if (tk < 0)
-  // {
-  // return 1;
-  // }
-  // if (A == null)
-  // {
-  // A = new double[T.size()][order()];
-  // }
-  // if (tk == 0)
-  // {
-  // A[tk][j] = 1;
-  // return 1;
-  // }
-  // double val = A[tk][j];
-  // if (val == 0)
-  // {
-  // val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A[tk - 1][j]);
-  // assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
-  // A[tk][j] = val;
-  // }
-  // return val;
-  // }
 
   protected abstract double
             evolveλ(int type,
                     double dt,
                     double[][] S);
-
-  protected double
-            getDeterministicIntensity(int m,
-                                      double upperTime,
-                                      int i)
-  {
-    return 0; // κ.get(m);
-  }
-
-  protected double
-            getDeterministicCompensator(int m,
-                                        double upperTime,
-                                        double lowerTime,
-                                        int i)
-  {
-    return (upperTime - lowerTime) * getDeterministicIntensity(m, upperTime, i);
-  }
 
   @SuppressWarnings("unchecked")
   private Entry<Double, Integer>

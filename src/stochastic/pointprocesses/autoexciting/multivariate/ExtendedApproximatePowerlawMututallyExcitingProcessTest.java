@@ -91,6 +91,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     { .1945892322, .1955665183, .3172551798, .1965982732, .318279369 });
     Vector trueIntensity1 = new Vector(new double[]
     { .2065355127, .2221480142, .2087731581, .3374144892, .2141883713, .2114497082, .2973930688 });
+    Vector intensityFast = process.λvector(0);
+    Vector intensity1Fast = process.λvector(1);
+
     Vector intensity = process.λvectorSlow(0);
     Vector intensity1 = process.λvectorSlow(1);
     out.println(ansi().fgBrightGreen() + "process="
@@ -103,10 +106,14 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
                 + process.getTimes(0)
                 + "\nT[1]="
                 + process.getTimes(1)
-                + "\nintensity0="
+                + "\nintensity0Slow="
                 + intensity
-                + "\nintensity1="
+                + "\nintensity1Slow="
                 + intensity1
+                + "\nintensity0Fast="
+                + intensityFast
+                + "\nintensity1Fast="
+                + intensity1Fast
                 + ansi().fgDefault());
 
     assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
