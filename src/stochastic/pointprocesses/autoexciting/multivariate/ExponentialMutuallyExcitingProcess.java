@@ -782,7 +782,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     Vector intensity = new Vector(mtimes.size());
     final int Nm = mtimes.size();
-    for (int i = 1; i < Nm; i++)
+    for (int i = 0; i < Nm; i++)
     {
       double logsum = 0;
 
@@ -795,7 +795,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           R[j][m][n] = r;
         }
       }
-      intensity.set(i - 1, logsum);
+      intensity.set(i, logsum);
     }
     return intensity;
   }
@@ -811,7 +811,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       return 0;
     }
     double Ti = T(m, i);
-    return 1 + sum(k -> exp(-β(j, m, n) * (Ti - T(n, k))), 0, i - 1);
+    int hmm = Nopen(n, Ti);
+    double result = 1 + sum(k -> exp(-β(j, m, n) * (Ti - T(n, k))), 0, hmm - 1);
+    out.format("Rsum[j=%d,m=%d,n=%d,i=%d]=%f   Nopen(n,Ti)=%d\n", j, m, n, i, result, hmm);
+    return result;
   }
 
   // public double
