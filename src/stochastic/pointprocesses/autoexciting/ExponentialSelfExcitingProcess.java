@@ -877,7 +877,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     return 1 + sum(k -> exp(-β(j) * (Ti - T.get(k))), 0, tk - 1);
   }
 
-  public synchronized double
+  public double
          A(int tk,
            int j)
   {

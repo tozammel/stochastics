@@ -86,8 +86,13 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
          testIntensity() throws InterruptedException
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
-    Vector intensity = process.λvector(0);
-    Vector intensity1 = process.λvector(1);
+
+    Vector trueIntensity0 = new Vector(new double[]
+    { .1945892322, .1955665183, .3172551798, .1965982732, .318279369 });
+    Vector trueIntensity1 = new Vector(new double[]
+    { .2065355127, .2221480142, .2087731581, .3374144892, .2141883713, .2114497082, .2973930688 });
+    Vector intensity = process.λvectorSlow(0);
+    Vector intensity1 = process.λvectorSlow(1);
     out.println(ansi().fgBrightGreen() + "process="
                 + process
                 + "\nparams="
@@ -104,15 +109,19 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
                 + intensity1
                 + ansi().fgDefault());
 
-    XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
-    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1, t), 10000, 0, 300, t -> t);
-    chart.addSeries("λ1", sample.left, sample.right);
-    display(chart);
-    double cnt = 1;
-    while (cnt > 0)
-    {
-      Thread.sleep(1000);
-    }
+    assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1, pow(10, -9)));
+
+    // XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
+    // Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1,
+    // t), 10000, 0, 300, t -> t);
+    // chart.addSeries("λ1", sample.left, sample.right);
+    // display(chart);
+    // double cnt = 1;
+    // while (cnt > 0)
+    // {
+    // Thread.sleep(1000);
+    // }
 
     double λt1 = process.λ(0, process.T(0, 1));
     out.println("λt1=" + λt1);

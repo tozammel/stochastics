@@ -720,7 +720,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     double R[][][] = new double[order()][dim()][dim()];
     Vector[] timesSub = timesSubPair.left;
-    TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
     final Vector mtimes = timesSub[m];
 
     Vector intensity = new Vector(mtimes.size() - 1);
@@ -730,14 +729,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       final double upperTime = mtimes.get(i);
       final double lowerTime = mtimes.get(i - 1);
       double mtimeDiff = upperTime - lowerTime;
+      assert mtimeDiff > 0;
       double logsum = 0;
+      out.format("lowerTime=T(%d,%d)=%f ", m, i - 1, lowerTime);
+      out.format("upperTime=T(%d,%d)=%f ", m, i, upperTime);
+      out.format("mtimeDiff=%f\n", mtimeDiff);
 
       for (int n = 0; n < dim(); n++)
       {
         final Vector ntimes = timesSub[n];
-        Entry<Double, Integer> floorEntry = getLowerEntry(subTimeIndex, lowerTime, m, n, i);
-        Entry<Double, Integer> ceilEntry = getUpperEntry(subTimeIndex, upperTime, m, n, i);
-
         for (int j = 0; j < order(); j++)
         {
           double r;
@@ -745,14 +745,16 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           if (m != n)
           {
             r = exp(-βjmn * mtimeDiff) * R[j][m][n];
-            int initialk = floorEntry != null ? floorEntry.getValue() : 0;
-            int finalk = (ceilEntry != null ? (ceilEntry.getValue()) : ntimes.size());
-            for (int k = initialk; k < finalk; k++)
+            for (int k = Nclosed(n, T(m, i - 1)); k < Nopen(n, T(m, i)); k++)
             {
               final Double ktime = ntimes.get(k);
               if (ktime >= lowerTime && ktime < upperTime)
               {
                 r += exp(-βjmn * (upperTime - ktime));
+              }
+              else
+              {
+                err.println("unnecessary looop at k=" + k);
               }
             }
 
@@ -769,6 +771,75 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     return intensity;
   }
+
+  public final Vector
+         λvectorSlow(int m)
+  {
+    final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
+    double R[][][] = new double[order()][dim()][dim()];
+    Vector[] timesSub = timesSubPair.left;
+    final Vector mtimes = timesSub[m];
+
+    Vector intensity = new Vector(mtimes.size());
+    final int Nm = mtimes.size();
+    for (int i = 1; i < Nm; i++)
+    {
+      double logsum = 0;
+
+      for (int n = 0; n < dim(); n++)
+      {
+        for (int j = 0; j < order(); j++)
+        {
+          double r = Rsum(j, m, n, i - 1);
+          logsum += α(j, m, n) * r / Z(m, n);
+          R[j][m][n] = r;
+        }
+      }
+      intensity.set(i - 1, logsum);
+    }
+    return intensity;
+  }
+
+  public double
+         Rsum(int j,
+              int m,
+              int n,
+              int i)
+  {
+    if (i < 0)
+    {
+      return 0;
+    }
+    double Ti = T(m, i);
+    return 1 + sum(k -> exp(-β(j, m, n) * (Ti - T(n, k))), 0, i - 1);
+  }
+
+  // public double
+  // A(int tk,
+  // int j)
+  // {
+  // if (tk < 0)
+  // {
+  // return 1;
+  // }
+  // if (A == null)
+  // {
+  // A = new double[T.size()][order()];
+  // }
+  // if (tk == 0)
+  // {
+  // A[tk][j] = 1;
+  // return 1;
+  // }
+  // double val = A[tk][j];
+  // if (val == 0)
+  // {
+  // val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A[tk - 1][j]);
+  // assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
+  // A[tk][j] = val;
+  // }
+  // return val;
+  // }
 
   protected abstract double
             evolveλ(int type,
@@ -803,7 +874,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
     if (upperEntry == null)
     {
-      upperEntry = subTimeIndex[n].higherEntry(upperTime);
+      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
       if (upperEntries == null)
       {
         upperEntries = new Entry[dim()][dim()][T.size()];
@@ -824,7 +895,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Entry<Double, Integer> lowerEntry = lowerEntries == null ? null : lowerEntries[m][n][i];
     if (lowerEntry == null)
     {
-      lowerEntry = subTimeIndex[n].lowerEntry(lowerTime);
+      lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
       if (lowerEntries == null)
       {
         lowerEntries = new Entry[dim()][dim()][T.size()];
