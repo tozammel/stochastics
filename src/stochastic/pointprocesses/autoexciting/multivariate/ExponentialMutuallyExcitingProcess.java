@@ -687,8 +687,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     final Vector mtimes = timesSub[m];
     final int Nm = mtimes.size();
-    Vector intensity = new Vector(Nm - 1);
-    for (int i = 1; i < Nm; i++)
+    Vector intensity = new Vector(Nm);
+    for (int i = 0; i < Nm; i++)
     {
       double lambda = 0;
       final double mtime = mtimes.get(i);
@@ -697,19 +697,20 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         final Vector ntimes = timesSub[n];
         final int Nn = ntimes.size();
+        final double z = Z(m, n);
         for (int j = 0; j < order(); j++)
         {
           final double αjmn = α(j, m, n);
           final double βjmn = β(j, m, n);
           double ntime;
-          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
+          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
           {
-            lambda += αjmn * exp(-βjmn * (mtime - ntime));
+            lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
           }
         }
       }
 
-      intensity.set(i - 1, lambda);
+      intensity.set(i, lambda);
     }
     return intensity;
   }
@@ -775,29 +776,31 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final Vector
          λvectorSlow(int m)
   {
-    final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
-    double R[][][] = new double[order()][dim()][dim()];
-    Vector[] timesSub = timesSubPair.left;
-    final Vector mtimes = timesSub[m];
-
-    Vector intensity = new Vector(mtimes.size());
-    final int Nm = mtimes.size();
-    for (int i = 0; i < Nm; i++)
-    {
-      double logsum = 0;
-
-      for (int n = 0; n < dim(); n++)
-      {
-        for (int j = 0; j < order(); j++)
-        {
-          double r = Rsum(j, m, n, i - 1);
-          logsum += α(j, m, n) * r / Z(m, n);
-          R[j][m][n] = r;
-        }
-      }
-      intensity.set(i, logsum);
-    }
-    return intensity;
+    return calculateIntensitySlow(getTimeSubsets(), m);
+    // final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair =
+    // getTimeSubsets();
+    // double R[][][] = new double[order()][dim()][dim()];
+    // Vector[] timesSub = timesSubPair.left;
+    // final Vector mtimes = timesSub[m];
+    //
+    // Vector intensity = new Vector(mtimes.size());
+    // final int Nm = mtimes.size();
+    // for (int i = 0; i < Nm; i++)
+    // {
+    // double logsum = 0;
+    //
+    // for (int n = 0; n < dim(); n++)
+    // {
+    // for (int j = 0; j < order(); j++)
+    // {
+    // double r = Rsum(j, m, n, i - 1);
+    // logsum += α(j, m, n) * r / Z(m, n);
+    // R[j][m][n] = r;
+    // }
+    // }
+    // intensity.set(i, logsum);
+    // }
+    // return intensity;
   }
 
   public double
