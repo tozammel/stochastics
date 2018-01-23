@@ -109,19 +109,19 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
                 + intensity1
                 + ansi().fgDefault());
 
-    //assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
-    //a//ssertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1, pow(10, -9)));
 
-     XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
-     Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1,
-     t), 10000, 0, 300, t -> t);
-     chart.addSeries("λ1", sample.left, sample.right);
-     display(chart);
-     double cnt = 1;
-     while (cnt > 0)
-     {
-     Thread.sleep(1000);
-     }
+    // XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
+    // Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1,
+    // t), 10000, 0, 300, t -> t);
+    // chart.addSeries("λ1", sample.left, sample.right);
+    // display(chart);
+    // double cnt = 1;
+    // while (cnt > 0)
+    // {
+    // Thread.sleep(1000);
+    // }
 
     double λt1 = process.λ(0, process.T(0, 1));
     out.println("λt1=" + λt1);
