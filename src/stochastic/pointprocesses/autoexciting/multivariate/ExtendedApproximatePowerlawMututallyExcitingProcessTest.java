@@ -59,7 +59,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testA()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
     for (int m = 0; m < process.dim(); m++)
     {
@@ -72,8 +72,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
             double a = process.Asum(j, m, n, tk);
             double b = process.A(j, m, n, tk);
             double d = process.B(j, m, n, tk);
-            // out.println("a=" + a + " b=" + b + " c=" + c + " d=" + d);
+             out.println("a=" + a + " b=" + b +  " d=" + d);
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Asum=%s != A=%s", j, m, n, tk, a, b), a, b, 1E-8);
+            assertEquals(a, b, 1E-8);
             assertEquals(a, 1 + d, 1E-8);
           }
         }
@@ -96,6 +97,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
     Vector intensity = process.λvectorSlow(0);
     Vector intensity1 = process.λvectorSlow(1);
+        
     out.println(ansi().fgBrightGreen() + "process="
                 + process
                 + "\nparams="

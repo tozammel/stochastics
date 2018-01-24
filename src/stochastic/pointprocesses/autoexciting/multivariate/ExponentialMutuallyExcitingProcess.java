@@ -49,6 +49,7 @@ import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
+import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
 import stochastic.pointprocesses.finance.TradingFiltration;
 
@@ -463,10 +464,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
-      int startIndex = Nclosed(n, Tmi1)-1;
-      int endIndex = Nopen(n, Tmi)-1;
+      int startIndex = Nclosed(n, Tmi1);
+      int endIndex = Nopen(n, Tmi);
 
-      double intersection = 1 + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
       A[j][m][n][i] = val;
     }
@@ -737,7 +738,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
         for (int j = 0; j < order(); j++)
         {
           final double αjmn = α(j, m, n);
-          lambda += (αjmn / z) * A(j, m, n, i);
+          double fack = (αjmn / z) * Asum(j, m, n, i );
+          double fook = (αjmn / z) * A(j, m, n, i );
+          TestCase.assertEquals( fack, fook, 1E-8 );
+          lambda += fack;
         }
       }
 
