@@ -6,6 +6,7 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
 import static java.lang.System.out;
+import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
@@ -109,10 +110,12 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          getΛKolmogorovSmirnovStatistic()
   {
-    Vector sortedCompensator = new Vector(Λ().doubleStream().sorted()).reverse();
-    KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
-    double ksStatistic = ksTest.kolmogorovSmirnovStatistic(new ExponentialDistribution(1), sortedCompensator.toDoubleArray());
-    return 1 - ksStatistic;
+    return sum(m -> {
+      Vector sortedCompensator = new Vector(Λ(m).doubleStream().sorted()).reverse();
+      KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
+      double ksStatistic = ksTest.kolmogorovSmirnovStatistic(new ExponentialDistribution(1), sortedCompensator.toDoubleArray());
+      return 1 - ksStatistic;
+    }, 0, dim() - 1) / dim();
   }
 
   /**
@@ -371,7 +374,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
          meanRecurrenceTime()
   {
     return Double.NaN;
-    //throw new UnsupportedOperationException("TODO");
+    // throw new UnsupportedOperationException("TODO");
   }
 
   @Override
@@ -432,6 +435,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
            int n,
            int i)
   {
-    return sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), 0, Nopen(n, T(m, i-i) - 1));
+    return sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), 0, Nopen(n, T(m, i - i) - 1));
   }
 }

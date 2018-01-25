@@ -146,9 +146,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract Object[]
          evaluateParameterStatistics(double[] point);
 
-  public abstract Vector
-         Λ();
-
   public abstract double
          mean();
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.DoubleAdder;
 import java.util.function.IntConsumer;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.Supplier;
@@ -351,16 +352,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public double
          getΛmomentMeasure()
   {
-    Vector dT = Λ();
-    Vector moments = dT().normalizedMoments(2);
-    Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
-    return normalizedSampleMoments.sum();
-  }
-
-  public Vector
-         dT()
-  {
-    throw new UnsupportedOperationException("TODO");
+    return sum(m -> {
+      Vector comp = Λ(m);
+      Vector moments = comp.normalizedMoments(2);
+      Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
+      return normalizedSampleMoments.sum();
+    }, 0, dim() - 1) / dim();
   }
 
   @Override
@@ -384,13 +381,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    */
   public abstract double
          totalΛ();
-
-  @Override
-  public Vector
-         Λ()
-  {
-    throw new UnsupportedOperationException("this is a multivariate process, use Λ(i) instead");
-  }
 
   /**
    * 
@@ -518,18 +508,20 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     ExponentialMutuallyExcitingProcess process = newProcess(point);
     double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
 
-    Vector compensated = process.Λ();
+    DoubleAdder meanCompMean = new DoubleAdder();
+    DoubleAdder meanCompVar = new DoubleAdder();
+
+    rangeClosed(0, dim() - 1).forEach(m -> {
+      meanCompMean.add(process.Λ(m).mean());
+      meanCompVar.add(process.Λ(m).variance());
+    });
+    double compMean = meanCompMean.doubleValue() / dim();
+    double compVar = meanCompVar.doubleValue() / dim();
 
     // out.println(compensated.autocor(30));
 
     Object[] statisticsVector = new Object[]
-    { process.logLik(),
-      ksStatistic,
-      compensated.mean(),
-      compensated.variance(),
-      process.getΛmomentMeasure(),
-      process.getLjungBoxMeasure(),
-      process.getΛmomentLjungBoxMeasure() };
+    { process.logLik(), ksStatistic, compMean, compVar, process.getΛmomentMeasure(), process.getLjungBoxMeasure(), process.getΛmomentLjungBoxMeasure() };
 
     /**
      * Exception in thread "main" java.lang.RuntimeException: Attempt to get
