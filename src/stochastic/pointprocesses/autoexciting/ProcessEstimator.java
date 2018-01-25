@@ -15,11 +15,13 @@ import java.util.concurrent.TimeUnit;
 import org.fusesource.jansi.Ansi.Color;
 
 import fastmath.DoubleColMatrix;
+import fastmath.IntVector;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
+import stochastic.pointprocesses.autoexciting.multivariate.ExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import util.TerseThreadFactory;
@@ -63,6 +65,8 @@ public class ProcessEstimator
     out.println("Estimating parameters for " + filename);
     ArrayList<AbstractSelfExcitingProcess> processes = estimateSelfExcitingProcess(type, filename, trajectoryCount, symbol);
 
+    // TODO:  use multivar estimator and compare results
+    
   }
 
   /**
@@ -150,6 +154,15 @@ public class ProcessEstimator
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
+    
+    ExtendedApproximatePowerlawMututallyExcitingProcess multivarProcess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    multivarProcess.T = slice;
+    multivarProcess.K = new IntVector( slice.size() );
+    out.println( "estimating multivar " );
+    multivarProcess.estimateParameters(10, ev -> {} );
+    
+    out.println( "estimated " + multivarProcess );
+
     return process;
   }
 

@@ -5,21 +5,14 @@ import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
-import static util.Plotter.addSeriesToChart;
-import static util.Plotter.chart;
-import static util.Plotter.display;
 
 import java.util.Arrays;
 import java.util.TreeMap;
-
-import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
-import org.knowm.xchart.XYChart;
 
 import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
-import util.Plotter;
 
 public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends TestCase
 {
@@ -72,7 +65,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
             double a = process.Asum(j, m, n, tk);
             double b = process.AsumToo(j, m, n, tk);
             double c = process.A(j, m, n, tk);
-            out.format("m=%d n=%d tk=%d j=%d Asum=%f AsumToo A=%f\n", m,n,tk,j,a,b,c);
+            out.format("m=%d n=%d tk=%d j=%d Asum=%f AsumToo A=%f\n", m, n, tk, j, a, b, c);
             out.flush();
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Asum=%s != A=%s", j, m, n, tk, a, b), a, b, 1E-8);
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Asum=%s != A=%s", j, m, n, tk, a, b), a, c, 1E-8);
@@ -89,9 +82,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
     Vector trueIntensity0 = new Vector(new double[]
-    { .1945892322, .1955665183, .3172551798, .1965982732, .318279369 });
+    { 0.0000000000, 0.0009772861, 0.1226659480, 0.0020090410, 0.1236901367 });
     Vector trueIntensity1 = new Vector(new double[]
-    { .2065355127, .2221480142, .2087731581, .3374144892, .2141883713, .2114497082, .2973930688 });
+    { 0.0000000000, 0.0156125015, 0.0022376454, 0.1308789764, 0.0076528586, 0.0049141955, 0.0908575556 });
     Vector intensityFast = process.λvector(0);
     Vector intensity1Fast = process.λvector(1);
 

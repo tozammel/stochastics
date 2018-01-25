@@ -3,9 +3,7 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 import static fastmath.Functions.seq;
 import static java.lang.Math.sqrt;
 import static java.lang.System.out;
-import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 import static util.Console.println;
 
@@ -25,7 +23,6 @@ import dnl.utils.text.table.TextTable;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 
@@ -431,8 +428,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
     return tt;
   }
 
-  public abstract Vector
-         λvector();
 
   public abstract Vector
          λvector(int type);

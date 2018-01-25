@@ -683,7 +683,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     DoubleAdder sum = new DoubleAdder();
     sum.add(κ);
     double s;
-    for (int i = 0; i < T.size() && (s = T.get(i)) <= t; i++)
+    for (int i = 0; i < T.size() && (s = T.get(i)) < t; i++)
     {
       double dt = t - s;
       sum.add(f(dt));

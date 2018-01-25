@@ -13,8 +13,8 @@ import fastmath.Vector;
 import fastmath.Vector.Condition;
 import fastmath.matfile.MatFile;
 import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ProcessEstimator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
+import stochastic.pointprocesses.autoexciting.ProcessEstimator;
 import stochastic.pointprocesses.ui.CalibratedTradingStrategyViewer;
 import util.DateUtils;
 

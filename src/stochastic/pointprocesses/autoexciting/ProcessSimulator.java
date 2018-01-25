@@ -1,7 +1,6 @@
 package stochastic.pointprocesses.autoexciting;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
 import static java.util.stream.IntStream.rangeClosed;

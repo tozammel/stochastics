@@ -4,14 +4,20 @@ import static java.lang.Math.abs;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
+import static util.Plotter.display;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.knowm.xchart.XYChart;
 
+import fastmath.IntVector;
+import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
+import stochastic.pointprocesses.autoexciting.multivariate.ExtendedApproximatePowerlawMututallyExcitingProcess;
+import util.Plotter;
 
 @SuppressWarnings(
 { "deprecation", "unused", "unchecked" })
@@ -201,9 +207,64 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
     process.T.set(2, 24);
     process.T.set(3, 27);
 
+    ExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    mprocess.assignParameters(process.getParameters().toDoubleArray());
+    mprocess.T = process.T;
+    mprocess.K = new IntVector(process.T.size());
+
     double a = process.Λ().sum();
     double b = process.totalΛ();
+    double c = mprocess.Λ(0).sum();
+
     assertEquals(a, b, 1E-15);
+    assertEquals(a, c, 1E-15);
+
+  }
+
+  public void
+         testLL() throws InterruptedException
+  {
+    ExtendedApproximatePowerlawSelfExcitingProcess process = constructProcess();
+    process.T = new Vector(4);
+    process.T.set(0, 0);
+    process.T.set(1, 19);
+    process.T.set(2, 24);
+    process.T.set(3, 27);
+
+    ExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    mprocess.assignParameters(process.getParameters().toDoubleArray());
+    mprocess.T = process.T;
+    mprocess.K = new IntVector(process.T.size());
+
+    //out.println("process Z = " + process.Z());
+   // out.println("mprocess Z = " + mprocess.Z(0, 0));
+
+    Vector lp = process.λvector();
+    Vector mlp = mprocess.λvector(0);
+
+    //out.println( "fuck lp=" + lp );
+    //out.println( "fuck mlp=" + mlp );
+    
+    double fucku = process.λ(process.T.get(1));
+    double fuckm = mprocess.λ(0, mprocess.T(0, 1));
+    //out.println( "fucku=" + fucku + " fuckm=" + fuckm );
+    
+    XYChart chart = Plotter.chart("uni", "a", process::λ, 0, 300, t -> t);
+    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> mprocess.λ(0, t), 1000, 0, 300, t -> t);
+    chart.addSeries("m", sample.left, sample.right);
+    display(chart);
+
+    while( chart != null )
+    {
+      Thread.sleep(1000);
+    }
+    out.println("lp=" + lp);
+    out.println("mlp=" + mlp);
+
+    double a = process.logLik();
+    double c = mprocess.logLik();
+
+    assertEquals(a, c, 1E-15);
 
   }
 

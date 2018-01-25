@@ -39,6 +39,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.commons.math3.random.RandomVectorGenerator;
+import org.fusesource.jansi.Ansi.Color;
 
 import fastmath.DoubleColMatrix;
 import fastmath.EigenDecomposition;
@@ -49,7 +50,6 @@ import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
-import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
 import stochastic.pointprocesses.finance.TradingFiltration;
 
@@ -215,6 +215,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private double[][][][] A;
 
+  int llcnt = 0;
+
   /**
    * the log-likelihood, without the additive constant T so its not exactly the
    * true LL but the result is the same
@@ -224,26 +226,26 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          logLik()
   {
     double ll = sum(m -> {
-      Vector λvector = λvector(m);
+      Vector λvector = λvector(m).slice(1, N(m) - 1);
 
-      Vector lslice = λvector.copy().log();
+      Vector lslice = λvector.log();
       Vector comp = Λ(m);
       double compsum = comp.sum();
-      out.println(ansi().fgBrightGreen() + "λvector for m="
-                  + m
-                  + " λvector="
-                  + λvector
-                  + "\n slice="
-                  + lslice
-                  + "\n  comp="
-                  + comp
-                  + " compsum="
-                  + compsum
-                  + ansi().fgDefault());
 
       return lslice.sum() - compsum;
     }, 0, dim() - 1);
-    out.println(Thread.currentThread().getName() + " ll=" + ll);
+    if (llcnt++ % 10 == 0)
+    {
+      out.println(ansi().fg(Color.values()[llcnt % Color.values().length]) + Thread.currentThread()
+                                                                                   .getName()
+                  + " ll="
+                  + ll
+                  + " #"
+                  + llcnt
+                  + "="
+                  + this
+                  + ansi().fgDefault());
+    }
     return ll;
     // double tn = T.getRightmostValue();
     // double ll = tn - T.getLeftmostValue() - totalΛ();
@@ -464,8 +466,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
 
-      // double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))),
-      // startIndex, endIndex);
       double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
       A[j][m][n][i] = val;
@@ -706,7 +706,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           final double αjmn = α(j, m, n);
           final double βjmn = β(j, m, n);
           double ntime;
-          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
+          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
           {
             lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
           }
@@ -744,7 +744,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             final double αjmn = α(j, m, n);
             final double βjmn = β(j, m, n);
             double ntime;
-            for (int k = 0; k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
+            for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
             {
               lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
             }
@@ -764,7 +764,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             final double βjmn = β(j, m, n);
             double ntime;
             lambda += (αjmn / z) * exp(-βjmn * (mtime - T(m, i - 1))) * A(j, m, n, i - 1);
-            for (int k = Nopen(n, mtimes.get(i - 1)); k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
+            for (int k = Nopen(n, mtimes.get(i - 1)); k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
             {
               lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
             }

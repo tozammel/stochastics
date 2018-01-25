@@ -25,7 +25,6 @@ import dnl.utils.text.table.TextTable;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
-import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 
 public abstract class AbstractSelfExcitingProcess implements MultivariateFunction, SelfExcitingProcess
 {
@@ -435,7 +434,5 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
   public abstract Vector
          λvector();
 
-  public abstract Vector
-         λvector(int type);
-
+  
 };

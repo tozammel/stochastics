@@ -17,10 +17,10 @@ import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
+import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
 /**
  * a multivariate version of
@@ -320,13 +320,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   @Override
   public double
          getMeanSquaredPredictionError()
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
-
-  @Override
-  public Vector
-         λvector()
   {
     throw new UnsupportedOperationException("TODO");
   }

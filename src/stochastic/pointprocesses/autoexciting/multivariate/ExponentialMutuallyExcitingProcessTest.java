@@ -1,6 +1,5 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static java.lang.Math.abs;
 import static java.lang.System.out;
 
 import fastmath.DoubleMatrix;

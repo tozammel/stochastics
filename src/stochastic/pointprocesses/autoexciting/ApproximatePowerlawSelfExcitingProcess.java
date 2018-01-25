@@ -5,7 +5,6 @@ import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
 
-import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
 public class ApproximatePowerlawSelfExcitingProcess extends ExponentialSelfExcitingProcess
@@ -121,18 +120,5 @@ public class ApproximatePowerlawSelfExcitingProcess extends ExponentialSelfExcit
     return Type.ExtendedApproximatePowerlaw;
   }
 
-  @Override
-  public Vector
-         λvector(int type)
-  {
-    if (type == 0)
-    {
-      return λvector();
-    }
-    else
-    {
-      throw new IllegalArgumentException("there is only one dimension, zero, since this is a univariate process");
-    }
-  }
 
 }

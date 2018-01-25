@@ -10,7 +10,6 @@ import org.apache.commons.math3.optim.SimpleBounds;
 
 import fastmath.IntVector;
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 
 public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingProcess
