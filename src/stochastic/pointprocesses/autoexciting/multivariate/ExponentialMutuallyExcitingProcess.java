@@ -406,15 +406,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         B(int j,
-           int m,
-           int n,
-           int i)
-  {
-    return A(j, m, n, i) - 1;
-  }
-
-  public double
          Asum(int j,
               int m,
               int n,
@@ -472,10 +463,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
-      int startIndex = Nclosed(n, Tmi1);
-      int endIndex = Nopen(n, Tmi) - 1;
+     
 
-      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      //double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
       A[j][m][n][i] = val;
     }
