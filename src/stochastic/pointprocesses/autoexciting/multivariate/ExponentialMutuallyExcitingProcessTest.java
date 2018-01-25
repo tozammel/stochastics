@@ -7,7 +7,7 @@ import fastmath.IntVector;
 import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawAutoExcitingProcessTest;
+import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
@@ -15,7 +15,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testMeanRecurrentTime()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     double mrt = process.meanRecurrenceTime();
     
     //Vector points = process.simulate(5, 20000);
@@ -37,7 +37,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testTotalΛ() throws InterruptedException
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     process.T = new Vector(4);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -81,7 +81,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testA()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
 
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.ε.set(new double[]

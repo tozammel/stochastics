@@ -20,8 +20,8 @@ import stochastic.pointprocesses.autoexciting.multivariate.ExtendedApproximatePo
 import util.Plotter;
 
 @SuppressWarnings(
-{ "deprecation", "unused", "unchecked" })
-public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
+{ "unused" })
+public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
 {
 
   private double phasedt;
@@ -29,7 +29,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testSimulation()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     Vector points = process.simulate(5, 30000);
     out.println("pdiff = " + points.diff().mean());
     ExtendedApproximatePowerlawSelfExcitingProcess inferredProcess = process.copy();
@@ -43,7 +43,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testInvLambdaExpectation()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]
@@ -54,7 +54,7 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
   public void
          testInvLambda()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawAutoExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]
@@ -249,17 +249,17 @@ public class ExtendedExponentialPowerlawAutoExcitingProcessTest extends TestCase
     double fuckm = mprocess.λ(0, mprocess.T(0, 1));
     //out.println( "fucku=" + fucku + " fuckm=" + fuckm );
     
-    XYChart chart = Plotter.chart("uni", "a", process::λ, 0, 300, t -> t);
-    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> mprocess.λ(0, t), 1000, 0, 300, t -> t);
-    chart.addSeries("m", sample.left, sample.right);
-    display(chart);
-
-    while( chart != null )
-    {
-      Thread.sleep(1000);
-    }
-    out.println("lp=" + lp);
-    out.println("mlp=" + mlp);
+//    XYChart chart = Plotter.chart("uni", "a", process::λ, 0, 300, t -> t);
+//    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> mprocess.λ(0, t), 1000, 0, 300, t -> t);
+//    chart.addSeries("m", sample.left, sample.right);
+//    display(chart);
+//
+//    while( chart != null )
+//    {
+//      Thread.sleep(1000);
+//    }
+    // out.println("lp=" + lp);
+    // out.println("mlp=" + mlp);
 
     double a = process.logLik();
     double c = mprocess.logLik();
