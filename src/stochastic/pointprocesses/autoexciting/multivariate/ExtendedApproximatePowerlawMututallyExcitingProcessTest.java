@@ -120,6 +120,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
     assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
     assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensityFast, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1Fast, pow(10, -9)));
 
     // XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
     // Pair<double[], double[]> sample = Plotter.sampleFunction(t -> process.λ(1,
@@ -317,18 +319,6 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     out.println("z1=" + z1);
     assertEquals(19.488945713548063, z1);
 
-  }
-
-  public void
-         testλVector()
-  {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
-
-    Vector lv0 = process.λvector(0);
-    out.println("lv0=" + lv0);
-    Vector lv1 = process.λvector(1);
-    out.println("lv1=" + lv1);
-    // assertTrue(Double.isFinite(ll));
   }
 
   public void

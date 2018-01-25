@@ -463,9 +463,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     {
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
-     
 
-      //double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
+      // double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))),
+      // startIndex, endIndex);
       double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
       A[j][m][n][i] = val;
@@ -718,10 +718,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return intensity;
   }
 
-  public final Vector
-         λvector(int m)
+  public Vector
+         calculateIntensityFast(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
+                                int m)
   {
-    final Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     final Vector[] timesSub = timesSubPair.left;
 
     final Vector mtimes = timesSub[m];
@@ -730,23 +730,58 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     for (int i = 0; i < Nm; i++)
     {
       double lambda = 0;
+      final double mtime = mtimes.get(i);
 
-      for (int n = 0; n < dim(); n++)
+      if (i == 0)
       {
-        final double z = Z(m, n);
-        for (int j = 0; j < order(); j++)
+        for (int n = 0; n < dim(); n++)
         {
-          final double αjmn = α(j, m, n);
-          double fack = (αjmn / z) * Asum(j, m, n, i);
-          double fook = (αjmn / z) * A(j, m, n, i);
-          TestCase.assertEquals(fack, fook, 1E-7);
-          lambda += fack;
+          final Vector ntimes = timesSub[n];
+          final int Nn = ntimes.size();
+          final double z = Z(m, n);
+          for (int j = 0; j < order(); j++)
+          {
+            final double αjmn = α(j, m, n);
+            final double βjmn = β(j, m, n);
+            double ntime;
+            for (int k = 0; k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
+            {
+              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
+            }
+          }
+        }
+      }
+      else
+      {
+        for (int n = 0; n < dim(); n++)
+        {
+          final Vector ntimes = timesSub[n];
+          final int Nn = ntimes.size();
+          final double z = Z(m, n);
+          for (int j = 0; j < order(); j++)
+          {
+            final double αjmn = α(j, m, n);
+            final double βjmn = β(j, m, n);
+            double ntime;
+            lambda += (αjmn / z) * exp(-βjmn * (mtime - T(m, i - 1))) * A(j, m, n, i - 1);
+            for (int k = Nopen(n, mtimes.get(i - 1)); k < Nn && (ntime = ntimes.get(k)) <= mtime; k++)
+            {
+              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
+            }
+          }
         }
       }
 
       intensity.set(i, lambda);
     }
     return intensity;
+  }
+
+  public final Vector
+         λvector(int m)
+  {
+    return calculateIntensityFast(getTimeSubsets(), m);
+
   }
 
   public final Vector
