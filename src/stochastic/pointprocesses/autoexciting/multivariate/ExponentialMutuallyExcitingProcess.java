@@ -427,16 +427,24 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     double Tmi = T(m, i);
     int l = Nopen(n, Tmi) - 1;
-    return 1 + sum(k -> {
-      double β = β(j, m, n);
-      double dt = Tmi - T(n, k);
-      double e = exp(-β * dt);
-      if (trace)
-      {
-        out.format("k=%d β=%f dt=%f e=%s\n", k, β, dt, e);
-      }
-      return e;
-    }, 0, l);
+    return sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), 0, l);
+  }
+
+  public double
+         AsumToo(int j,
+                 int m,
+                 int n,
+                 int i)
+  {
+    assert i >= 0;
+    if (i == 0)
+    {
+      return 0;
+    }
+    double TmiPrev = T(m, i - 1);
+    double Tmi = T(m, i);
+    return exp(-β(j, m, n) * (Tmi - TmiPrev)) * Asum(j, m, n, i - 1) + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, TmiPrev), Nopen(n, Tmi) - 1);
+
   }
 
   public double
@@ -465,7 +473,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
       int startIndex = Nclosed(n, Tmi1);
-      int endIndex = Nopen(n, Tmi);
+      int endIndex = Nopen(n, Tmi) - 1;
 
       double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), startIndex, endIndex);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
@@ -738,9 +746,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
         for (int j = 0; j < order(); j++)
         {
           final double αjmn = α(j, m, n);
-          double fack = (αjmn / z) * Asum(j, m, n, i );
-          double fook = (αjmn / z) * A(j, m, n, i );
-          TestCase.assertEquals( fack, fook, 1E-8 );
+          double fack = (αjmn / z) * Asum(j, m, n, i);
+          double fook = (αjmn / z) * A(j, m, n, i);
+          TestCase.assertEquals(fack, fook, 1E-7);
           lambda += fack;
         }
       }
