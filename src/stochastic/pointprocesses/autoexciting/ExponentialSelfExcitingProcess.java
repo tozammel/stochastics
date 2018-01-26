@@ -57,6 +57,8 @@ import util.AutoArrayList;
 
 public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitingProcess implements MultivariateFunction, Cloneable, SelfExcitingProcess
 {
+  private static final double OPTIMIZATION_ACCURACY = 1E-6;
+
   private static final int MAX_ITERS = 1000;
 
   public String
@@ -312,7 +314,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
       return process.Λ().mean() > 0;
     };
 
-    Supplier<MultivariateOptimizer> optimizerSupplier = () -> new BOBYQAOptimizer(getParamCount() * 2 + 1);
+    Supplier<MultivariateOptimizer> optimizerSupplier = () -> new BOBYQAOptimizer(getParamCount() * 2 + 1, 10, OPTIMIZATION_ACCURACY);
 
     ParallelMultistartMultivariateOptimizer multiopt = new ParallelMultistartMultivariateOptimizer(optimizerSupplier,
                                                                                                    numStarts,

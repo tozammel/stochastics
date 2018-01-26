@@ -233,14 +233,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       Vector comp = Λ(m);
       double compsum = comp.sum();
 
-      return lslice.sum() - compsum;
-    }, 0, dim() - 1);
+      return lslice.sum() - compsum ;
+    }, 0, dim() - 1) + ( T.getRightmostValue() - T.getLeftmostValue() );
     if (llcnt++ % 10 == 0)
     {
-      out.println(ansi().fg(Color.values()[llcnt % Color.values().length]) + Thread.currentThread()
-                                                                                   .getName()
+      out.println(ansi().fg(Color.values()[llcnt % Color.values().length]) + Thread.currentThread().getName()
                   + " ll="
-                  + ll
+                  + String.format("%30.30f", ll)
                   + " #"
                   + llcnt
                   + "="
@@ -311,7 +310,11 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       return true;
     };
 
-    Supplier<MultivariateOptimizer> optimizerSupplier = () -> new BOBYQAOptimizer(getParamCount() * dim() * 2 + 1);
+    Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
+      BOBYQAOptimizer optimizer = new BOBYQAOptimizer(getParamCount() * dim() * 2 + 1);
+      //optimizer.
+      return optimizer;
+    };
 
     ParallelMultistartMultivariateOptimizer multiopt = new ParallelMultistartMultivariateOptimizer(optimizerSupplier,
                                                                                                    numStarts,
@@ -327,6 +330,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     double startTime = currentTimeMillis();
+
     PointValuePair optimum = multiopt.optimize(progressNotifier,
                                                GoalType.MAXIMIZE,
                                                momentMatchingAutocorrelationComparator,

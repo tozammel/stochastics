@@ -6,4 +6,5 @@
 /*.mat
 /*.hpl
 /untitled.png
-/target/
+/target/*
+/*.class
