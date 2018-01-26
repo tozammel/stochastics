@@ -226,8 +226,16 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   }
 
   public abstract double
-         meanRecurrenceTime();
+         meanRecurrenceTime(int m);
 
+  public abstract int
+         dim();
+
+  public Vector
+         meanRecurrenceTimeVector()
+  {
+    return new Vector(seq(this::meanRecurrenceTime, 0, dim() - 1));
+  }
 
   public double
 
@@ -424,7 +432,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
     return tt;
   }
-
 
   public abstract Vector
          λvector(int type);

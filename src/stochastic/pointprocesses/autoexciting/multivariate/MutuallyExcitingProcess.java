@@ -174,9 +174,10 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
   {
     return "{" + asList(getParameterFields()).stream().map(param -> getVectorField(param).toString()).collect(joining(","))
            + ",Edt="
-           + meanRecurrenceTime()
+           + meanRecurrenceTimeVector()
            + "}";
 
   }
 
+ 
 }

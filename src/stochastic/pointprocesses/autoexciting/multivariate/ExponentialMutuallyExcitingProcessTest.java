@@ -23,7 +23,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     ExtendedApproximatePowerlawMututallyExcitingProcess multidimProcess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
     multidimProcess.assignParameters(process.getParameters().toDoubleArray());
     
-    double multiMrt = multidimProcess.meanRecurrenceTime();
+    double multiMrt = multidimProcess.meanRecurrenceTime(0);
     
     assertEquals( mrt, multiMrt );
     

@@ -58,7 +58,7 @@ public class MutuallyExcitingProcessEstimator
     Type type = Type.MultivariateExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 6;
+    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 10;
     if (args.length > 1)
     {
       trajectoryCount = Integer.valueOf(args[1]);
@@ -172,12 +172,12 @@ public class MutuallyExcitingProcessEstimator
 
     Vector intensities[] = seq((IntFunction<Vector>) type -> process.λvector(type).setName("intensity" + type), 0, process.dim() - 1).toArray(Vector[]::new);
 
-    Vector innov = process.getInnovationSequence();
-    out.println("writing timestamp data, compensator, intensity, and innov to " + testFile.getAbsolutePath() + " E[data.dt]=" + data.diff().mean());
+    //Vector innov = process.getInnovationSequence();
+    out.println("writing timestamp data, compensator, intensity to " + testFile.getAbsolutePath() + " E[data.dt]=" + data.diff().mean());
     MatFile outFile = new MatFile(testFile, MutuallyExcitingProcessEstimator.class.getSimpleName());
     outFile.write(data.createMiMatrix());
 
-    outFile.write(innov.createMiMatrix());
+    //outFile.write(innov.createMiMatrix());
     outFile.write(data.createMiMatrix());
     for (int i = 0; i < process.dim; i++)
     {
