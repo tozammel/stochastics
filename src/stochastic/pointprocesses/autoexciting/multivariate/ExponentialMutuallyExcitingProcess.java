@@ -47,6 +47,7 @@ import fastmath.EigenDecomposition;
 import fastmath.Pair;
 import fastmath.Vector;
 import fastmath.exceptions.FastMathException;
+import fastmath.optim.ExtendedBOBYQAOptimizer;
 import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
@@ -233,8 +234,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       Vector comp = Λ(m);
       double compsum = comp.sum();
 
-      return lslice.sum() - compsum ;
-    }, 0, dim() - 1) + ( T.getRightmostValue() - T.getLeftmostValue() );
+      return lslice.sum() - compsum;
+    }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
     if (llcnt++ % 10 == 0)
     {
       out.println(ansi().fg(Color.values()[llcnt % Color.values().length]) + Thread.currentThread().getName()
@@ -311,8 +312,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      BOBYQAOptimizer optimizer = new BOBYQAOptimizer(getParamCount() * dim() * 2 + 1);
-      //optimizer.
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-6 );
+      // optimizer.
       return optimizer;
     };
 
