@@ -58,7 +58,7 @@ public class MutuallyExcitingProcessEstimator
     Type type = Type.MultivariateExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 3;
+    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 6;
     if (args.length > 1)
     {
       trajectoryCount = Integer.valueOf(args[1]);
