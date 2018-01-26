@@ -238,14 +238,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
     if (llcnt++ % 10 == 0)
     {
-      out.println(ansi().fg(Color.values()[llcnt % Color.values().length]) + Thread.currentThread().getName()
-                  + " ll="
-                  + String.format("%30.30f", ll)
-                  + " #"
-                  + llcnt
-                  + "="
-                  + this
-                  + ansi().fgDefault());
+      out.println(Thread.currentThread().getName() + " ll=" + String.format("%30.30f", ll) + " #" + llcnt + "=" + this);
     }
     return ll;
     // double tn = T.getRightmostValue();
@@ -312,7 +305,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-6 );
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-6);
       // optimizer.
       return optimizer;
     };
