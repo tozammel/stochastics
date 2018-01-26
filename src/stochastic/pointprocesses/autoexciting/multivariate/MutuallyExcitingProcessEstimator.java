@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.seq;
+import static java.awt.EventQueue.getMostRecentEventTime;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
@@ -23,6 +24,11 @@ import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import fastmath.matfile.MiDouble;
+import fastmath.matfile.MiInt32;
+import fastmath.matfile.MiMatrix;
+import fastmath.matfile.MxDouble;
+import fastmath.matfile.MxInt32;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
@@ -172,19 +178,23 @@ public class MutuallyExcitingProcessEstimator
 
     Vector intensities[] = seq((IntFunction<Vector>) type -> process.λvector(type).setName("intensity" + type), 0, process.dim() - 1).toArray(Vector[]::new);
 
-    //Vector innov = process.getInnovationSequence();
+    // Vector innov = process.getInnovationSequence();
     out.println("writing timestamp data, compensator, intensity to " + testFile.getAbsolutePath() + " E[data.dt]=" + data.diff().mean());
     MatFile outFile = new MatFile(testFile, MutuallyExcitingProcessEstimator.class.getSimpleName());
     outFile.write(data.createMiMatrix());
 
-    //outFile.write(innov.createMiMatrix());
+    // outFile.write(innov.createMiMatrix());
     outFile.write(data.createMiMatrix());
     for (int i = 0; i < process.dim; i++)
     {
       Vector compensator = process.Λ(i).setName("comp" + i);
+      outFile.write(process.getTimes(i).createMiMatrix());
       outFile.write(compensator.createMiMatrix());
       outFile.write(intensities[i].createMiMatrix());
     }
+    MiInt32 dims = new MiInt32(process.K.size());
+    outFile.write(new MiMatrix(new MxInt32(new MiInt32(process.K.buffer)), dims, "K"));
+
     outFile.close();
   }
 

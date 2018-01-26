@@ -295,7 +295,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       for (int i = 0; i < process.dim(); i++)
       {
         double mean = process.Λ(i).mean();
-        out.println( Thread.currentThread().getName() + " process mean dim " + i + " is " + mean);
+        out.println(Thread.currentThread().getName() + " process mean dim " + i + " is " + mean);
         if (mean < 0)
         {
           return false;
@@ -305,7 +305,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5 );
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
       // optimizer.
       return optimizer;
     };
@@ -581,7 +581,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         subTimeIndices.put(subTimes.get(j), j);
       }
-      timeVectors[i] = new Vector(timesSub[i]).setName("T[" + i + "]");
+      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
     }
     cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
 
