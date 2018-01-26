@@ -49,6 +49,7 @@ import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 import fastmath.Functions;
 import fastmath.Pair;
 import fastmath.Vector;
+import fastmath.optim.ExtendedBOBYQAOptimizer;
 import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
@@ -57,8 +58,6 @@ import util.AutoArrayList;
 
 public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitingProcess implements MultivariateFunction, Cloneable, SelfExcitingProcess
 {
-  private static final double OPTIMIZATION_ACCURACY = 1E-6;
-
   private static final int MAX_ITERS = 1000;
 
   public String
@@ -314,7 +313,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
       return process.Λ().mean() > 0;
     };
 
-    Supplier<MultivariateOptimizer> optimizerSupplier = () -> new BOBYQAOptimizer(getParamCount() * 2 + 1, 10, OPTIMIZATION_ACCURACY);
+    Supplier<MultivariateOptimizer> optimizerSupplier = () -> new ExtendedBOBYQAOptimizer(getParamCount() * 2 + 1, 10, 1E-4);
 
     ParallelMultistartMultivariateOptimizer multiopt = new ParallelMultistartMultivariateOptimizer(optimizerSupplier,
                                                                                                    numStarts,
