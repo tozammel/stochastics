@@ -292,7 +292,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          estimateParameters(int numStarts,
                             IntConsumer progressNotifier)
   {
-    int digits = 15;
     int maxIters = Integer.MAX_VALUE;
 
     MaxEval maxEval = new MaxEval(maxIters);

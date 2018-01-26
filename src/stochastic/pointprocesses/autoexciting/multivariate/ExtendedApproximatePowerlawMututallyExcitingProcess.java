@@ -6,7 +6,6 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
 import static java.lang.System.out;
-import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
@@ -107,6 +106,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     throw new UnsupportedOperationException("TODO");
   }
 
+  /**
+   * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type 1..dim 
+   */
   public double
          getΛKolmogorovSmirnovStatistic()
   {
