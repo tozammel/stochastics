@@ -44,23 +44,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
     return λ;
   }
 
-  // @Override
-  // public double
-  // totalΛ()
-  // {
-  // double tn = T.getRightmostValue();
-  //
-  // return (sum(i -> sum(j -> (α(i, j, j) / β(i, j, j)) * (1 - exp(-β(i, j, j) *
-  // (tn - T.get(i)))), 0, dim() - 1), 0, T.size() - 1)) / Z();
-  // }
-
-  @Override
-  public double
-         logLikelihood(Vector t)
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
-
   @Override
   public double
          invΛ(int tk,
@@ -89,6 +72,5 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
     }
     return dt;
   }
-
 
 }

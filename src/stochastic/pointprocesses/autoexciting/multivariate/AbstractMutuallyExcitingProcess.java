@@ -29,6 +29,8 @@ import stochastic.pointprocesses.autoexciting.BoundedParameter;
 public abstract class AbstractMutuallyExcitingProcess implements MultivariateFunction
 {
 
+  protected static int llcnt = 0;
+
   public Vector T;
 
   public boolean verbose = false;
@@ -54,7 +56,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
       spawn.assignParameters(getParameters().toDoubleArray());
       spawn.T = T;
       spawn.X = X;
-
+      spawn.llcnt = llcnt;
       return spawn;
     }
     catch (Exception e)
@@ -69,7 +71,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   }
 
   @SuppressWarnings("unchecked")
-  public final <E extends AbstractMutuallyExcitingProcess>
+  public  <E extends AbstractMutuallyExcitingProcess>
          E
          copy()
   {
@@ -438,9 +440,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   public abstract double
          getBranchingRatio();
-
-  public abstract double
-         logLikelihood(Vector t);
 
   public abstract Type
          getType();

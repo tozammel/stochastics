@@ -30,6 +30,8 @@ import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExc
 public class ExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMututallyExcitingProcess
 {
 
+ 
+
   public ExtendedApproximatePowerlawMututallyExcitingProcess(int dim)
   {
     this.dim = dim;
@@ -61,16 +63,18 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public final double
          value(double[] point)
   {
-    assignParameters(point);
+    ExtendedApproximatePowerlawMututallyExcitingProcess clone = copy();
+    clone.assignParameters(point);
 
     double score = Double.NaN;
 
-    score = logLik();
+    score = clone.logLik();
 
-    if (verbose)
-    {
-      out.println(Thread.currentThread().getName() + " score{" + getParamString() + "}=" + score);
-    }
+    // if (verbose)
+    // {
+    // out.println(Thread.currentThread().getName() + " " + this + " LL score=" +
+    // score);
+    // }
 
     return score;
 
@@ -107,7 +111,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   }
 
   /**
-   * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type 1..dim 
+   * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type
+   * 1..dim
    */
   public double
          getΛKolmogorovSmirnovStatistic()
@@ -373,7 +378,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
 
   @Override
   public double
-         meanRecurrenceTime( int m )
+         meanRecurrenceTime(int m)
   {
     return Double.NaN;
     // throw new UnsupportedOperationException("TODO");

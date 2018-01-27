@@ -217,7 +217,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private double[][][][] A;
 
-  int llcnt = 0;
 
   /**
    * the log-likelihood, without the additive constant T so its not exactly the
@@ -238,7 +237,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
     if (llcnt++ % 10 == 0)
     {
-      out.println(Thread.currentThread().getName() + " ll=" + String.format("%30.30f", ll) + " #" + llcnt + "=" + this);
+      out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
     }
     return ll;
     // double tn = T.getRightmostValue();
@@ -292,6 +291,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     SolutionValidator validator = point -> {
       ExponentialMutuallyExcitingProcess process = newProcess(point.getPoint());
+      out.println(Thread.currentThread().getName() + " validating " + process + " which has a LL score of " + process.logLik());
+
       for (int i = 0; i < process.dim(); i++)
       {
         double mean = process.Λ(i).mean();
@@ -520,15 +521,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     Object[] statisticsVector = new Object[]
     { process.logLik(), ksStatistic, compMean, compVar, process.getΛmomentMeasure(), process.getLjungBoxMeasure(), process.getΛmomentLjungBoxMeasure() };
 
-    /**
-     * Exception in thread "main" java.lang.RuntimeException: Attempt to get
-     * fastmath.Vector field
-     * "stochastic.processes.selfexciting.multivariate.ExtendedApproximatePowerlawMututallyExcitingProcess.τ"
-     * with illegal data type conversion to double at
-     * stochastic.processes.selfexciting.AbstractSelfExcitingProcess.getFieldValue(AbstractSelfExcitingProcess.java:260)
-     * at
-     * stochastic.processes.selfexciting.multivariate.ExponentialMutuallyExcitingProcess.lambda$6(ExponentialMutuallyExcitingProcess.java:346)
-     */
     return addAll(stream(getParameterFields()).map(param -> {
       Vector value = process.getVectorField(param);
       return value;
