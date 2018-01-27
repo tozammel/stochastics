@@ -437,6 +437,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   }
 
+  public void
+         setAsize(int sampleCount)
+  {
+    A = new double[order()][dim()][dim()][sampleCount];
+  }
+
   public double
          A(int j,
            int m,

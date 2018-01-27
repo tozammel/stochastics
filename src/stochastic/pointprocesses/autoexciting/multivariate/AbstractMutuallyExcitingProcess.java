@@ -20,6 +20,7 @@ import org.apache.commons.math3.optim.PointValuePair;
 import org.apache.commons.math3.optim.SimpleBounds;
 
 import dnl.utils.text.table.TextTable;
+import fastmath.AbstractMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
@@ -71,7 +72,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   }
 
   @SuppressWarnings("unchecked")
-  public  <E extends AbstractMutuallyExcitingProcess>
+  public <E extends AbstractMutuallyExcitingProcess>
          E
          copy()
   {
@@ -452,5 +453,8 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract double
          Φδ(double t,
             double y);
+
+  public abstract Vector
+         Λ(int m);
 
 }

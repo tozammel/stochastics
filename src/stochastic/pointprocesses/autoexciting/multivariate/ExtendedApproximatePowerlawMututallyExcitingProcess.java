@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.product;
+import static fastmath.Functions.seq;
 import static fastmath.Functions.sum;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
@@ -409,38 +410,31 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     return sum(n -> sum(k -> f(m, n, t - T(n, k)), 0, Nopen(n, t) - 1), 0, dim() - 1);
   }
 
+  public void
+         appendTime(int type,
+                    double time)
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
+
   /**
-   * the conditional intensity of the m-th dimension of the process at time t
+   * n-th compensated point, expensive non-recursive O(n^2) runtime version
    * 
-   * @param m
-   * @param d
-   * @return
+   * @param i
+   *          >= 1 and <= n
+   * @return sum(k -> iψ(T.get(i + 1) - T.get(k)) - iψ(T.get(i) - T.get(k)), 0,
+   *         i-1)
    */
   public double
-         λrecursive(int m,
-                    double t)
+         Λ(int m,
+           int i,
+           double dt)
   {
-    assert t >= 0 : "t cannot be negative, was " + t;
-
-    // out.println("λ(m=" + m + ", t=" + t);
-    return sum(n -> {
-      int Nn = Nopen(n, t);
-      double leftover = f(m, n, t - T(n, Nn - 1));
-      out.println(ansi().fgBrightCyan() + " leftover n=" + n + " leftover " + leftover + " " + ansi().fgDefault());
-      return sum(j -> {
-        double rj = α(j, m, n) * R(j, m, n, Nn - 1);
-        out.println(" j=" + j + " m=" + m + " n=" + n + " rj=" + rj);
-        return rj;
-      }, 0, order() - 1) + leftover;
-    }, 0, dim() - 1);
+    /**
+     * FIXME: sum over n ?
+     */
+    return sum(j -> (α(j, m, m) / β(j, m, m)) * (1 - (exp(-β(j, m, m) * dt))) * A(j, m, m, i), 0, order() - 1) / Z(m, m);
   }
 
-  public double
-         R(int j,
-           int m,
-           int n,
-           int i)
-  {
-    return sum(k -> exp(-β(j, m, n) * (T(m, i) - T(n, k))), 0, Nopen(n, T(m, i - i) - 1));
-  }
+
 }
