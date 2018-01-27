@@ -64,7 +64,7 @@ public class MutuallyExcitingProcessEstimator
     Type type = Type.MultivariateExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 6;
+    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 3;
     if (args.length > 1)
     {
       trajectoryCount = Integer.valueOf(args[1]);
@@ -164,7 +164,7 @@ public class MutuallyExcitingProcessEstimator
 
       File testFile = new File("test" + i + ".mat");
       storeParameterEstimationResults(testFile, timeSlice, process);
-      System.out.println( "test mode");
+      System.out.println("test mode");
       System.exit(1);
     }
 
@@ -193,8 +193,7 @@ public class MutuallyExcitingProcessEstimator
       outFile.write(compensator.createMiMatrix());
       outFile.write(intensities[i].createMiMatrix());
     }
-    MiInt32 dims = new MiInt32(process.K.size());
-    outFile.write(new MiMatrix(new MxInt32(new MiInt32(process.K.buffer)), dims, "K"));
+    outFile.write(new Vector(process.K).setName("K").createMiMatrix());
 
     outFile.close();
   }
