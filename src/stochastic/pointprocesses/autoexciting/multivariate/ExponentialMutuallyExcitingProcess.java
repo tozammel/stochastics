@@ -185,10 +185,20 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         γ(int type,
-           int k)
+         γ(int k,
+           int m,
+           int n)
   {
-    IntToDoubleFunction a = j -> j == k ? α(j, type, type) : β(j, type, type);
+    return γ(k, m, n);
+  }
+
+  public double
+         γ(int k,
+           int m,
+           int n,
+           int p)
+  {
+    IntToDoubleFunction a = j -> j == k ? α(j, m, n) : pow(β(j, m, n), p);
 
     return product(a, 0, order() - 1);
   }
@@ -216,7 +226,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
   private double[][][][] A;
-
 
   /**
    * the log-likelihood, without the additive constant T so its not exactly the

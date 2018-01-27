@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static fastmath.Functions.product;
 import static fastmath.Functions.sum;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
@@ -29,8 +30,6 @@ import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExc
  */
 public class ExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMututallyExcitingProcess
 {
-
- 
 
   public ExtendedApproximatePowerlawMututallyExcitingProcess(int dim)
   {
@@ -380,8 +379,8 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          meanRecurrenceTime(int m)
   {
-    return Double.NaN;
-    // throw new UnsupportedOperationException("TODO");
+
+    return sum(j -> γ(j, m, m, 2), 0, order() - 1) / ((product(k -> β(k, m, m), 0, order() - 1)) * sum(j -> γ(j, m, m, 1), 0, order() - 1) * Z(m, m));
   }
 
   @Override
