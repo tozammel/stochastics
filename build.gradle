@@ -42,3 +42,8 @@ dependencies {
 repositories {
   mavenLocal()
   }
+
+plugins {
+  id "net.java.openjdk.shinyafox.jshell.gradle.plugin" version "1.0.3"
+  }
+  
