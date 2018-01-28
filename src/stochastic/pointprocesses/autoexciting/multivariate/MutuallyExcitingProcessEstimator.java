@@ -1,7 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.seq;
-import static java.awt.EventQueue.getMostRecentEventTime;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
@@ -24,11 +23,6 @@ import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
-import fastmath.matfile.MiDouble;
-import fastmath.matfile.MiInt32;
-import fastmath.matfile.MiMatrix;
-import fastmath.matfile.MxDouble;
-import fastmath.matfile.MxInt32;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
@@ -73,22 +67,7 @@ public class MutuallyExcitingProcessEstimator
 
     out.println("Estimating parameters for " + filename);
     ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateSelfExcitingTradingProcess(type, filename, trajectoryCount, symbol);
-    for (int i = 0; i < processes.size(); i++)
-    {
-      File modelFile = new File(filename + "." + type.getFilenameExtension() + "." + i + ".model");
-      ExponentialMutuallyExcitingProcess process = processes.get(i);
-      double firstTimestampInInterval = DateUtils.convertTimeUnits(process.T.getLeftmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
-      double lastTimestampInInterval = DateUtils.convertTimeUnits(process.T.getRightmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
-
-      out.println("Storing estimated parameters in " + modelFile
-                  + " covering the range "
-                  + firstTimestampInInterval
-                  + " to "
-                  + lastTimestampInInterval
-                  + " hours");
-
-      process.storeParameters(modelFile);
-    }
+    
 
   }
 
@@ -117,7 +96,7 @@ public class MutuallyExcitingProcessEstimator
                                             String symbol) throws IOException
   {
     assert type != null;
-    return estimateSelfExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)));
+    return estimateSelfExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
   }
 
   /**
@@ -130,6 +109,7 @@ public class MutuallyExcitingProcessEstimator
    * @param trajectoryCount
    *          number of random starts for the multistart optimizer to use to
    *          determine optimal parameters
+   * @param filename
    * @param times
    * @return
    * @throws IOException
@@ -137,7 +117,8 @@ public class MutuallyExcitingProcessEstimator
   public static ArrayList<ExponentialMutuallyExcitingProcess>
          estimateSelfExcitingTradingProcesses(Type type,
                                               int trajectoryCount,
-                                              TradingFiltration tradingProcess) throws IOException
+                                              TradingFiltration tradingProcess,
+                                              String filename) throws IOException
   {
     assert type != null;
     Vector times = tradingProcess.times;
@@ -163,9 +144,9 @@ public class MutuallyExcitingProcessEstimator
       processes.add(process);
 
       File testFile = new File("test" + i + ".mat");
-      storeParameterEstimationResults(testFile, timeSlice, process);
-      System.out.println("test mode");
-      System.exit(1);
+      storeParameterEstimationResults(testFile, timeSlice, process, filename, i);
+      // System.out.println("test mode");
+      // System.exit(1);
     }
 
     return processes;
@@ -174,7 +155,9 @@ public class MutuallyExcitingProcessEstimator
   public static void
          storeParameterEstimationResults(File testFile,
                                          Vector data,
-                                         ExponentialMutuallyExcitingProcess process) throws IOException
+                                         ExponentialMutuallyExcitingProcess process,
+                                         String filename,
+                                         int i) throws IOException
   {
 
     Vector intensities[] = seq((IntFunction<Vector>) type -> process.λvector(type).setName("intensity" + type), 0, process.dim() - 1).toArray(Vector[]::new);
@@ -186,16 +169,29 @@ public class MutuallyExcitingProcessEstimator
 
     // outFile.write(innov.createMiMatrix());
     outFile.write(data.createMiMatrix());
-    for (int i = 0; i < process.dim; i++)
+    for (int m = 0; i < process.dim; i++)
     {
-      Vector compensator = process.Λ(i).setName("comp" + i);
-      outFile.write(process.getTimes(i).createMiMatrix());
+      Vector compensator = process.Λ(m).setName("comp" + m);
+      outFile.write(process.getTimes(m).createMiMatrix());
       outFile.write(compensator.createMiMatrix());
-      outFile.write(intensities[i].createMiMatrix());
+      outFile.write(intensities[m].createMiMatrix());
     }
     outFile.write(new Vector(process.K).setName("K").createMiMatrix());
 
     outFile.close();
+
+    File modelFile = new File(filename + "." + process.getType().getFilenameExtension() + "." + i + ".model");
+    double firstTimestampInInterval = DateUtils.convertTimeUnits(process.T.getLeftmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
+    double lastTimestampInInterval = DateUtils.convertTimeUnits(process.T.getRightmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
+
+    out.println("Storing estimated parameters in " + modelFile
+                + " covering the range "
+                + firstTimestampInInterval
+                + " to "
+                + lastTimestampInInterval
+                + " hours");
+
+    process.storeParameters(modelFile);
   }
 
   public void

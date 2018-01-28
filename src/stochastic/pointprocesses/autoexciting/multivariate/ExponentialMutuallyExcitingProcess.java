@@ -19,7 +19,11 @@ import static java.util.stream.Stream.concat;
 import static org.apache.commons.lang.ArrayUtils.addAll;
 import static org.fusesource.jansi.Ansi.ansi;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
@@ -1111,9 +1115,17 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public void
-         storeParameters(File modelFile)
+         storeParameters(File modelFile) throws IOException
   {
-    throw new UnsupportedOperationException("TODO");
+    FileOutputStream fileOutputStream = new FileOutputStream(modelFile, false);
+    DataOutputStream dos = new DataOutputStream(fileOutputStream);
+    Vector params = getParameters();
+    for (int i = 0; i < getParamCount(); i++)
+    {
+      dos.writeDouble(params.get(i));
+    }
+    dos.close();
+    fileOutputStream.close();
   }
 
   /**

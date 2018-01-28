@@ -1,7 +1,15 @@
+
+plugins {
+  id "net.java.openjdk.shinyafox.jshell.gradle.plugin" version "1.0.3"
+  }
+  
+  
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
+
+  
 group = 'sc'
 version = '7.0'
 
@@ -11,6 +19,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
+
+  
 sourceSets {
     main {
         java {
@@ -42,8 +52,3 @@ dependencies {
 repositories {
   mavenLocal()
   }
-
-plugins {
-  id "net.java.openjdk.shinyafox.jshell.gradle.plugin" version "1.0.3"
-  }
-  
