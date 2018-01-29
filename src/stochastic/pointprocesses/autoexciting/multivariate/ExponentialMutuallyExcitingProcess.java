@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
@@ -193,7 +194,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int m,
            int n)
   {
-    return γ(k, m, n,1);
+    return γ(k, m, n, 1);
   }
 
   public double
@@ -243,6 +244,32 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       Vector λvector = λvector(m).slice(1, N(m) - 1);
 
       Vector lslice = λvector.log();
+      double maxT = T.getRightmostValue();
+      double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
+                           0,
+                           N(m) - 1);
+      return lslice.sum() - compsum;
+    }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
+    if (llcnt++ % 10 == 0)
+    {
+      out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
+    }
+    return ll;
+
+  }
+
+  /**
+   * the log-likelihood, without the additive constant T so its not exactly the
+   * true LL but the result is the same
+   * 
+   */
+  public final double
+         logLikSlower()
+  {
+    double ll = sum(m -> {
+      Vector λvector = λvector(m).slice(1, N(m) - 1);
+
+      Vector lslice = λvector.log();
       Vector comp = Λ(m);
       double compsum = comp.sum();
 
@@ -253,41 +280,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
     }
     return ll;
-    // double tn = T.getRightmostValue();
-    // double ll = tn - T.getLeftmostValue() - totalΛ();
-    //
-    // double S[][] = new double[order()][dim()];
-    // for (int type = 0; type < dim(); type++)
-    // {
-    // final int n = N(type);
-    //
-    // Vector compensator = Λ(type);
-    // for (int tk = 1; tk < n; tk++)
-    // {
-    // double t = T.get(tk);
-    // double dt = t - T.get(tk - 1);
-    // double λ = evolveλ(type, dt, S);
-    //
-    // if (λ > 0)
-    // {
-    // ll += log(λ);
-    // }
-    //
-    // ll -= compensator.get(tk - 1);
-    // }
-    //
-    // if (Double.isNaN(ll))
-    //
-    // {
-    // if (verbose)
-    // {
-    // out.println(Thread.currentThread().getName() + " NaN for LL ");
-    // }
-    // ll = Double.NEGATIVE_INFINITY;
-    // }
-    // }
-    // out.println(Thread.currentThread().getName() + " ll=" + ll);
-    // return ll;
 
   }
 
