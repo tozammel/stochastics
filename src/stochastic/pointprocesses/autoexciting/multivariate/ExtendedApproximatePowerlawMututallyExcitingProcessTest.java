@@ -24,10 +24,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
          testMeanRecurrenceTime()
   {
     ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
-    // process.τ.assign(10.0843321348, 8.4890790143);
-    // process.ε.assign(0, 0);
-    // process.η.assign(2.8483343724, 2.5714437398);
-    // process.b.assign(3.4935467810, 2.9798206550);
+    process.τ.assign(0.4663536036, 0.4343345865);
+    process.ε.assign(0, 0);
+    process.η.assign(2.6985900988, 2.4276896668);
+    process.b.assign(10, 10);
 
     Vector recurrenceTimes = process.meanRecurrenceTimeVector();
     ExtendedApproximatePowerlawSelfExcitingProcess univarProcess = new ExtendedApproximatePowerlawSelfExcitingProcess();
@@ -38,12 +38,24 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
     double z2 = process.Z(0, 0);
     double z = univarProcess.Z();
-    assertEquals(z2, z, pow(10, -13));
-
-    assertEquals(recurrenceTimes.get(0), univarProcess.meanRecurrenceTime(), pow(10, -12));
+    
+    for ( int i = 0; i < process.order(); i++ )
+    {
+      double alpham = process.α(i, 0, 0);
+      double alphau = univarProcess.α(i);
+      double betam = process.β(i, 0, 0);
+      double betau = univarProcess.β(i);
+      out.println( i + " multi alpha=" + alpham + " uni alpha=" + alphau + " multi beta=" + betam + " uni beta= "+ betau );
+    }
+    out.println( "univar params: " + univarProcess.getαβString() );
+    out.println( "multivar params: " + process.getαβString() );
     out.println("meanRecurrenceTime=" + univarProcess.meanRecurrenceTime());
     univarProcess.printResults(new PointValuePair[]
     { new PointValuePair(univarProcess.getParameters().toDoubleArray(), 100) });
+    assertEquals(z, z2, pow(10, -13));
+
+    assertEquals(recurrenceTimes.get(0), univarProcess.meanRecurrenceTime(), pow(10, -12));
+
   }
 
   public static ExtendedApproximatePowerlawMututallyExcitingProcess
