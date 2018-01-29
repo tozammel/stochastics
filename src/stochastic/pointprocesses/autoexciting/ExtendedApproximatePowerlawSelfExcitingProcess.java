@@ -93,12 +93,12 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     return M + 1;
   }
 
-  @Override
-  public double
-         Z()
-  {
-    return (ε < 1E-14) ? (b * η + M) : ((pow(τ, -ε) * (pow(m, ε) - pow(m, -ε * (M - 1)))) / (pow(m, ε) - 1) + b * η);
-  }
+//  @Override
+//  public double
+//         Z()
+//  {
+//    return (ε < 1E-14) ? (b * η + M) : ((pow(τ, -ε) * (pow(m, ε) - pow(m, -ε * (M - 1)))) / (pow(m, ε) - 1) + b * η);
+//  }
 
   @Override
   public double

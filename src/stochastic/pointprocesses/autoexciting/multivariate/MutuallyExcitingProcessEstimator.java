@@ -169,10 +169,11 @@ public class MutuallyExcitingProcessEstimator
 
     // outFile.write(innov.createMiMatrix());
     outFile.write(data.createMiMatrix());
-    for (int m = 0; i < process.dim; i++)
+    for (int m = 0; i < process.dim(); i++)
     {
       Vector compensator = process.Λ(m).setName("comp" + m);
-      outFile.write(process.getTimes(m).createMiMatrix());
+      Vector times = process.getTimes(m);
+      outFile.write(times.createMiMatrix());
       outFile.write(compensator.createMiMatrix());
       outFile.write(intensities[m].createMiMatrix());
     }
