@@ -363,7 +363,8 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
     for (int i = 0; i < optima.length; i++)
     {
-      Object[] row = evaluateParameterStatistics(optima[i].getPoint());
+      double[] point = optima[i].getPoint();
+      Object[] row = evaluateParameterStatistics(point);
 
       for (int j = 0; j < columnHeaders.length; j++)
       {
@@ -424,6 +425,12 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
     PointValuePair[] optima = multiopt.getOptima().toArray(new PointValuePair[0]);
 
+    return printResults(optima);
+  }
+
+  public TextTable
+         printResults(PointValuePair[] optima)
+  {
     String[] columnHeaders = getColumnHeaders();
 
     Object[][] data = evaluateStatisticsForEachLocalOptima(optima, columnHeaders);

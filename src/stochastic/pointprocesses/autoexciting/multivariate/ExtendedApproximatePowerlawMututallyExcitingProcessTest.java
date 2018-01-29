@@ -9,6 +9,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+import org.apache.commons.math3.optim.PointValuePair;
+
 import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
@@ -39,7 +41,9 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     assertEquals(z2, z, pow(10, -13));
 
     assertEquals(recurrenceTimes.get(0), univarProcess.meanRecurrenceTime(), pow(10, -12));
-
+    out.println("meanRecurrenceTime=" + univarProcess.meanRecurrenceTime());
+    univarProcess.printResults(new PointValuePair[]
+    { new PointValuePair(univarProcess.getParameters().toDoubleArray(), 100) });
   }
 
   public static ExtendedApproximatePowerlawMututallyExcitingProcess

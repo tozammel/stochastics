@@ -265,6 +265,11 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          getΛmomentMeasure()
   {
     Vector dΛ = Λ();
+    if ( dΛ.size() == 0 )
+    {
+      return Double.NaN;
+    }
+      
     Vector moments = dΛ.normalizedMoments(2);
     Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
     return normalizedSampleMoments.sum();
@@ -405,8 +410,15 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public double
          getΛKolmogorovSmirnovStatistic()
   {
+   
     KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
-    Vector sortedCompensator = new Vector(Λ().doubleStream().sorted()).reverse();
+    Vector comp = Λ();
+    
+    if ( comp.size() == 0 )
+    {
+      return Double.NaN;
+    }
+    Vector sortedCompensator = new Vector(comp.doubleStream().sorted()).reverse();
     double ksStatistic = ksTest.kolmogorovSmirnovStatistic(expDist, sortedCompensator.toDoubleArray());
     return 1 - ksStatistic;
   }
@@ -485,6 +497,10 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public final double
          logLik()
   {
+    if ( T == null )
+    {
+      return Double.NaN;
+    }
     double tn = T.getRightmostValue();
     double ll = tn - T.getLeftmostValue() - totalΛ();
     final int n = T.size();
@@ -708,7 +724,10 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public Vector
          Λ()
   {
-
+    if ( T == null )
+    {
+      return new Vector();
+    }
     final int n = T.size() - 1;
 
     Vector compensator = new Vector(n);

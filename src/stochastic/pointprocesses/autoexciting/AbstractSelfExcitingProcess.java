@@ -419,6 +419,12 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
 
     PointValuePair[] optima = multiopt.getOptima().toArray(new PointValuePair[0]);
 
+    return printResults(optima);
+  }
+
+  public TextTable
+         printResults(PointValuePair[] optima)
+  {
     String[] columnHeaders = getColumnHeaders();
 
     Object[][] data = evaluateStatisticsForEachLocalOptima(optima, columnHeaders);

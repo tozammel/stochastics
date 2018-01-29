@@ -44,7 +44,7 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
   {
     assert T != null : "T is null";
     assert K != null : "K is null";
-    assert X != null : "X is null";
+    //assert X != null : "X is null";
 
     try
     {
