@@ -13,9 +13,34 @@ import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
+import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 
 public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends TestCase
 {
+
+  public void
+         testMeanRecurrenceTime()
+  {
+    ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    // process.τ.assign(10.0843321348, 8.4890790143);
+    // process.ε.assign(0, 0);
+    // process.η.assign(2.8483343724, 2.5714437398);
+    // process.b.assign(3.4935467810, 2.9798206550);
+
+    Vector recurrenceTimes = process.meanRecurrenceTimeVector();
+    ExtendedApproximatePowerlawSelfExcitingProcess univarProcess = new ExtendedApproximatePowerlawSelfExcitingProcess();
+    univarProcess.τ = process.τ.get(0);
+    univarProcess.ε = process.ε.get(0);
+    univarProcess.η = process.η.get(0);
+    univarProcess.b = process.b.get(0);
+
+    double z2 = process.Z(0, 0);
+    double z = univarProcess.Z();
+    assertEquals(z2, z, pow(10, -13));
+
+    assertEquals(recurrenceTimes.get(0), univarProcess.meanRecurrenceTime(), pow(10, -12));
+
+  }
 
   public static ExtendedApproximatePowerlawMututallyExcitingProcess
          constructLongerProcess()
@@ -306,11 +331,11 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
     double z0 = process.Z(0, 0);
     out.println("z0=" + z0);
-    assertEquals(20.34, z0);
+    assertEquals(20.34, z0, pow(10, -13));
 
     double z1 = process.Z(1, 1);
     out.println("z1=" + z1);
-    assertEquals(19.488945713548063, z1);
+    assertEquals(19.488945713548063, z1, pow(10, -13));
 
   }
 

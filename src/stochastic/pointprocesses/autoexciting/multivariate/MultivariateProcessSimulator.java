@@ -49,6 +49,11 @@ public class MultivariateProcessSimulator
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
       ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+      process.τ.assign(10.0843321348, 8.4890790143);
+      process.ε.assign(0, 0);
+      process.η.assign(2.8483343724, 2.5714437398);
+      process.b.assign(3.4935467810, 2.9798206550);
+
       // process.ε = 0.05;0
       process.T = new Vector(new double[]
       { 0 });
@@ -67,7 +72,15 @@ public class MultivariateProcessSimulator
     int lastRejectedPoint = -1;
     int rejects = 0;
     ExponentialDistribution expDist = new ExponentialDistribution(new JDKRandomGenerator(seed), 1);
-    out.println("simulating " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points with seed=" + seed);
+    out.println("simulating " + ansi().fgBrightYellow()
+                + process
+                + ansi().fgDefault()
+                + " from "
+                + process.T.size()
+                + " points with seed="
+                + seed
+                + " meanRecurrenceTimes="
+                + process.meanRecurrenceTimeVector());
     int n = process.T.size();
     double nextTime = 0;
     int sampleCount = 130000;

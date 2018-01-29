@@ -12,6 +12,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.IntToDoubleFunction;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
@@ -165,7 +167,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     {
       return 1;
     }
-    return j < M ? 1 / (τ.get(m) * pow(base, j)) : βS(m);
+    return j < M ? (τ.get(m) * pow(base, -j)) : βS(m);
 
   }
 
@@ -381,7 +383,24 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
          meanRecurrenceTime(int m)
   {
 
-    return sum(j -> γ(j, m, m, 2), 0, order() - 1) / ((product(k -> β(k, m, m), 0, order() - 1)) * sum(j -> γ(j, m, m, 1), 0, order() - 1) * Z(m, m));
+    Vector beta = new Vector(seq((IntToDoubleFunction) j -> β(j, m, m), 0, order() - 1));
+    Vector gamma = new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m, 2), 0, order() - 1));
+    double numerator = sum(j -> γ(j, m, m, 2), 0, order() - 1);
+    double dp = product(k -> β(k, m, m), 0, order() - 1);
+    double ds = sum(j -> γ(j, m, m, 1), 0, order() - 1);
+    double denominator = dp * ds;
+    double ratio = (numerator / denominator) / Z(m, m);
+//    out.format("meanRecurrenceTime m=%d numerator=%35.35f dp=%s ds=%s denominator=%30.30f ratio=%30.30f order=%d\nbeta=%s\ngamma=%s\n",
+//               m,
+//               numerator,
+//               dp,
+//               ds,
+//               denominator,
+//               ratio,
+//               order(),
+//               Arrays.toString(beta.toDoubleArray()),
+//               Arrays.toString(gamma.toDoubleArray()));
+    return ratio;
   }
 
   @Override
@@ -435,6 +454,5 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
      */
     return sum(j -> (α(j, m, m) / β(j, m, m)) * (1 - (exp(-β(j, m, m) * dt))) * A(j, m, m, i), 0, order() - 1) / Z(m, m);
   }
-
 
 }

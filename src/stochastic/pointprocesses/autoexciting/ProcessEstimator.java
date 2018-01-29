@@ -52,9 +52,8 @@ public class ProcessEstimator
 
     AutoExcitingProcessFactory.Type type = Type.ExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
-    int cpuMultiplier = 1;
+    int cpuMultiplier = 2;
 
-    cpuMultiplier = 4;
     int trajectoryCount = Runtime.getRuntime().availableProcessors() * cpuMultiplier;
     if (args.length > 1)
     {

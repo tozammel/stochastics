@@ -193,7 +193,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int m,
            int n)
   {
-    return γ(k, m, n);
+    return γ(k, m, n,1);
   }
 
   public double
