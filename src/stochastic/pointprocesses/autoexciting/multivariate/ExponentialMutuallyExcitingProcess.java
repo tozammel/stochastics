@@ -247,12 +247,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double maxT = T.getRightmostValue();
       double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
                            0,
-                           N(m) - 1);
+                           N(m) - 1)
+                       / Z(m, m);
+      out.println("compsum(m=" + m + ")=" + compsum);
       return lslice.sum() - compsum;
-    }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
-    if (llcnt++ % 10 == 0)
+    }, 0, dim() - 1) + (T.getRightmostValue());
+    if (llcnt++ % 25 == 1)
     {
-      out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
+      out.println(Thread.currentThread().getName() + " " + this + "#" + llcnt + " ll=" + ll);
     }
     return ll;
 
@@ -296,12 +298,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     SolutionValidator validator = point -> {
       ExponentialMutuallyExcitingProcess process = newProcess(point.getPoint());
-      out.println(Thread.currentThread().getName() + " validating " + process + " which has a LL score of " + process.logLik());
+      // out.println(Thread.currentThread().getName() + " validating " + process + "
+      // which has a LL score of " + process.logLik());
 
       for (int i = 0; i < process.dim(); i++)
       {
         double mean = process.Λ(i).mean();
-        out.println(Thread.currentThread().getName() + " process mean dim " + i + " is " + mean);
+        // out.println(Thread.currentThread().getName() + " process mean dim " + i + "
+        // is " + mean);
         if (mean < 0)
         {
           return false;

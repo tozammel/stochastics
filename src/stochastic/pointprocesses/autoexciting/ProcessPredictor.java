@@ -219,8 +219,8 @@ public class ProcessPredictor
     out.println("writing timestamp data, compensator and intensity to " + testFile.getAbsolutePath()
                 + " E[data.dt]="
                 + data.diff().mean()
-                + " 1/k="
-                + (1 / process.κ));
+                + " estimated meanRecurrenceTime="
+                + process.meanRecurrenceTime());
     try
     {
       MatFile.write(testFile, data.createMiMatrix(), compensator.createMiMatrix(), intensity.createMiMatrix());

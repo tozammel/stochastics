@@ -158,8 +158,8 @@ public class ProcessEstimator
     multivarProcess.T = slice;
     multivarProcess.K = new IntVector( slice.size() );
     out.println( "estimating multivar " );
-    multivarProcess.estimateParameters(10, ev -> {} );
-    
+    ParallelMultistartMultivariateOptimizer opt = multivarProcess.estimateParameters(10, ev -> {} );
+    multivarProcess.printResults(opt);
     out.println( "estimated " + multivarProcess );
 
     return process;
@@ -238,6 +238,7 @@ public class ProcessEstimator
     process.T = data;
     ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), null);
 
+    
     // double averageError = process.getInnovationSequence().mean();
     // out.println("E(I)=" + process.getMeanPredictionError()
     //

@@ -375,7 +375,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
               int tk)
   {
     assert dt >= 0 : "dt cannot be negative, was " + dt + " at tk=" + tk;
-    double Λ = dt * κ;
+    double Λ = 0;
     for (int j = 0; j < order(); j++)
     {
       double α = α(j);
@@ -501,39 +501,46 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     {
       return Double.NaN;
     }
+    Vector λvector = λvector().slice(1, T.size() - 1);
+
+    Vector lslice = λvector.log();
+    
     double tn = T.getRightmostValue();
-    double ll = tn - T.getLeftmostValue() - totalΛ();
-    final int n = T.size();
+    //out.println( "tn=" + tn );
+    double compSum = totalΛ();
+    //out.println( "compSum=" + compSum );
+    
 
-    A = new double[n][order()];
+    return tn + lslice.sum() - compSum;
+//    A = new double[n][order()];
+//
+//    double S[] = new double[order()];
+//    for (int tk = 1; tk < n; tk++)
+//    {
+//      double t = T.get(tk);
+//      double dt = t - T.get(tk - 1);
+//      double λ = evolveλ(dt, t, S);
+//
+//      if (λ > 0)
+//      {
+//        ll += log(λ);
+//      }
+//
+//      // ll -= Λ;
+//
+//    }
 
-    double S[] = new double[order()];
-    for (int tk = 1; tk < n; tk++)
-    {
-      double t = T.get(tk);
-      double dt = t - T.get(tk - 1);
-      double λ = evolveλ(dt, t, S);
-
-      if (λ > 0)
-      {
-        ll += log(λ);
-      }
-
-      // ll -= Λ;
-
-    }
-
-    if (Double.isNaN(ll))
-
-    {
-      if (verbose)
-      {
-        out.println(Thread.currentThread().getName() + " NaN for LL ");
-      }
-      ll = Double.NEGATIVE_INFINITY;
-    }
-
-    return ll;
+//    if (Double.isNaN(ll))
+//
+//    {
+//      if (verbose)
+//      {
+//        out.println(Thread.currentThread().getName() + " NaN for LL ");
+//      }
+//      ll = Double.NEGATIVE_INFINITY;
+//    }
+//
+//    return ll;
 
   }
 
@@ -655,7 +662,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   {
     double tn = T.getRightmostValue();
 
-    return (tn * κ + sum(i -> sum(j -> (α(j) / β(j)) * (1 - exp(-β(j) * (tn - T.get(i)))), 0, order() - 1), 0, T.size() - 1)) / Z();
+    return ( sum(i -> sum(j -> (α(j) / β(j)) * (1 - exp(-β(j) * (tn - T.get(i)))), 0, order() - 1), 0, T.size() - 1)) / Z();
   }
 
   @Override
@@ -711,7 +718,6 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     assert t >= 0 : "t cannot be negative, was " + t;
 
     DoubleAdder sum = new DoubleAdder();
-    sum.add(κ);
     double s;
     for (int i = 0; i < T.size() && (s = T.get(i)) < t; i++)
     {
@@ -966,7 +972,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
                     double[] S)
   {
     assert dt >= 0 : "dt cannot be negative, was " + dt + " at t=" + t;
-    double λ = κ;
+    double λ = 0;
     for (int j = 0; j < order(); j++)
     {
       S[j] = exp(-β(j) * dt) * (1 + S[j]);

@@ -80,7 +80,7 @@ public class ProcessSimulator
       process.trace = false;
       // TODO: average over Λ and compare against the invariant projection
       double dt = process.invΛ(y);
-      if (dt > 10000 || dt < 0.001 )
+      if (dt > 10000 || dt < 0.001)
       {
         int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
         lastRejectedPoint = i;
@@ -178,8 +178,9 @@ public class ProcessSimulator
     out.println("writing timestamp data, compensator and intensity to " + testFile.getAbsolutePath()
                 + " E[data.dt]="
                 + data.diff().mean()
-                + " 1/k="
-                + (1 / process.κ));
+                + " meanRecurrenceTime="
+                + process.meanRecurrenceTime());
+
     try
     {
       MatFile.write(testFile, data.createMiMatrix(), compensator.createMiMatrix(), intensity.createMiMatrix());

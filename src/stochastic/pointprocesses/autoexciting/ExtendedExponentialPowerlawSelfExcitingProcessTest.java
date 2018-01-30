@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.autoexciting;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
@@ -236,28 +237,34 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());
 
-    //out.println("process Z = " + process.Z());
-   // out.println("mprocess Z = " + mprocess.Z(0, 0));
+    // out.println("process Z = " + process.Z());
+    // out.println("mprocess Z = " + mprocess.Z(0, 0));
 
     Vector lp = process.λvector();
     Vector mlp = mprocess.λvector(0);
 
-    //out.println( "fuck lp=" + lp );
-    //out.println( "fuck mlp=" + mlp );
-    
-    double fucku = process.λ(process.T.get(1));
-    double fuckm = mprocess.λ(0, mprocess.T(0, 1));
-    //out.println( "fucku=" + fucku + " fuckm=" + fuckm );
-    
-//    XYChart chart = Plotter.chart("uni", "a", process::λ, 0, 300, t -> t);
-//    Pair<double[], double[]> sample = Plotter.sampleFunction(t -> mprocess.λ(0, t), 1000, 0, 300, t -> t);
-//    chart.addSeries("m", sample.left, sample.right);
-//    display(chart);
-//
-//    while( chart != null )
-//    {
-//      Thread.sleep(1000);
-//    }
+    out.println("lp=" + lp);
+    out.println("mp=" + mlp);
+
+    Vector ucomp = process.Λ();
+    Vector mcomp = mprocess.Λ(0);
+
+    assertTrue(ucomp.equals(mcomp, pow(10, -13)));
+    out.println("ucomp=" + ucomp);
+    out.println("mcomp=" + mcomp);
+
+    assertTrue(lp.equals(mlp, pow(10, -13)));
+
+    // XYChart chart = Plotter.chart("uni", "a", process::λ, 0, 300, t -> t);
+    // Pair<double[], double[]> sample = Plotter.sampleFunction(t -> mprocess.λ(0,
+    // t), 1000, 0, 300, t -> t);
+    // chart.addSeries("m", sample.left, sample.right);
+    // display(chart);
+    //
+    // while( chart != null )
+    // {
+    // Thread.sleep(1000);
+    // }
     // out.println("lp=" + lp);
     // out.println("mlp=" + mlp);
 

@@ -36,11 +36,6 @@ public abstract class AbstractSelfExcitingProcess implements MultivariateFunctio
 
   public boolean verbose = false;
 
-  /**
-   * constant deterministic intensity
-   */
-  public double κ = 0;
-
   /*
    * The first column of this matrix is identical with T, the remaining columns,
    * if any, are the marks associated with the timestamps in column 0
