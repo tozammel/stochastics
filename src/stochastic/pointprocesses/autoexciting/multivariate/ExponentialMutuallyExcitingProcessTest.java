@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.lang.Math.pow;
 import static java.lang.System.out;
 
 import fastmath.DoubleMatrix;
@@ -61,7 +62,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     double c = mprocess.totalΛ();
     assertEquals(a, c, 1E-15);
 
-    assertEquals(process.Λ(0), mprocess.Λ(0));
+    assertTrue(process.Λ().equals( mprocess.Λ(0), pow(10,-13) ));
 
   }
 
