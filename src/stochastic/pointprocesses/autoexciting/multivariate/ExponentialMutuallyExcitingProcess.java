@@ -240,18 +240,18 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final double
          logLik()
   {
+    double maxT = T.getRightmostValue();
     double ll = sum(m -> {
       Vector λvector = λvector(m).slice(1, N(m) - 1);
 
       Vector lslice = λvector.log();
-      double maxT = T.getRightmostValue();
       double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
                            0,
                            N(m) - 1)
                        / Z(m, m);
-      out.println("compsum(m=" + m + ")=" + compsum);
+      //out.println("compsum(m=" + m + ")=" + compsum);
       return lslice.sum() - compsum;
-    }, 0, dim() - 1) + (T.getRightmostValue());
+    }, 0, dim() - 1) + (maxT - T.getLeftmostValue());
     if (llcnt++ % 25 == 1)
     {
       out.println(Thread.currentThread().getName() + " " + this + "#" + llcnt + " ll=" + ll);

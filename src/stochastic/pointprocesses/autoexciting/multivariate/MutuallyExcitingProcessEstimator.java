@@ -157,7 +157,7 @@ public class MutuallyExcitingProcessEstimator
                                          Vector data,
                                          ExponentialMutuallyExcitingProcess process,
                                          String filename,
-                                         int i) throws IOException
+                                         final int i) throws IOException
   {
 
     Vector intensities[] = seq((IntFunction<Vector>) type -> process.λvector(type).setName("intensity" + type), 0, process.dim() - 1).toArray(Vector[]::new);
@@ -166,18 +166,22 @@ public class MutuallyExcitingProcessEstimator
     out.println("writing timestamp data, compensator, intensity to " + testFile.getAbsolutePath() + " E[data.dt]=" + data.diff().mean());
     MatFile outFile = new MatFile(testFile, MutuallyExcitingProcessEstimator.class.getSimpleName());
     outFile.write(data.createMiMatrix());
+    outFile.write(new Vector(process.K).setName("K").createMiMatrix());
 
     // outFile.write(innov.createMiMatrix());
-    outFile.write(data.createMiMatrix());
-    for (int m = 0; i < process.dim(); i++)
+    //outFile.write(data.createMiMatrix());
+    for (int m = 0; m < process.dim(); m++)
     {
       Vector compensator = process.Λ(m).setName("comp" + m);
       Vector times = process.getTimes(m);
+      out.println( "storing " + times.getName() );
+      out.println( "storing " + compensator.getName());
+      out.println( "storing " + intensities[m].getName() );
+      
       outFile.write(times.createMiMatrix());
       outFile.write(compensator.createMiMatrix());
       outFile.write(intensities[m].createMiMatrix());
     }
-    outFile.write(new Vector(process.K).setName("K").createMiMatrix());
 
     outFile.close();
 

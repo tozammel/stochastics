@@ -505,7 +505,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
     Vector lslice = λvector.log();
     
-    double tn = T.getRightmostValue();
+    double tn = ( T.getRightmostValue() - T.getLeftmostValue() ) ;
     //out.println( "tn=" + tn );
     double compSum = totalΛ();
     //out.println( "compSum=" + compSum );
