@@ -249,7 +249,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
                            0,
                            N(m) - 1)
                        / Z(m, m);
-      //out.println("compsum(m=" + m + ")=" + compsum);
+      // out.println("compsum(m=" + m + ")=" + compsum);
       return lslice.sum() - compsum;
     }, 0, dim() - 1) + (maxT - T.getLeftmostValue());
     if (llcnt++ % 25 == 1)
@@ -512,6 +512,21 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
+  public static String[] statisticNames =
+  { "Log-Lik", "1-KS(Λ,exp)", "mean(Λ)", "var(Λ)", "MM(Λ)", "LB(Λ)", "MMLB(Λ)", "E[dt]" };
+
+  /**
+   * 
+   * @return a list formed by concatenating the names of the parameters enumerated
+   *         by this{@link #getBoundedParameters()} and the names of the
+   *         statistics enumerated by this{@link #statisticNames}
+   */
+  public String[]
+         getColumnHeaders()
+  {
+    return concat(stream(getBoundedParameters()).map(param -> param.getName()), asList(statisticNames).stream()).collect(toList()).toArray(new String[0]);
+  }
+
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}
    */
@@ -534,7 +549,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     // out.println(compensated.autocor(30));
 
     Object[] statisticsVector = new Object[]
-    { process.logLik(), ksStatistic, compMean, compVar, process.getΛmomentMeasure(), process.getLjungBoxMeasure(), process.getΛmomentLjungBoxMeasure() };
+    { process.logLik(),
+      ksStatistic,
+      compMean,
+      compVar,
+      process.getΛmomentMeasure(),
+      process.getLjungBoxMeasure(),
+      process.getΛmomentLjungBoxMeasure(),
+      process.meanRecurrenceTimeVector().toString() };
 
     return addAll(stream(getParameterFields()).map(param -> {
       Vector value = process.getVectorField(param);
@@ -1094,21 +1116,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   boolean trace = false;
-
-  public static String[] statisticNames =
-  { "Log-Lik", "1-KS(Λ,exp)", "mean(Λ)", "var(Λ)", "MM(Λ)", "(LjungBox(Λ,10)-8)^2", "E[dt]" };
-
-  /**
-   * 
-   * @return a list formed by concatenating the names of the parameters enumerated
-   *         by this{@link #getBoundedParameters()} and the names of the
-   *         statistics enumerated by this{@link #statisticNames}
-   */
-  public String[]
-         getColumnHeaders()
-  {
-    return concat(stream(getBoundedParameters()).map(param -> param.getName()), asList(statisticNames).stream()).collect(toList()).toArray(new String[0]);
-  }
 
   public void
          storeParameters(File modelFile) throws IOException

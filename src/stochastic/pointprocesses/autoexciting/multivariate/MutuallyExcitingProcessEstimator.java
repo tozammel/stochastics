@@ -299,15 +299,4 @@ public class MutuallyExcitingProcessEstimator
     return data;
   }
 
-  public static Vector
-         loadTimes(String filename,
-                   String symbol) throws IOException
-  {
-
-    DoubleColMatrix matrix = MatFile.loadMatrix(filename, symbol);
-    Vector data = matrix.col(0).setName("data");
-
-    return data;
-  }
-
 }
