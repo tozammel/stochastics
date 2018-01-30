@@ -35,7 +35,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
     out.println("pdiff = " + points.diff().mean());
     ExtendedApproximatePowerlawSelfExcitingProcess inferredProcess = process.copy();
     inferredProcess.T = points;
-    inferredProcess.estimateParameters(10);
+    inferredProcess.estimateParameters(20);
     out.println("simulated " + process);
     out.println("inferred " + inferredProcess);
     assertTrue(abs(process.meanRecurrenceTime() - inferredProcess.meanRecurrenceTime()) < 1);

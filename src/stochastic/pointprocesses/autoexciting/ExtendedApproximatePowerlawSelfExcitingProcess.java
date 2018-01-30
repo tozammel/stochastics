@@ -33,7 +33,7 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
 
   public static enum Parameter implements BoundedParameter
   {
-    τ(0.8, 15), ε(0, 0.5), η(0.1, 10), b(0, 20);
+    τ(1, 10), ε(0, 0.5), η(0.1, 10), b(0, 10);
 
     Parameter(double min, double max)
     {
