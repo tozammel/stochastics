@@ -67,7 +67,6 @@ public class MutuallyExcitingProcessEstimator
 
     out.println("Estimating parameters for " + filename);
     ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateSelfExcitingTradingProcess(type, filename, trajectoryCount, symbol);
-    
 
   }
 
@@ -130,21 +129,21 @@ public class MutuallyExcitingProcessEstimator
     int n = (int) (TradingProcess.tradingDuration / W);
     int indexes[] = TradingStrategy.getIndices(times);
 
-    for (int i = 0; i < n; i++)
+    for (int section = 0; section < n; section++)
     {
-      Vector timeSlice = times.slice(i == 0 ? 0 : indexes[i - 1], indexes[i]);
-      IntVector typeSlice = tradingProcess.types.slice(i == 0 ? 0 : indexes[i - 1], indexes[i]);
-      DoubleMatrix markedPointSlice = tradingProcess.markedPoints.sliceRows(i == 0 ? 0 : tradingProcess.tradeIndexes[i - 1], tradingProcess.tradeIndexes[i]);
+      Vector timeSlice = times.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
+      IntVector typeSlice = tradingProcess.types.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
+      DoubleMatrix markedPointSlice = tradingProcess.markedPoints.sliceRows(section == 0 ? 0 : tradingProcess.tradeIndexes[section - 1], tradingProcess.tradeIndexes[section]);
 
       ExponentialMutuallyExcitingProcess process = ExponentialMutuallyExcitingProcess.spawnNewProcess(type, tradingProcess);
 
       MutuallyExcitingProcessEstimator estimator = new MutuallyExcitingProcessEstimator(process);
       estimator.setTrajectoryCount(trajectoryCount);
-      estimator.estimate(markedPointSlice, typeSlice);
+      estimator.estimate(markedPointSlice, typeSlice, filename, section);
       processes.add(process);
 
-      File testFile = new File("test" + i + ".mat");
-      storeParameterEstimationResults(testFile, timeSlice, process, filename, i);
+      File testFile = new File("test" + section + ".mat");
+      storeParameterEstimationResults(testFile, timeSlice, process, filename, section);
       // System.out.println("test mode");
       // System.exit(1);
     }
@@ -169,15 +168,15 @@ public class MutuallyExcitingProcessEstimator
     outFile.write(new Vector(process.K).setName("K").createMiMatrix());
 
     // outFile.write(innov.createMiMatrix());
-    //outFile.write(data.createMiMatrix());
+    // outFile.write(data.createMiMatrix());
     for (int m = 0; m < process.dim(); m++)
     {
       Vector compensator = process.Λ(m).setName("comp" + m);
       Vector times = process.getTimes(m);
-      out.println( "storing " + times.getName() );
-      out.println( "storing " + compensator.getName());
-      out.println( "storing " + intensities[m].getName() );
-      
+      out.println("storing " + times.getName());
+      out.println("storing " + compensator.getName());
+      out.println("storing " + intensities[m].getName());
+
       outFile.write(times.createMiMatrix());
       outFile.write(compensator.createMiMatrix());
       outFile.write(intensities[m].createMiMatrix());
@@ -221,7 +220,8 @@ public class MutuallyExcitingProcessEstimator
 
   public MutuallyExcitingProcess
          estimate(DoubleMatrix markedPoints,
-                  IntVector types) throws IOException
+                  IntVector types,
+                  String filename, int section) throws IOException
   {
     process.T = markedPoints.col(0);
     process.X = markedPoints;
@@ -252,7 +252,7 @@ public class MutuallyExcitingProcessEstimator
                     .reset());
     }
 
-    ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), j -> out.println("j=" + j));
+    ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), j -> out.println("j=" + j), filename, section);
     printResults(optimizer);
 
     return process;

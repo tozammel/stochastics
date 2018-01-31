@@ -259,7 +259,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   public abstract ParallelMultistartMultivariateOptimizer
          estimateParameters(int numStarts,
-                            IntConsumer progressNotifier);
+                            IntConsumer progressNotifier, String filename, int section);
 
   public abstract String[]
          getColumnHeaders();

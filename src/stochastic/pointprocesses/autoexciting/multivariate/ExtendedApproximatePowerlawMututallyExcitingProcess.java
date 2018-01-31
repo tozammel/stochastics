@@ -246,6 +246,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
   public double
          getΛmomentLjungBoxMeasure()
   {
+    //return getΛmomentMeasure() * getLjungBoxMeasure() * -logLik();
     return getΛmomentMeasure() * log(1 + getLjungBoxMeasure());
   }
 
@@ -390,16 +391,17 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcess extends Diagona
     double ds = sum(j -> γ(j, m, m, 1), 0, order() - 1);
     double denominator = dp * ds;
     double ratio = (numerator / denominator) / Z(m, m);
-//    out.format("meanRecurrenceTime m=%d numerator=%35.35f dp=%s ds=%s denominator=%30.30f ratio=%30.30f order=%d\nbeta=%s\ngamma=%s\n",
-//               m,
-//               numerator,
-//               dp,
-//               ds,
-//               denominator,
-//               ratio,
-//               order(),
-//               Arrays.toString(beta.toDoubleArray()),
-//               Arrays.toString(gamma.toDoubleArray()));
+    // out.format("meanRecurrenceTime m=%d numerator=%35.35f dp=%s ds=%s
+    // denominator=%30.30f ratio=%30.30f order=%d\nbeta=%s\ngamma=%s\n",
+    // m,
+    // numerator,
+    // dp,
+    // ds,
+    // denominator,
+    // ratio,
+    // order(),
+    // Arrays.toString(beta.toDoubleArray()),
+    // Arrays.toString(gamma.toDoubleArray()));
     return ratio;
   }
 

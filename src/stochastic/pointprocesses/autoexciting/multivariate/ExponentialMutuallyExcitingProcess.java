@@ -17,18 +17,17 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Stream.concat;
 import static org.apache.commons.lang.ArrayUtils.addAll;
-import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.function.IntConsumer;
 import java.util.function.IntToDoubleFunction;
@@ -43,9 +42,7 @@ import org.apache.commons.math3.optim.SimpleBounds;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.commons.math3.random.RandomVectorGenerator;
-import org.fusesource.jansi.Ansi.Color;
 
 import fastmath.DoubleColMatrix;
 import fastmath.EigenDecomposition;
@@ -59,6 +56,7 @@ import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
 import stochastic.pointprocesses.finance.TradingFiltration;
+import util.DateUtils;
 
 public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitingProcess
 {
@@ -289,12 +287,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   public ParallelMultistartMultivariateOptimizer
          estimateParameters(int numStarts,
-                            IntConsumer progressNotifier)
+                            IntConsumer progressNotifier,
+                            String filename,
+                            int section)
   {
     int maxIters = Integer.MAX_VALUE;
 
     MaxEval maxEval = new MaxEval(maxIters);
     SimpleBounds simpleBounds = getParameterBounds();
+    AtomicInteger solutionCounter = new AtomicInteger();
 
     SolutionValidator validator = point -> {
       ExponentialMutuallyExcitingProcess process = newProcess(point.getPoint());
@@ -311,11 +312,34 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
           return false;
         }
       }
+
+      final int solutionCount = solutionCounter.incrementAndGet();
+      File modelFile = new File(filename + "." + process.getType().getFilenameExtension() + "." + section + "." + solutionCount + ".model");
+      double firstTimestampInInterval = DateUtils.convertTimeUnits(process.T.getLeftmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
+      double lastTimestampInInterval = DateUtils.convertTimeUnits(process.T.getRightmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
+
+      out.println("Storing estimated parameters in " + modelFile
+                  + " covering the range "
+                  + firstTimestampInInterval
+                  + " to "
+                  + lastTimestampInInterval
+                  + " hours");
+
+      try
+      {
+        process.storeParameters(modelFile);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace(System.err);
+        throw new RuntimeException(e.getMessage(), e);
+      }
+
       return true;
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-6);
       // optimizer.
       return optimizer;
     };
@@ -326,11 +350,21 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     PointValuePairComparator momentMatchingAutocorrelationComparator = (a,
                                                                         b) -> {
-      ExponentialMutuallyExcitingProcess processA = newProcess(a.getPoint());
-      ExponentialMutuallyExcitingProcess processB = newProcess(b.getPoint());
-      double mma = processA.getΛmomentLjungBoxMeasure();
-      double mmb = processB.getΛmomentLjungBoxMeasure();
-      return Double.compare(mma, mmb);
+      try
+      {
+        ExponentialMutuallyExcitingProcess processA = newProcess(a.getPoint());
+        ExponentialMutuallyExcitingProcess processB = newProcess(b.getPoint());
+        // double mma = processA.getΛmomentLjungBoxMeasure();
+        double mma = processA.getΛmomentMeasure();
+        // double mmb = processB.getΛmomentLjungBoxMeasure();
+        double mmb = processB.getΛmomentMeasure();
+        return Double.compare(mma, mmb);
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace(System.err);
+        return 1;
+      }
     };
 
     double startTime = currentTimeMillis();
@@ -368,11 +402,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public double
-         getΛmomentLjungBoxMeasure()
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
+  public abstract double
+         getΛmomentLjungBoxMeasure();
 
   public ExponentialMutuallyExcitingProcess
          newProcess(double[] point)

@@ -64,8 +64,8 @@ public class ProcessEstimator
     out.println("Estimating parameters for " + filename);
     ArrayList<AbstractSelfExcitingProcess> processes = estimateSelfExcitingProcess(type, filename, trajectoryCount, symbol);
 
-    // TODO:  use multivar estimator and compare results
-    
+    // TODO: use multivar estimator and compare results
+
   }
 
   /**
@@ -94,7 +94,7 @@ public class ProcessEstimator
   {
     Vector data = loadTimes(filename, symbol);
 
-    return estimateSelfExcitingProcesses(type, trajectoryCount, data);
+    return estimateSelfExcitingProcesses(type, trajectoryCount, data, filename);
   }
 
   /**
@@ -103,18 +103,21 @@ public class ProcessEstimator
    * 
    * @param type
    *          {@link Type} of self-exciting process to use
-   * 
    * @param trajectoryCount
    *          number of random starts for the multistart optimizer to use to
    *          determine optimal parameters
    * @param times
+   * @param sourcefilename
+   *          TODO
+   * 
    * @return
    * @throws IOException
    */
   public static ArrayList<AbstractSelfExcitingProcess>
          estimateSelfExcitingProcesses(AutoExcitingProcessFactory.Type type,
                                        int trajectoryCount,
-                                       Vector times) throws IOException
+                                       Vector times,
+                                       String sourcefilename) throws IOException
   {
 
     double Edt = times.diff().mean();
@@ -125,16 +128,16 @@ public class ProcessEstimator
     int n = (int) (TradingProcess.tradingDuration / W);
     int indexes[] = TradingStrategy.getIndices(times);
 
-    range(0, n).forEachOrdered(i -> {
-      Vector slice = times.slice(i == 0 ? 0 : indexes[i - 1], indexes[i]);
+    range(0, n).forEachOrdered(section -> {
+      Vector slice = times.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
       double sliceEdt = slice.diff().mean();
 
-      out.println("E_" + i + "[dt]=" + sliceEdt);
+      out.println("E_" + section + "[dt]=" + sliceEdt);
 
-      AbstractSelfExcitingProcess process = estimateSelfExcitingProcess(type, trajectoryCount, slice);
+      AbstractSelfExcitingProcess process = estimateSelfExcitingProcess(type, trajectoryCount, slice, sourcefilename, section);
       processes.add(process);
 
-      File testFile = new File("test" + i + ".mat");
+      File testFile = new File("test" + section + ".mat");
       File modelFile = new File(testFile.getAbsolutePath() + "." + type.getFilenameExtension() + ".model");
 
       storeParameterEstimationResults(testFile, slice, process, modelFile);
@@ -147,20 +150,22 @@ public class ProcessEstimator
   public static AbstractSelfExcitingProcess
          estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
                                      int trajectoryCount,
-                                     Vector slice)
+                                     Vector slice,
+                                     String filename, int section)
   {
     AbstractSelfExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type);
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
-    
+
     ExtendedApproximatePowerlawMututallyExcitingProcess multivarProcess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
     multivarProcess.T = slice;
-    multivarProcess.K = new IntVector( slice.size() );
-    out.println( "estimating multivar " );
-    ParallelMultistartMultivariateOptimizer opt = multivarProcess.estimateParameters(10, ev -> {} );
+    multivarProcess.K = new IntVector(slice.size());
+    out.println("estimating multivar ");
+    ParallelMultistartMultivariateOptimizer opt = multivarProcess.estimateParameters(10, ev -> {
+    }, filename, section);
     multivarProcess.printResults(opt);
-    out.println( "estimated " + multivarProcess );
+    out.println("estimated " + multivarProcess);
 
     return process;
   }
@@ -238,7 +243,6 @@ public class ProcessEstimator
     process.T = data;
     ParallelMultistartMultivariateOptimizer optimizer = process.estimateParameters(getTrajectoryCount(), null);
 
-    
     // double averageError = process.getInnovationSequence().mean();
     // out.println("E(I)=" + process.getMeanPredictionError()
     //
