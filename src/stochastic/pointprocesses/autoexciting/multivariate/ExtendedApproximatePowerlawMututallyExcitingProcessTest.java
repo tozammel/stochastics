@@ -16,6 +16,7 @@ import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
 public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends TestCase
 {
@@ -23,7 +24,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testMeanRecurrenceTime()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.τ.assign(0.4663536036, 0.4343345865);
     process.ε.assign(0, 0);
     process.η.assign(2.6985900988, 2.4276896668);
@@ -58,10 +59,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
 
   }
 
-  public static ExtendedApproximatePowerlawMututallyExcitingProcess
+  public static DiagonalExtendedApproximatePowerlawMututallyExcitingProcess
          constructLongerProcess()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
     process.ε.assign(0.02, 0.04);
     process.T = new Vector(new double[]
     { 25, 92, 93, 104, 112, 166, 167, 175, 176, 189, 227, 229 });
@@ -70,10 +71,10 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     return process;
   }
 
-  public static ExtendedApproximatePowerlawMututallyExcitingProcess
+  public static DiagonalExtendedApproximatePowerlawMututallyExcitingProcess
          constructProcess()
   {
-    final ExtendedApproximatePowerlawMututallyExcitingProcess process = new ExtendedApproximatePowerlawMututallyExcitingProcess(2);
+    final DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
 
     process.assignParameters(new double[]
     { 1, 0, 3, 1.78, 1, 0.01, 2.99, 1.75 });
@@ -93,7 +94,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testA()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
 
     for (int m = 0; m < process.dim(); m++)
     {
@@ -120,7 +121,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testIntensity() throws InterruptedException
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
 
     Vector trueIntensity0 = new Vector(new double[]
     { 0.0000000000, 0.0009772861, 0.1226659480, 0.0020090410, 0.1236901367 });
@@ -189,7 +190,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
     Vector correctComp1 = new Vector(new double[]
     { .4998888423, .8070096157, .165624490, 1.059560873, .805224444, .278509920 });
 
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     Vector comp0 = process.Λ(0);
     Vector comp1 = process.Λ(1);
     out.println("process " + process + "\ncomp0=" + comp0);
@@ -214,7 +215,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testGetAndAssignParameters()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = new ExtendedApproximatePowerlawMututallyExcitingProcess(2);
+    ExponentialMutuallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
     int paramCount = process.getParamCount() * process.dim;
     Vector randomParams = new Vector(paramCount);
     for (int i = 0; i < randomParams.size(); i++)
@@ -230,7 +231,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testInvLambda()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     // process.ε = 0.05;
 
     // process.T = process.T.subtract(process.T.get(0));
@@ -263,7 +264,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testLikelihood()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
 
     double ll = process.logLik();
     out.println(ansi().fgBrightCyan() + "ll for " + process + " is " + ll + ansi().fgDefault());
@@ -273,7 +274,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testSubTimes()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExponentialMutuallyExcitingProcess process = constructProcess();
     process.T = new Vector(new double[]
     { 25, 91, 93, 112, 166, 167, 175, 176, 189, 227 });
     process.K = new IntVector(new int[]
@@ -288,7 +289,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testTotalΛ()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
 
     // SimpsonIntegrator integrator = new SimpsonIntegrator();
     // out.println("integrating total compensator");
@@ -307,7 +308,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testf()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     out.println("testing f for " + process);
     double val0 = process.f(0, 0, 6.5);
     double val1 = process.f(1, 1, 6.5);
@@ -321,7 +322,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testF()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     out.println("testing F for " + process);
     double val0 = process.F(0, 0, 6.5);
     double val1 = process.F(1, 1, 6.5);
@@ -343,7 +344,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testZ()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructProcess();
+    ExponentialMutuallyExcitingProcess process = constructProcess();
 
     double z0 = process.Z(0, 0);
     out.println("z0=" + z0);
@@ -358,7 +359,7 @@ public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends Tes
   public void
          testΦ()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
     double x = process.Φ(0, 0.25, 1, process.N(0) - 1);
     assertTrue(Double.isFinite(x));

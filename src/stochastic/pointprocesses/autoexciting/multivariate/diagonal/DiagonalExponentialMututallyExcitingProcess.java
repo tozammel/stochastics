@@ -1,23 +1,15 @@
-package stochastic.pointprocesses.autoexciting.multivariate;
+package stochastic.pointprocesses.autoexciting.multivariate.diagonal;
 
-import static fastmath.Functions.sum;
 import static java.lang.Math.abs;
 import static java.lang.Math.exp;
 import static java.lang.String.format;
 import static java.lang.System.out;
 
 import fastmath.Vector;
+import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 
 public abstract class DiagonalExponentialMututallyExcitingProcess extends ExponentialMutuallyExcitingProcess
 {
-  @Override
-  public double
-         Z(int m,
-           int n)
-  {
-    return sum(j -> sum(k -> α(j, m, k) / β(j, m, k), 0, dim() - 1), 0, order() - 1);
-  }
-
   /**
    * 
    * @param dt

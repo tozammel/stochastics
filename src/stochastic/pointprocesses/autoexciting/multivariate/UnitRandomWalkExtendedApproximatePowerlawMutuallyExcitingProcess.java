@@ -1,13 +1,14 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
 
 /**
- * Special case of {@link ExtendedApproximatePowerlawMututallyExcitingProcess} where τ[1..m]=[1..1] and ε=[0......0]
+ * Special case of {@link DiagonalExtendedApproximatePowerlawMututallyExcitingProcess} where τ[1..m]=[1..1] and ε=[0......0]
  *
  */
-public class UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess extends ExtendedApproximatePowerlawMututallyExcitingProcess
+public class UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess extends DiagonalExtendedApproximatePowerlawMututallyExcitingProcess
 {
 
   public static enum Parameter implements BoundedParameter

@@ -2,9 +2,11 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.product;
+import static fastmath.Functions.seq;
 import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
 import static java.lang.Math.exp;
+import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static java.lang.String.format;
@@ -43,6 +45,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.random.RandomVectorGenerator;
+import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 
 import fastmath.DoubleColMatrix;
 import fastmath.EigenDecomposition;
@@ -55,171 +58,50 @@ import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
+import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import util.DateUtils;
 
 public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitingProcess
 {
 
-  public abstract int
-         order();
 
   public ExponentialMutuallyExcitingProcess()
   {
 
   }
 
-  @Override
-  public double
-         Φδ(double t,
-            double y)
-  {
-    int tk = T.size() - 1;
-    throw new UnsupportedOperationException("TODO");
-  }
-
-  public double
-         Φ(int m,
-           double dt,
-           double y,
-           int tk)
-  {
-    double τ = τ(m, dt, y);
-    out.println("τ=" + τ);
-    return τ + sum(l -> sum(i -> Φ(m, i, l) * sum(k -> σ(m, i, l, k, dt, dt) - σ(m, i, l, k, dt, lastT(m)), 0, tk), 0, dim() - 1), 0, order() - 1);
-  }
+  public static String[] statisticNames =
+  { "Log-Lik", "1-KS(Λ,exp)", "mean(Λ)", "var(Λ)", "MM(Λ)", "LB(Λ)", "MMLB(Λ)", "E[dt]" };
 
   /**
    * 
-   * @param m
-   * @param dt
-   * @param y
-   * @return -y * this{@link #v(int)}(m)*{@link #η(int, double)}(m,dt)
-   */
-  public double
-         τ(int m,
-           double dt,
-           double y)
-  {
-    double v = v(m);
-    double η = η(m, dt);
-    out.println("v=" + v + " η=" + η);
-    return -y * v * η;
-  }
-
-  /**
-   * 
-   * @param m
-   *          dimension/index of the process, an integer in [0,dim)
-   * 
-   * @return ∏(∏(β(m,n,j),j=1..P),n=1..M)
-   */
-  public double
-         v(int m)
-  {
-    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
-  }
-
-  public double
-         Φ(int m,
-           int i,
-           int l)
-  {
-    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> n == i && j == l ? α(m, n, j) : β(m, n, j), 0, dim() - 1), 0, order() - 1);
-  }
-
-  public double
-         σ(int m,
-           int i,
-           int l,
-           int k,
-           double ds,
-           double dt)
-  {
-    assert m < dim() : "m=" + m + " >= dim";
-    double Tm = lastT(m);
-
-    return exp(sum(j -> sum(n -> β(m, n, j) * ((n == i && j == l) ? (ds + T(n, k)) : (dt + lastT(n))), 0, dim() - 1), 0, order() - 1));
-  }
-
-  /**
-   * get time of i-th point of the m-th proces
-   * 
-   * @param m
-   *          ordinal, integer in [0,dim)
-   * @param i
-   *          time index, starts at 0
+   * @param type
+   *          type of process to spawn
+   * @param filtration
    * @return
    */
-  public double
-         T(int m,
-           int i)
+  public static ExponentialMutuallyExcitingProcess
+         spawnNewProcess(AutoExcitingProcessFactory.Type type,
+                         TradingFiltration filtration)
   {
-    if (i < 0)
+    assert filtration.times != null : "tradingProcess.times is null";
+    assert filtration.types != null : "tradingProcess.types is null";
+    assert filtration.markedPoints != null : "tradingProcess.markedPoints is null";
+
+    if (type == AutoExcitingProcessFactory.Type.MultivariateExtendedApproximatePowerlaw)
     {
-      return 0;
+      ExponentialMutuallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
+      process.T = filtration.times;
+      process.K = filtration.types;
+      process.X = filtration.markedPoints;
+      return process;
     }
-    assert i >= 0 : "i cannot be negative, was " + i;
-    assert m < dim() : "m=" + m + " >= dim";
-    Vector Tm = getTimeSubsets().left[m];
-    assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
-    return Tm.get(i);
-  }
-
-  public double
-         η(int m,
-           double dt)
-  {
-    double Tm = lastT(m);
-
-    double vol = sum(j -> sum(n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
-
-    double measure = (dt + Tm) * vol;
-    out.println("vol=" + vol + " dt=" + dt + " Tm=" + Tm + " measure=" + measure);
-    return exp(measure);
-  }
-
-  public Double
-         lastT(int m)
-  {
-    assert m < dim() : "m=" + m + " >= dim";
-
-    return getTimeSubsets().right[m].lastKey();
-  }
-
-  public double
-         γ(int k,
-           int m,
-           int n)
-  {
-    return γ(k, m, n, 1);
-  }
-
-  public double
-         γ(int k,
-           int m,
-           int n,
-           int p)
-  {
-    IntToDoubleFunction a = j -> j == k ? α(j, m, n) : pow(β(j, m, n), p);
-
-    return product(a, 0, order() - 1);
-  }
-
-  @Override
-  public double
-         Φδ(double t,
-            double y,
-            int tk)
-  {
-    return sum(m -> Φ(m, t, y, tk) / Φdt(t, tk), 0, dim() - 1);
-  }
-
-  public double
-         Φdt(double t,
-             int tk)
-  {
-    throw new UnsupportedOperationException("TODO");
+    else
+    {
+      throw new UnsupportedOperationException("TODO: " + type);
+    }
   }
 
   private Entry<Double, Integer>[][][] lowerEntries;
@@ -230,60 +112,206 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private double[][][][] A;
 
-  /**
-   * the log-likelihood, without the additive constant T so its not exactly the
-   * true LL but the result is the same
-   * 
-   */
-  public final double
-         logLik()
-  {
-    double maxT = T.getRightmostValue();
-    double ll = sum(m -> {
-      Vector λvector = λvector(m).slice(1, N(m) - 1);
-
-      Vector lslice = λvector.log();
-      double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
-                           0,
-                           N(m) - 1)
-                       / Z(m, m);
-      // out.println("compsum(m=" + m + ")=" + compsum);
-      return lslice.sum() - compsum;
-    }, 0, dim() - 1) + (maxT - T.getLeftmostValue());
-    if (llcnt++ % 25 == 1)
-    {
-      out.println(Thread.currentThread().getName() + " " + this + "#" + llcnt + " ll=" + ll);
-    }
-    return ll;
-
-  }
-
-  /**
-   * the log-likelihood, without the additive constant T so its not exactly the
-   * true LL but the result is the same
-   * 
-   */
-  public final double
-         logLikSlower()
-  {
-    double ll = sum(m -> {
-      Vector λvector = λvector(m).slice(1, N(m) - 1);
-
-      Vector lslice = λvector.log();
-      Vector comp = Λ(m);
-      double compsum = comp.sum();
-
-      return lslice.sum() - compsum;
-    }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
-    if (llcnt++ % 10 == 0)
-    {
-      out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
-    }
-    return ll;
-
-  }
-
   protected boolean verbose = false;
+
+  private ExponentialDistribution expDist = new ExponentialDistribution(1);
+
+  private int predictionIntegrationLimit = 25;
+
+  private Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
+
+  protected boolean trace = false;
+
+  public int M = 15;
+
+  public double
+         A(int j,
+           int m,
+           int n,
+           int i)
+  {
+    assert j < order();
+    assert 0 <= n && n < dim();
+    assert i < N(m);
+    assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
+
+    if (A == null)
+    {
+      A = new double[order()][dim()][dim()][T.size()];
+    }
+    if (i == 0)
+    {
+      A[j][m][n][i] = 0;
+      return 0;
+    }
+    double val = A[j][m][n][i];
+    if (val == 0)
+    {
+      double Tmi = T(m, i);
+      double Tmi1 = T(m, i - 1);
+
+      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
+      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
+      A[j][m][n][i] = val;
+    }
+    return val;
+  }
+
+  public double
+         Asum(int j,
+              int m,
+              int n,
+              int i)
+  {
+    assert i >= 0;
+    if (i == 0)
+    {
+      return 0;
+    }
+    double Tmi = T(m, i);
+    int l = Nopen(n, Tmi) - 1;
+    return sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), 0, l);
+  }
+
+  public double
+         AsumToo(int j,
+                 int m,
+                 int n,
+                 int i)
+  {
+    assert i >= 0;
+    if (i == 0)
+    {
+      return 0;
+    }
+    double TmiPrev = T(m, i - 1);
+    double Tmi = T(m, i);
+    return exp(-β(j, m, n) * (Tmi - TmiPrev)) * Asum(j, m, n, i - 1) + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, TmiPrev), Nopen(n, Tmi) - 1);
+
+  }
+
+  /**
+   * Calculate sum(α(j,m,n)/β(j,m,n),j=1..order)
+   * 
+   * @return branching matrix of dimsion this{@link #dim} x this{@link #dim}
+   */
+  public DoubleColMatrix
+         calculateBranchingMatrix()
+  {
+    DoubleColMatrix αβ = new DoubleColMatrix(dim(), dim());
+    for (int j = 0; j < order(); j++)
+    {
+      for (int m = 0; m < dim(); m++)
+      {
+        for (int n = 0; n < dim(); n++)
+        {
+          αβ.add(n, n, α(j, m, n) / β(j, m, n));
+        }
+      }
+    }
+    return αβ;
+  }
+
+  public Vector
+         calculateIntensityFast(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
+                                int m)
+  {
+    final Vector[] timesSub = timesSubPair.left;
+
+    final Vector mtimes = timesSub[m];
+    final int Nm = mtimes.size();
+    Vector intensity = new Vector(Nm);
+    for (int i = 0; i < Nm; i++)
+    {
+      double lambda = 0;
+      final double mtime = mtimes.get(i);
+
+      if (i == 0)
+      {
+        for (int n = 0; n < dim(); n++)
+        {
+          final Vector ntimes = timesSub[n];
+          final int Nn = ntimes.size();
+          final double z = Z(m, n);
+          for (int j = 0; j < order(); j++)
+          {
+            final double αjmn = α(j, m, n);
+            final double βjmn = β(j, m, n);
+            double ntime;
+            for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
+            {
+              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
+            }
+          }
+        }
+      }
+      else
+      {
+        for (int n = 0; n < dim(); n++)
+        {
+          final Vector ntimes = timesSub[n];
+          final int Nn = ntimes.size();
+          final double z = Z(m, n);
+          for (int j = 0; j < order(); j++)
+          {
+            final double αjmn = α(j, m, n);
+            final double βjmn = β(j, m, n);
+            double ntime;
+            lambda += (αjmn / z) * exp(-βjmn * (mtime - T(m, i - 1))) * A(j, m, n, i - 1);
+            for (int k = Nopen(n, mtimes.get(i - 1)); k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
+            {
+              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
+            }
+          }
+        }
+      }
+
+      intensity.set(i, lambda);
+    }
+    return intensity;
+  }
+
+  public Vector
+         calculateIntensitySlow(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
+                                int m)
+  {
+    final Vector[] timesSub = timesSubPair.left;
+
+    final Vector mtimes = timesSub[m];
+    final int Nm = mtimes.size();
+    Vector intensity = new Vector(Nm);
+    for (int i = 0; i < Nm; i++)
+    {
+      double lambda = 0;
+      final double mtime = mtimes.get(i);
+
+      for (int n = 0; n < dim(); n++)
+      {
+        final Vector ntimes = timesSub[n];
+        final int Nn = ntimes.size();
+        final double z = Z(m, n);
+        for (int j = 0; j < order(); j++)
+        {
+          final double αjmn = α(j, m, n);
+          final double βjmn = β(j, m, n);
+          double ntime;
+          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
+          {
+            lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
+          }
+        }
+      }
+
+      intensity.set(i, lambda);
+    }
+    return intensity;
+  }
+
+  public int
+         dim()
+  {
+    return dim;
+  }
 
   public ParallelMultistartMultivariateOptimizer
          estimateParameters(int numStarts,
@@ -390,174 +418,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return multiopt;
   }
 
-  public double
-         getΛmomentMeasure()
-  {
-    return sum(m -> {
-      Vector comp = Λ(m);
-      Vector moments = comp.normalizedMoments(2);
-      Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
-      return normalizedSampleMoments.sum();
-    }, 0, dim() - 1) / dim();
-  }
-
-  @Override
-  public abstract double
-         getΛmomentLjungBoxMeasure();
-
-  public ExponentialMutuallyExcitingProcess
-         newProcess(double[] point)
-  {
-    ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
-    process.assignParameters(point);
-    return process;
-  }
-
-  /**
-   * 
-   * @return Λ(0,t[n])
-   */
-  public abstract double
-         totalΛ();
-
-  /**
-   * 
-   * @param m
-   *          ordinal ranging from 0 to this{@link #dim()}-1
-   * @param tk
-   * @return ∫λ(t)dt where t ranges from T[tk] to T[tk+1]
-   */
-  public double
-         Λ(int m,
-           int tk)
-  {
-    assert 0 <= m && m < dim();
-    return Λ(m).get(tk);
-  }
-
-  public double
-         Asum(int j,
-              int m,
-              int n,
-              int i)
-  {
-    assert i >= 0;
-    if (i == 0)
-    {
-      return 0;
-    }
-    double Tmi = T(m, i);
-    int l = Nopen(n, Tmi) - 1;
-    return sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), 0, l);
-  }
-
-  public double
-         AsumToo(int j,
-                 int m,
-                 int n,
-                 int i)
-  {
-    assert i >= 0;
-    if (i == 0)
-    {
-      return 0;
-    }
-    double TmiPrev = T(m, i - 1);
-    double Tmi = T(m, i);
-    return exp(-β(j, m, n) * (Tmi - TmiPrev)) * Asum(j, m, n, i - 1) + sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, TmiPrev), Nopen(n, Tmi) - 1);
-
-  }
-
-  public void
-         setAsize(int sampleCount)
-  {
-    A = new double[order()][dim()][dim()][sampleCount];
-  }
-
-  public double
-         A(int j,
-           int m,
-           int n,
-           int i)
-  {
-    assert j < order();
-    assert 0 <= n && n < dim();
-    assert i < N(m);
-    assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
-
-    if (A == null)
-    {
-      A = new double[order()][dim()][dim()][T.size()];
-    }
-    if (i == 0)
-    {
-      A[j][m][n][i] = 0;
-      return 0;
-    }
-    double val = A[j][m][n][i];
-    if (val == 0)
-    {
-      double Tmi = T(m, i);
-      double Tmi1 = T(m, i - 1);
-
-      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
-      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[j][m][n][i - 1]);
-      A[j][m][n][i] = val;
-    }
-    return val;
-  }
-
-  /**
-   * counting function for the number of events of a specified type and occuring
-   * *strictly before* a specified time
-   * 
-   * @param base
-   *          of event, integer in [0,dim)
-   * @param t
-   * 
-   * @return number of events of type m before time t
-   */
-  public int
-         Nopen(int type,
-               double t)
-  {
-    Entry<Double, Integer> entry = getTimeSubsets().right[type].lowerEntry(t);
-    return entry == null ? 0 : (entry.getValue() + 1);
-  }
-
-  /**
-   * counting function for the number of events of a specified type and occuring
-   * at or before a specified time
-   * 
-   * @param base
-   *          of event, integer in [0,dim)
-   * @param t
-   * 
-   * @return number of events of type m before time t
-   */
-  public int
-         Nclosed(int type,
-                 double t)
-  {
-    Entry<Double, Integer> entry = getTimeSubsets().right[type].floorEntry(t);
-    return entry == null ? 0 : (entry.getValue() + 1);
-  }
-
-  public static String[] statisticNames =
-  { "Log-Lik", "1-KS(Λ,exp)", "mean(Λ)", "var(Λ)", "MM(Λ)", "LB(Λ)", "MMLB(Λ)", "E[dt]" };
-
-  /**
-   * 
-   * @return a list formed by concatenating the names of the parameters enumerated
-   *         by this{@link #getBoundedParameters()} and the names of the
-   *         statistics enumerated by this{@link #statisticNames}
-   */
-  public String[]
-         getColumnHeaders()
-  {
-    return concat(stream(getBoundedParameters()).map(param -> param.getName()), asList(statisticNames).stream()).collect(toList()).toArray(new String[0]);
-  }
-
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}
    */
@@ -595,275 +455,70 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }).toArray(), statisticsVector);
   }
 
-  public Vector
-         getTimes(int type)
-  {
-    return getTimeSubsets().left[type];
-  }
-
-  /**
-   * Given two Vectors (of times and types), calculate indices and partition
-   * subsets of different types
-   *
-   * 
-   * @return Pair<Vector times[dim],Map<time,type>[dim]>
-   */
-  @SuppressWarnings("unchecked")
-  public Pair<Vector[], TreeMap<Double, Integer>[]>
-         getTimeSubsets()
-  {
-    assert T.size() == K.size();
-    if (cachedSubTimes != null)
-    {
-      return cachedSubTimes;
-    }
-    final ArrayList<Double>[] timesSub = new ArrayList[dim()];
-    final Vector[] timeVectors = new Vector[dim()];
-    TreeMap<Double, Integer>[] timeIndices = new TreeMap[dim()];
-
-    for (int i = 0; i < dim(); i++)
-    {
-      timesSub[i] = new ArrayList<Double>();
-      timeIndices[i] = new TreeMap<Double, Integer>();
-    }
-    for (int i = 0; i < T.size(); i++)
-    {
-      int k = K.get(i);
-      assert k >= 0;
-      assert k < dim() : format("k=%d dim=%d", k, dim());
-      timesSub[k].add(T.get(i));
-    }
-    for (int i = 0; i < dim(); i++)
-    {
-      ArrayList<Double> subTimes = timesSub[i];
-      TreeMap<Double, Integer> subTimeIndices = timeIndices[i];
-      for (int j = 0; j < subTimes.size(); j++)
-      {
-        subTimeIndices.put(subTimes.get(j), j);
-      }
-      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
-    }
-    cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
-
-    return cachedSubTimes;
-  }
-
-  /**
-   * 
-   * @param j
-   *          index in [0,order()-1]
-   * @param m
-   *          from type in [0,dim-1]
-   * @param n
-   *          to type in [0,dim-1]
-   * @return the j-th element of the Vector of parameters corresponding to the
-   *         k-th type
-   */
-  protected abstract double
-            α(int j,
-              int m,
-              int n);
-
-  /**
-   * 
-   * @param j
-   *          index in [0,order()-1]
-   * @param m
-   *          from type in [0,dim-1]
-   * @param n
-   *          to type in [0,dim-1]
-   * @return the j-th element of the Vector of parameters corresponding to the
-   *         k-th type
-   */
-  protected abstract double
-            β(int j,
-              int m,
-              int n);
-
-  /**
-   * Calculate sum(α(j,m,n)/β(j,m,n),j=1..order)
-   * 
-   * @return branching matrix of dimsion this{@link #dim} x this{@link #dim}
-   */
-  public DoubleColMatrix
-         calculateBranchingMatrix()
-  {
-    DoubleColMatrix αβ = new DoubleColMatrix(dim(), dim());
-    for (int j = 0; j < order(); j++)
-    {
-      for (int m = 0; m < dim(); m++)
-      {
-        for (int n = 0; n < dim(); n++)
-        {
-          αβ.add(n, n, α(j, m, n) / β(j, m, n));
-        }
-      }
-    }
-    return αβ;
-  }
-
-  /**
-   * @return false if any of the absolute values of the eigenvalues of this
-   *         {@link #calculateBranchingMatrix()} are >=1 or if the eigenvalue
-   *         decomposition cannot be calculated
-   */
-  public boolean
-         isStationary()
-  {
-    EigenDecomposition eig;
-    try
-    {
-      eig = calculateBranchingMatrix().eig();
-    }
-    catch (FastMathException e)
-    {
-      e.printStackTrace(err);
-      return false;
-    }
-    for (int i = 0; i < dim(); i++)
-    {
-      double d = sqrt(pow(eig.getRealEigenvalues().get(i), 2) + pow(eig.getImaginaryEigenvalues().get(i), 2));
-      if (d >= 1)
-      {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public Vector
-         calculateIntensitySlow(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                                int m)
-  {
-    final Vector[] timesSub = timesSubPair.left;
-
-    final Vector mtimes = timesSub[m];
-    final int Nm = mtimes.size();
-    Vector intensity = new Vector(Nm);
-    for (int i = 0; i < Nm; i++)
-    {
-      double lambda = 0;
-      final double mtime = mtimes.get(i);
-
-      for (int n = 0; n < dim(); n++)
-      {
-        final Vector ntimes = timesSub[n];
-        final int Nn = ntimes.size();
-        final double z = Z(m, n);
-        for (int j = 0; j < order(); j++)
-        {
-          final double αjmn = α(j, m, n);
-          final double βjmn = β(j, m, n);
-          double ntime;
-          for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
-          {
-            lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
-          }
-        }
-      }
-
-      intensity.set(i, lambda);
-    }
-    return intensity;
-  }
-
-  public Vector
-         calculateIntensityFast(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                                int m)
-  {
-    final Vector[] timesSub = timesSubPair.left;
-
-    final Vector mtimes = timesSub[m];
-    final int Nm = mtimes.size();
-    Vector intensity = new Vector(Nm);
-    for (int i = 0; i < Nm; i++)
-    {
-      double lambda = 0;
-      final double mtime = mtimes.get(i);
-
-      if (i == 0)
-      {
-        for (int n = 0; n < dim(); n++)
-        {
-          final Vector ntimes = timesSub[n];
-          final int Nn = ntimes.size();
-          final double z = Z(m, n);
-          for (int j = 0; j < order(); j++)
-          {
-            final double αjmn = α(j, m, n);
-            final double βjmn = β(j, m, n);
-            double ntime;
-            for (int k = 0; k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
-            {
-              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
-            }
-          }
-        }
-      }
-      else
-      {
-        for (int n = 0; n < dim(); n++)
-        {
-          final Vector ntimes = timesSub[n];
-          final int Nn = ntimes.size();
-          final double z = Z(m, n);
-          for (int j = 0; j < order(); j++)
-          {
-            final double αjmn = α(j, m, n);
-            final double βjmn = β(j, m, n);
-            double ntime;
-            lambda += (αjmn / z) * exp(-βjmn * (mtime - T(m, i - 1))) * A(j, m, n, i - 1);
-            for (int k = Nopen(n, mtimes.get(i - 1)); k < Nn && (ntime = ntimes.get(k)) < mtime; k++)
-            {
-              lambda += (αjmn / z) * exp(-βjmn * (mtime - ntime));
-            }
-          }
-        }
-      }
-
-      intensity.set(i, lambda);
-    }
-    return intensity;
-  }
-
-  public final Vector
-         λvector(int m)
-  {
-    return calculateIntensityFast(getTimeSubsets(), m);
-
-  }
-
-  public final Vector
-         λvectorSlow(int m)
-  {
-    return calculateIntensitySlow(getTimeSubsets(), m);
-
-  }
-
   protected abstract double
             evolveλ(int type,
                     double dt,
                     double[][] S);
 
-  @SuppressWarnings("unchecked")
-  private Entry<Double, Integer>
-          getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
-                        final double upperTime,
-                        int m,
-                        int n,
-                        int i)
+  @Override
+  public double
+         f(int m,
+           int n,
+           double t)
   {
-    Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
-    if (upperEntry == null)
+    assert t >= 0 : "t cannot be negative, was " + t + " m=" + m + " n=" + n;
+    return sum(j -> α(j, m, n) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
+  }
+
+  /**
+   * @return 1+(∑_m∑_j(α[j,m,n]/β[j,m,n])*exp(-β[j,m,n]*t))/Z(type) <br>
+   *         m=0..dim-1 j=0..order-1
+   */
+  @Override
+  public double
+         F(int m,
+           int n,
+           double t)
+  {
+    return 1 - sum(j -> (α(j, m, n) / β(j, m, n)) * exp(-β(j, m, n) * t), 0, order() - 1) / Z(m, n);
+  }
+
+  @Override
+  public double
+         getBranchingRatio()
+  {
+    return 1;
+  }
+
+  /**
+   * 
+   * @return a list formed by concatenating the names of the parameters enumerated
+   *         by this{@link #getBoundedParameters()} and the names of the
+   *         statistics enumerated by this{@link #statisticNames}
+   */
+  public String[]
+         getColumnHeaders()
+  {
+    return concat(stream(getBoundedParameters()).map(param -> param.getName()), asList(statisticNames).stream()).collect(toList()).toArray(new String[0]);
+  }
+
+  /**
+   * return a function of the Ljung-Box statistic which measures the amount of
+   * autocorrelation remaining in the compensator up to lags of
+   * this{@link #LJUNG_BOX_ORDER}
+   * 
+   * @return (Λ().getLjungBoxStatistic( this{@link #LJUNG_BOX_ORDER} ) - (
+   *         this{@link #LJUNG_BOX_ORDER} - 2 ))^2
+   */
+  public double
+         getLjungBoxMeasure()
+  {
+    double x = 0;
+    for (int type = 0; type < dim(); type++)
     {
-      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
-      if (upperEntries == null)
-      {
-        upperEntries = new Entry[dim()][dim()][T.size()];
-      }
-      upperEntries[m][n][i] = upperEntry;
+      x += pow(Λ(type).getLjungBoxStatistic(ExponentialSelfExcitingProcess.LJUNG_BOX_ORDER) - (ExponentialSelfExcitingProcess.LJUNG_BOX_ORDER - 2), 2);
     }
-    return upperEntry;
+    return x / dim();
   }
 
   @SuppressWarnings("unchecked")
@@ -887,149 +542,17 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return lowerEntry;
   }
 
-  public Vector
-         Λslow(int m)
+  @Override
+  public double
+         getMeanSquaredPredictionError()
   {
-    final Vector mtimes = getTimes(m);
-    final int N = mtimes.size();
-    Vector compensator = new Vector(N - 1);
-    for (int i = 1; i < N; i++)
-    {
-      double upperTime = mtimes.get(i);
-      double lowerTime = mtimes.get(i - 1);
-      double sum = 0;
-      for (int n = 0; n < dim(); n++)
-      {
-        final Vector ntimes = getTimes(n);
-        final int Nn = ntimes.size();
-        final double Z = Z(m, n);
-
-        for (int j = 0; j < order(); j++)
-        {
-          final double αjmn = α(j, m, n);
-          final double βjmn = β(j, m, n);
-          double ktime;
-          int k = 0;
-
-          for (k = 0; k < Nn && (ktime = ntimes.get(k)) < upperTime; k++)
-          {
-            sum += ((αjmn / βjmn) * (exp(-βjmn * (lowerTime - ktime)) - exp(-βjmn * (upperTime - ktime)))) / Z;
-          }
-
-        }
-      }
-      compensator.set(i - 1, sum);
-    }
-    return compensator;
+    throw new UnsupportedOperationException("TODO");
   }
-
-  public Vector
-         Λ(int m)
-  {
-    Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
-    final Vector[] timesSub = timesSubPair.left;
-    final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
-    final Vector mtimes = timesSub[m];
-    final int N = mtimes.size();
-    Vector compensator = new Vector(N - 1);
-    double A[][][] = new double[order()][dim()][dim()];
-
-    for (int i = 1; i < N; i++)
-    {
-      double upperTime = mtimes.get(i);
-      double lowerTime = mtimes.get(i - 1);
-      double lowerTimeBeforeLast = i > 2 ? mtimes.get(i - 2) : Double.NEGATIVE_INFINITY;
-
-      double sum = 0;
-      for (int n = 0; n < dim(); n++)
-      {
-        final Vector ntimes = timesSub[n];
-        Entry<Double, Integer> lowerEntryBeforeLast = Double.isInfinite(lowerTimeBeforeLast) ? null
-                                                                                             : getLowerEntry(subTimeIndex, lowerTimeBeforeLast, m, n, i - 1);
-        Entry<Double, Integer> lowerEntry = getLowerEntry(subTimeIndex, lowerTime, m, n, i);
-        Entry<Double, Integer> upperEntry = getUpperEntry(subTimeIndex, upperTime, m, n, i);
-        int lowerkBeforeLast = lowerEntryBeforeLast != null ? lowerEntryBeforeLast.getValue() : 0;
-        int lowerk = lowerEntry != null ? lowerEntry.getValue() : 0;
-        int upperk = upperEntry != null ? upperEntry.getValue() : ntimes.size();
-
-        for (int j = 0; j < order(); j++)
-        {
-          final double αjmn = α(j, m, n);
-          final double βjmn = β(j, m, n);
-          double ktime;
-          int k;
-          double subsum = exp(-βjmn * (lowerTime - lowerTimeBeforeLast)) * A[j][m][n];
-          for (k = lowerkBeforeLast; k < lowerk; k++)
-          {
-            ktime = ntimes.get(k);
-            if (ktime < lowerTime && ktime >= lowerTimeBeforeLast)
-            {
-              subsum += exp(-βjmn * (lowerTime - ktime));
-            }
-          }
-          A[j][m][n] = subsum;
-
-          double innerSum = subsum * (1 - exp(-βjmn * (upperTime - lowerTime)));
-          for (k = lowerk; k < upperk; k++)
-          {
-            ktime = ntimes.get(k);
-            if (ktime >= lowerTime && ktime < upperTime)
-            {
-              innerSum += 1 - exp(-βjmn * (upperTime - ktime));
-            }
-          }
-
-          sum += (αjmn / βjmn) * innerSum / Z(m, n);
-
-        }
-      }
-      compensator.set(i - 1, sum);
-    }
-    return compensator;
-
-  }
-
-  private ExponentialDistribution expDist = new ExponentialDistribution(1);
-
-  private int predictionIntegrationLimit = 25;
 
   public int
-         dim()
+         getPredictionIntegrationLimit()
   {
-    return dim;
-  }
-
-  private Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
-
-  /**
-   *
-   * @param timesSubPair
-   * @param m
-   *          dim
-   * @param eta
-   *          i.i.d. exponential random variable with mean 1
-   * @return
-   */
-  public double
-         predict(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
-                 final int m)
-  {
-    final Vector[] timesSub = timesSubPair.left;
-    final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
-    final Vector mtimes = timesSub[m].extend(1);
-    final int N = mtimes.size();
-    final double lastTime = mtimes.get(mtimes.size() - 2);
-
-    BrentSolver solver = new BrentSolver(pow(10, -15));
-    Vector inverses = new Vector(10000);
-    for (int l = 0; l < inverses.size(); l++)
-    {
-      final double eta = expDist.sample();
-      UnivariateFunction integrand = getPredictiveDensity(m, timesSub, subTimeIndex, mtimes, N, eta);
-      double nextTime = solver.solve(100000, integrand, lastTime - 0.0001, lastTime + 100);
-      inverses.set(l, nextTime);
-    }
-    return inverses.mean();
+    return predictionIntegrationLimit;
   }
 
   public UnivariateFunction
@@ -1111,18 +634,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
   }
 
-  public int
-         getPredictionIntegrationLimit()
-  {
-    return predictionIntegrationLimit;
-  }
-
-  public void
-         setPredictionIntegrationLimit(int predictionIntegrationLimit)
-  {
-    this.predictionIntegrationLimit = predictionIntegrationLimit;
-  }
-
   protected RandomVectorGenerator
             getRandomVectorGenerator(SimpleBounds bounds)
   {
@@ -1146,7 +657,364 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
   }
 
-  boolean trace = false;
+  @Override
+  public double
+         getRootMeanSquaredPredictionError()
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
+
+  public Vector
+         getTimes(int type)
+  {
+    return getTimeSubsets().left[type];
+  }
+
+  /**
+   * Given two Vectors (of times and types), calculate indices and partition
+   * subsets of different types
+   *
+   * 
+   * @return Pair<Vector times[dim],Map<time,type>[dim]>
+   */
+  @SuppressWarnings("unchecked")
+  public Pair<Vector[], TreeMap<Double, Integer>[]>
+         getTimeSubsets()
+  {
+    assert T.size() == K.size();
+    if (cachedSubTimes != null)
+    {
+      return cachedSubTimes;
+    }
+    final ArrayList<Double>[] timesSub = new ArrayList[dim()];
+    final Vector[] timeVectors = new Vector[dim()];
+    TreeMap<Double, Integer>[] timeIndices = new TreeMap[dim()];
+
+    for (int i = 0; i < dim(); i++)
+    {
+      timesSub[i] = new ArrayList<Double>();
+      timeIndices[i] = new TreeMap<Double, Integer>();
+    }
+    for (int i = 0; i < T.size(); i++)
+    {
+      int k = K.get(i);
+      assert k >= 0;
+      assert k < dim() : format("k=%d dim=%d", k, dim());
+      timesSub[k].add(T.get(i));
+    }
+    for (int i = 0; i < dim(); i++)
+    {
+      ArrayList<Double> subTimes = timesSub[i];
+      TreeMap<Double, Integer> subTimeIndices = timeIndices[i];
+      for (int j = 0; j < subTimes.size(); j++)
+      {
+        subTimeIndices.put(subTimes.get(j), j);
+      }
+      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
+    }
+    cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
+
+    return cachedSubTimes;
+  }
+
+  @SuppressWarnings("unchecked")
+  private Entry<Double, Integer>
+          getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
+                        final double upperTime,
+                        int m,
+                        int n,
+                        int i)
+  {
+    Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
+    if (upperEntry == null)
+    {
+      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
+      if (upperEntries == null)
+      {
+        upperEntries = new Entry[dim()][dim()][T.size()];
+      }
+      upperEntries[m][n][i] = upperEntry;
+    }
+    return upperEntry;
+  }
+
+  /**
+   * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type
+   * 1..dim
+   */
+  public double
+         getΛKolmogorovSmirnovStatistic()
+  {
+    return sum(m -> {
+      Vector sortedCompensator = new Vector(Λ(m).doubleStream().sorted()).reverse();
+      KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
+      double ksStatistic = ksTest.kolmogorovSmirnovStatistic(new ExponentialDistribution(1), sortedCompensator.toDoubleArray());
+      return 1 - ksStatistic;
+    }, 0, dim() - 1) / dim();
+  }
+
+  /**
+   * functions which takes its minimum when the mean and the variance of the
+   * compensator is closer to 1
+   * 
+   * @return this{@link #getΛmomentMeasure()} * log( 1 +
+   *         this{@link #getLjungBoxMeasure()} )
+   */
+  public double
+         getΛmomentLjungBoxMeasure()
+  {
+    //return getΛmomentMeasure() * getLjungBoxMeasure() * -logLik();
+    return getΛmomentMeasure() * log(1 + getLjungBoxMeasure());
+  }
+
+  /**
+   * functions which takes its minimum when the mean and the variance of the
+   * compensator is closer to 1
+   * 
+   * @return measure which is greater the closer the first two moments of the
+   *         compensator are to unity
+   */
+  public double
+         getΛmomentMeasure()
+  {
+    double x = 0;
+    for (int m = 0; m < dim(); m++)
+    {
+      Vector dT = Λ(m);
+      Vector moments = dT.normalizedMoments(2);
+      Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
+      x += normalizedSampleMoments.sum();
+    }
+    return x / dim();
+  }
+
+  /**
+   * @return false if any of the absolute values of the eigenvalues of this
+   *         {@link #calculateBranchingMatrix()} are >=1 or if the eigenvalue
+   *         decomposition cannot be calculated
+   */
+  public boolean
+         isStationary()
+  {
+    EigenDecomposition eig;
+    try
+    {
+      eig = calculateBranchingMatrix().eig();
+    }
+    catch (FastMathException e)
+    {
+      e.printStackTrace(err);
+      return false;
+    }
+    for (int i = 0; i < dim(); i++)
+    {
+      double d = sqrt(pow(eig.getRealEigenvalues().get(i), 2) + pow(eig.getImaginaryEigenvalues().get(i), 2));
+      if (d >= 1)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public Double
+         lastT(int m)
+  {
+    assert m < dim() : "m=" + m + " >= dim";
+
+    return getTimeSubsets().right[m].lastKey();
+  }
+
+  @Override
+  public void
+         loadParameters(File modelFile) throws IOException
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
+
+  /**
+   * the log-likelihood, without the additive constant T so its not exactly the
+   * true LL but the result is the same
+   * 
+   */
+  public final double
+         logLik()
+  {
+    double maxT = T.getRightmostValue();
+    double ll = sum(m -> {
+      Vector λvector = λvector(m).slice(1, N(m) - 1);
+
+      Vector lslice = λvector.log();
+      double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
+                           0,
+                           N(m) - 1)
+                       / Z(m, m);
+      // out.println("compsum(m=" + m + ")=" + compsum);
+      return lslice.sum() - compsum;
+    }, 0, dim() - 1) + (maxT - T.getLeftmostValue());
+    if (llcnt++ % 25 == 1)
+    {
+      out.println(Thread.currentThread().getName() + " " + this + "#" + llcnt + " ll=" + ll);
+    }
+    return ll;
+
+  }
+
+  /**
+   * the log-likelihood, without the additive constant T so its not exactly the
+   * true LL but the result is the same
+   * 
+   */
+  public final double
+         logLikSlower()
+  {
+    double ll = sum(m -> {
+      Vector λvector = λvector(m).slice(1, N(m) - 1);
+
+      Vector lslice = λvector.log();
+      Vector comp = Λ(m);
+      double compsum = comp.sum();
+
+      return lslice.sum() - compsum;
+    }, 0, dim() - 1) + (T.getRightmostValue() - T.getLeftmostValue());
+    if (llcnt++ % 10 == 0)
+    {
+      out.println(Thread.currentThread().getName() + " #" + llcnt + " " + this + " = " + " ll=" + String.format("%30.30f", ll));
+    }
+    return ll;
+
+  }
+
+  @Override
+  public double
+         meanRecurrenceTime(int m)
+  {
+  
+    Vector beta = new Vector(seq((IntToDoubleFunction) j -> β(j, m, m), 0, order() - 1));
+    Vector gamma = new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m, 2), 0, order() - 1));
+    double numerator = sum(j -> γ(j, m, m, 2), 0, order() - 1);
+    double dp = product(k -> β(k, m, m), 0, order() - 1);
+    double ds = sum(j -> γ(j, m, m, 1), 0, order() - 1);
+    double denominator = dp * ds;
+    double ratio = (numerator / denominator) / Z(m, m);
+    // out.format("meanRecurrenceTime m=%d numerator=%35.35f dp=%s ds=%s
+    // denominator=%30.30f ratio=%30.30f order=%d\nbeta=%s\ngamma=%s\n",
+    // m,
+    // numerator,
+    // dp,
+    // ds,
+    // denominator,
+    // ratio,
+    // order(),
+    // Arrays.toString(beta.toDoubleArray()),
+    // Arrays.toString(gamma.toDoubleArray()));
+    return ratio;
+  }
+
+  /**
+   * 
+   * @param m
+   * @return number of time points in the m-th dimension
+   */
+  public final int
+         N(int m)
+  {
+    return getTimes(m).size();
+  }
+
+  /**
+   * counting function for the number of events of a specified type and occuring
+   * at or before a specified time
+   * 
+   * @param base
+   *          of event, integer in [0,dim)
+   * @param t
+   * 
+   * @return number of events of type m before time t
+   */
+  public int
+         Nclosed(int type,
+                 double t)
+  {
+    Entry<Double, Integer> entry = getTimeSubsets().right[type].floorEntry(t);
+    return entry == null ? 0 : (entry.getValue() + 1);
+  }
+
+  public ExponentialMutuallyExcitingProcess
+         newProcess(double[] point)
+  {
+    ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
+    process.assignParameters(point);
+    return process;
+  }
+
+  /**
+   * counting function for the number of events of a specified type and occuring
+   * *strictly before* a specified time
+   * 
+   * @param base
+   *          of event, integer in [0,dim)
+   * @param t
+   * 
+   * @return number of events of type m before time t
+   */
+  public int
+         Nopen(int type,
+               double t)
+  {
+    Entry<Double, Integer> entry = getTimeSubsets().right[type].lowerEntry(t);
+    return entry == null ? 0 : (entry.getValue() + 1);
+  }
+
+  @Override
+  public final int
+         order()
+  {
+    return M + 1;
+  }
+
+  /**
+   *
+   * @param timesSubPair
+   * @param m
+   *          dim
+   * @param eta
+   *          i.i.d. exponential random variable with mean 1
+   * @return
+   */
+  public double
+         predict(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
+                 final int m)
+  {
+    final Vector[] timesSub = timesSubPair.left;
+    final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
+    final Vector mtimes = timesSub[m].extend(1);
+    final int N = mtimes.size();
+    final double lastTime = mtimes.get(mtimes.size() - 2);
+
+    BrentSolver solver = new BrentSolver(pow(10, -15));
+    Vector inverses = new Vector(10000);
+    for (int l = 0; l < inverses.size(); l++)
+    {
+      final double eta = expDist.sample();
+      UnivariateFunction integrand = getPredictiveDensity(m, timesSub, subTimeIndex, mtimes, N, eta);
+      double nextTime = solver.solve(100000, integrand, lastTime - 0.0001, lastTime + 100);
+      inverses.set(l, nextTime);
+    }
+    return inverses.mean();
+  }
+
+  public void
+         setAsize(int sampleCount)
+  {
+    A = new double[order()][dim()][dim()][sampleCount];
+  }
+
+  public void
+         setPredictionIntegrationLimit(int predictionIntegrationLimit)
+  {
+    this.predictionIntegrationLimit = predictionIntegrationLimit;
+  }
 
   public void
          storeParameters(File modelFile) throws IOException
@@ -1163,43 +1031,395 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   /**
+   * get time of i-th point of the m-th proces
    * 
-   * @param type
-   *          type of process to spawn
-   * @param filtration
+   * @param m
+   *          ordinal, integer in [0,dim)
+   * @param i
+   *          time index, starts at 0
    * @return
    */
-  public static ExponentialMutuallyExcitingProcess
-         spawnNewProcess(AutoExcitingProcessFactory.Type type,
-                         TradingFiltration filtration)
+  public double
+         T(int m,
+           int i)
   {
-    assert filtration.times != null : "tradingProcess.times is null";
-    assert filtration.types != null : "tradingProcess.types is null";
-    assert filtration.markedPoints != null : "tradingProcess.markedPoints is null";
+    if (i < 0)
+    {
+      return 0;
+    }
+    assert i >= 0 : "i cannot be negative, was " + i;
+    assert m < dim() : "m=" + m + " >= dim";
+    Vector Tm = getTimeSubsets().left[m];
+    assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
+    return Tm.get(i);
+  }
 
-    if (type == AutoExcitingProcessFactory.Type.MultivariateExtendedApproximatePowerlaw)
-    {
-      ExtendedApproximatePowerlawMututallyExcitingProcess process = new ExtendedApproximatePowerlawMututallyExcitingProcess(2);
-      process.T = filtration.times;
-      process.K = filtration.types;
-      process.X = filtration.markedPoints;
-      return process;
-    }
-    else
-    {
-      throw new UnsupportedOperationException("TODO: " + type);
-    }
+
+  @Override
+  public double
+         totalΛ()
+  {
+    return sum(k -> Λ(k).sum(), 0, dim() - 1);
   }
 
   /**
    * 
    * @param m
-   * @return number of time points in the m-th dimension
+   *          dimension/index of the process, an integer in [0,dim)
+   * 
+   * @return ∏(∏(β(m,n,j),j=1..P),n=1..M)
    */
-  public int
-         N(int m)
+  public double
+         v(int m)
   {
-    return getTimes(m).size();
+    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
+  }
+
+  @Override
+  public final double
+         value(double[] point)
+  {
+    ExponentialMutuallyExcitingProcess clone = copy();
+    clone.assignParameters(point);
+  
+    double score = Double.NaN;
+  
+    score = clone.logLik();
+  
+    // if (verbose)
+    // {
+    // out.println(Thread.currentThread().getName() + " " + this + " LL score=" +
+    // score);
+    // }
+  
+    return score;
+  
+  }
+
+  /**
+   * 
+   * @return normalizing constant such that the branching rate equals 1
+   */
+  @Override
+  public double
+         Z(int m,
+           int n)
+  {
+    double c = sum(j -> {
+      double a = α(j, m, n);
+      double b = β(j, m, n);
+      return a / b;
+    }, 0, order() - 1);
+    return c != 0.0 ? c : 1;
+  }
+
+  /**
+   * 
+   * @param j
+   *          index in [0,order()-1]
+   * @param m
+   *          from type in [0,dim-1]
+   * @param n
+   *          to type in [0,dim-1]
+   * @return the j-th element of the Vector of parameters corresponding to the
+   *         k-th type
+   */
+  protected abstract double
+            α(int j,
+              int m,
+              int n);
+
+  /**
+   * 
+   * @param j
+   *          index in [0,order()-1]
+   * @param m
+   *          from type in [0,dim-1]
+   * @param n
+   *          to type in [0,dim-1]
+   * @return the j-th element of the Vector of parameters corresponding to the
+   *         k-th type
+   */
+  protected abstract double
+            β(int j,
+              int m,
+              int n);
+
+  public double
+         γ(int k,
+           int m,
+           int n)
+  {
+    return γ(k, m, n, 1);
+  }
+
+  public double
+         γ(int k,
+           int m,
+           int n,
+           int p)
+  {
+    IntToDoubleFunction a = j -> j == k ? α(j, m, n) : pow(β(j, m, n), p);
+
+    return product(a, 0, order() - 1);
+  }
+
+  public double
+         η(int m,
+           double dt)
+  {
+    double Tm = lastT(m);
+
+    double vol = sum(j -> sum(n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
+
+    double measure = (dt + Tm) * vol;
+    out.println("vol=" + vol + " dt=" + dt + " Tm=" + Tm + " measure=" + measure);
+    return exp(measure);
+  }
+
+  /**
+   * the conditional intensity of the m-th dimension of the process at time t
+   * 
+   * @param m
+   * @param d
+   * @return
+   */
+  public double
+         λ(int m,
+           double t)
+  {
+    assert t >= 0 : "t cannot be negative, was " + t;
+    /**
+     * TODO: recursive intensity
+     */
+    // out.println("λ(m=" + m + ", t=" + t);
+    return sum(n -> sum(k -> f(m, n, t - T(n, k)), 0, Nopen(n, t) - 1), 0, dim() - 1);
+  }
+
+  public Vector
+         Λ(int m)
+  {
+    Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
+    final Vector[] timesSub = timesSubPair.left;
+    final TreeMap<Double, Integer>[] subTimeIndex = timesSubPair.right;
+    final Vector mtimes = timesSub[m];
+    final int N = mtimes.size();
+    Vector compensator = new Vector(N - 1);
+    double A[][][] = new double[order()][dim()][dim()];
+
+    for (int i = 1; i < N; i++)
+    {
+      double upperTime = mtimes.get(i);
+      double lowerTime = mtimes.get(i - 1);
+      double lowerTimeBeforeLast = i > 2 ? mtimes.get(i - 2) : Double.NEGATIVE_INFINITY;
+
+      double sum = 0;
+      for (int n = 0; n < dim(); n++)
+      {
+        final Vector ntimes = timesSub[n];
+        Entry<Double, Integer> lowerEntryBeforeLast = Double.isInfinite(lowerTimeBeforeLast) ? null
+                                                                                             : getLowerEntry(subTimeIndex, lowerTimeBeforeLast, m, n, i - 1);
+        Entry<Double, Integer> lowerEntry = getLowerEntry(subTimeIndex, lowerTime, m, n, i);
+        Entry<Double, Integer> upperEntry = getUpperEntry(subTimeIndex, upperTime, m, n, i);
+        int lowerkBeforeLast = lowerEntryBeforeLast != null ? lowerEntryBeforeLast.getValue() : 0;
+        int lowerk = lowerEntry != null ? lowerEntry.getValue() : 0;
+        int upperk = upperEntry != null ? upperEntry.getValue() : ntimes.size();
+
+        for (int j = 0; j < order(); j++)
+        {
+          final double αjmn = α(j, m, n);
+          final double βjmn = β(j, m, n);
+          double ktime;
+          int k;
+          double subsum = exp(-βjmn * (lowerTime - lowerTimeBeforeLast)) * A[j][m][n];
+          for (k = lowerkBeforeLast; k < lowerk; k++)
+          {
+            ktime = ntimes.get(k);
+            if (ktime < lowerTime && ktime >= lowerTimeBeforeLast)
+            {
+              subsum += exp(-βjmn * (lowerTime - ktime));
+            }
+          }
+          A[j][m][n] = subsum;
+
+          double innerSum = subsum * (1 - exp(-βjmn * (upperTime - lowerTime)));
+          for (k = lowerk; k < upperk; k++)
+          {
+            ktime = ntimes.get(k);
+            if (ktime >= lowerTime && ktime < upperTime)
+            {
+              innerSum += 1 - exp(-βjmn * (upperTime - ktime));
+            }
+          }
+
+          sum += (αjmn / βjmn) * innerSum / Z(m, n);
+
+        }
+      }
+      compensator.set(i - 1, sum);
+    }
+    return compensator;
+
+  }
+
+  /**
+   * 
+   * @param m
+   *          ordinal ranging from 0 to this{@link #dim()}-1
+   * @param tk
+   * @return ∫λ(t)dt where t ranges from T[tk] to T[tk+1]
+   */
+  public double
+         Λ(int m,
+           int tk)
+  {
+    assert 0 <= m && m < dim();
+    return Λ(m).get(tk);
+  }
+
+  /**
+   * n-th compensated point, expensive non-recursive O(n^2) runtime version
+   * 
+   * @param i
+   *          >= 1 and <= n
+   * @return sum(k -> iψ(T.get(i + 1) - T.get(k)) - iψ(T.get(i) - T.get(k)), 0,
+   *         i-1)
+   */
+  public double
+         Λ(int m,
+           int i,
+           double dt)
+  {
+    /**
+     * FIXME: sum over n ?
+     */
+    return sum(j -> (α(j, m, m) / β(j, m, m)) * (1 - (exp(-β(j, m, m) * dt))) * A(j, m, m, i), 0, order() - 1) / Z(m, m);
+  }
+
+  public Vector
+         Λslow(int m)
+  {
+    final Vector mtimes = getTimes(m);
+    final int N = mtimes.size();
+    Vector compensator = new Vector(N - 1);
+    for (int i = 1; i < N; i++)
+    {
+      double upperTime = mtimes.get(i);
+      double lowerTime = mtimes.get(i - 1);
+      double sum = 0;
+      for (int n = 0; n < dim(); n++)
+      {
+        final Vector ntimes = getTimes(n);
+        final int Nn = ntimes.size();
+        final double Z = Z(m, n);
+
+        for (int j = 0; j < order(); j++)
+        {
+          final double αjmn = α(j, m, n);
+          final double βjmn = β(j, m, n);
+          double ktime;
+          int k = 0;
+
+          for (k = 0; k < Nn && (ktime = ntimes.get(k)) < upperTime; k++)
+          {
+            sum += ((αjmn / βjmn) * (exp(-βjmn * (lowerTime - ktime)) - exp(-βjmn * (upperTime - ktime)))) / Z;
+          }
+
+        }
+      }
+      compensator.set(i - 1, sum);
+    }
+    return compensator;
+  }
+
+  public final Vector
+         λvector(int m)
+  {
+    return calculateIntensityFast(getTimeSubsets(), m);
+
+  }
+
+  public final Vector
+         λvectorSlow(int m)
+  {
+    return calculateIntensitySlow(getTimeSubsets(), m);
+
+  }
+
+  public double
+         σ(int m,
+           int i,
+           int l,
+           int k,
+           double ds,
+           double dt)
+  {
+    assert m < dim() : "m=" + m + " >= dim";
+    double Tm = lastT(m);
+
+    return exp(sum(j -> sum(n -> β(m, n, j) * ((n == i && j == l) ? (ds + T(n, k)) : (dt + lastT(n))), 0, dim() - 1), 0, order() - 1));
+  }
+
+  /**
+   * 
+   * @param m
+   * @param dt
+   * @param y
+   * @return -y * this{@link #v(int)}(m)*{@link #η(int, double)}(m,dt)
+   */
+  public double
+         τ(int m,
+           double dt,
+           double y)
+  {
+    double v = v(m);
+    double η = η(m, dt);
+    out.println("v=" + v + " η=" + η);
+    return -y * v * η;
+  }
+
+  public double
+         Φ(int m,
+           double dt,
+           double y,
+           int tk)
+  {
+    double τ = τ(m, dt, y);
+    out.println("τ=" + τ);
+    return τ + sum(l -> sum(i -> Φ(m, i, l) * sum(k -> σ(m, i, l, k, dt, dt) - σ(m, i, l, k, dt, lastT(m)), 0, tk), 0, dim() - 1), 0, order() - 1);
+  }
+
+  public double
+         Φ(int m,
+           int i,
+           int l)
+  {
+    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> n == i && j == l ? α(m, n, j) : β(m, n, j), 0, dim() - 1), 0, order() - 1);
+  }
+
+  public double
+         Φdt(double t,
+             int tk)
+  {
+    throw new UnsupportedOperationException("TODO");
+  }
+
+  @Override
+  public double
+         Φδ(double t,
+            double y)
+  {
+    int tk = T.size() - 1;
+    throw new UnsupportedOperationException("TODO");
+  }
+
+  @Override
+  public double
+         Φδ(double t,
+            double y,
+            int tk)
+  {
+    return sum(m -> Φ(m, t, y, tk) / Φdt(t, tk), 0, dim() - 1);
   }
 
 }

@@ -20,6 +20,7 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import junit.framework.TestCase;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import util.TerseThreadFactory;
 
 public class MultivariateProcessSimulator
@@ -48,7 +49,7 @@ public class MultivariateProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
       process.τ.assign(10.0843321348, 8.4890790143);
       process.ε.assign(0, 0);
       process.η.assign(2.8483343724, 2.5714437398);
@@ -66,7 +67,7 @@ public class MultivariateProcessSimulator
   }
 
   public static Vector
-         simulateProcess(ExtendedApproximatePowerlawMututallyExcitingProcess process,
+         simulateProcess(DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process,
                          int seed)
   {
     int lastRejectedPoint = -1;

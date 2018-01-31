@@ -9,6 +9,7 @@ import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
@@ -21,7 +22,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     
     //Vector points = process.simulate(5, 20000);
     //out.println("pdiff = " + points.diff().mean());
-    ExtendedApproximatePowerlawMututallyExcitingProcess multidimProcess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    ExponentialMutuallyExcitingProcess multidimProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     multidimProcess.assignParameters(process.getParameters().toDoubleArray());
     
     double multiMrt = multidimProcess.meanRecurrenceTime(0);
@@ -49,7 +50,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     double b = process.totalΛ();
     assertEquals(a, b, 1E-15);
 
-    ExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new ExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    ExponentialMutuallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     mprocess.assignParameters(process.getParameters().toDoubleArray());
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());
@@ -69,7 +70,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testN()
   {
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
 
     assertEquals(0, process.Nopen(0, 24));
     assertEquals(1, process.Nopen(0, 26));
@@ -84,7 +85,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   {
     ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
 
-    ExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
     process.ε.set(new double[]
     { 0.0, 0.02 });
 
