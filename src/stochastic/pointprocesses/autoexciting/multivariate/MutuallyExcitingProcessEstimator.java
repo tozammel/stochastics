@@ -18,7 +18,6 @@ import org.apache.commons.math3.optim.PointValuePair;
 import org.fusesource.jansi.Ansi.Color;
 
 import dnl.utils.text.table.TextTable;
-import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;

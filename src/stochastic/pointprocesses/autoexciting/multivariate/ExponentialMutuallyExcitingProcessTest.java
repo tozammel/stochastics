@@ -70,7 +70,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testN()
   {
-    ExponentialMutuallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
 
     assertEquals(0, process.Nopen(0, 24));
     assertEquals(1, process.Nopen(0, 26));
@@ -85,7 +85,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   {
     ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
 
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
     process.ε.set(new double[]
     { 0.0, 0.02 });
 

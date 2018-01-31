@@ -455,13 +455,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }).toArray(), statisticsVector);
   }
 
-  protected abstract double
-            evolveλ(int type,
-                    double dt,
-                    double[][] S);
 
   @Override
-  public double
+  public final double
          f(int m,
            int n,
            double t)
@@ -475,7 +471,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    *         m=0..dim-1 j=0..order-1
    */
   @Override
-  public double
+  public final double
          F(int m,
            int n,
            double t)
@@ -484,7 +480,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public double
+  public final double
          getBranchingRatio()
   {
     return 1;
@@ -510,7 +506,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return (Λ().getLjungBoxStatistic( this{@link #LJUNG_BOX_ORDER} ) - (
    *         this{@link #LJUNG_BOX_ORDER} - 2 ))^2
    */
-  public double
+  public final double
          getLjungBoxMeasure()
   {
     double x = 0;
@@ -522,7 +518,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @SuppressWarnings("unchecked")
-  private Entry<Double, Integer>
+  private final Entry<Double, Integer>
           getLowerEntry(TreeMap<Double, Integer>[] subTimeIndex,
                         final double lowerTime,
                         int m,
@@ -543,19 +539,19 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public double
+  public final double
          getMeanSquaredPredictionError()
   {
     throw new UnsupportedOperationException("TODO");
   }
 
-  public int
+  public final int
          getPredictionIntegrationLimit()
   {
     return predictionIntegrationLimit;
   }
 
-  public UnivariateFunction
+  public final UnivariateFunction
          getPredictiveDensity(final int m,
                               final Vector[] timesSub,
                               final TreeMap<Double, Integer>[] subTimeIndex,
@@ -634,7 +630,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
   }
 
-  protected RandomVectorGenerator
+  protected final RandomVectorGenerator
             getRandomVectorGenerator(SimpleBounds bounds)
   {
     return () -> {
@@ -658,13 +654,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public double
+  public final  double
          getRootMeanSquaredPredictionError()
   {
     throw new UnsupportedOperationException("TODO");
   }
 
-  public Vector
+  public final Vector
          getTimes(int type)
   {
     return getTimeSubsets().left[type];
@@ -678,7 +674,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return Pair<Vector times[dim],Map<time,type>[dim]>
    */
   @SuppressWarnings("unchecked")
-  public Pair<Vector[], TreeMap<Double, Integer>[]>
+  public final Pair<Vector[], TreeMap<Double, Integer>[]>
          getTimeSubsets()
   {
     assert T.size() == K.size();
@@ -718,7 +714,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @SuppressWarnings("unchecked")
-  private Entry<Double, Integer>
+  private final Entry<Double, Integer>
           getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
                         final double upperTime,
                         int m,
@@ -742,7 +738,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type
    * 1..dim
    */
-  public double
+  public final double
          getΛKolmogorovSmirnovStatistic()
   {
     return sum(m -> {
@@ -760,7 +756,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return this{@link #getΛmomentMeasure()} * log( 1 +
    *         this{@link #getLjungBoxMeasure()} )
    */
-  public double
+  public final double
          getΛmomentLjungBoxMeasure()
   {
     //return getΛmomentMeasure() * getLjungBoxMeasure() * -logLik();
@@ -774,7 +770,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return measure which is greater the closer the first two moments of the
    *         compensator are to unity
    */
-  public double
+  public final double
          getΛmomentMeasure()
   {
     double x = 0;
@@ -793,7 +789,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    *         {@link #calculateBranchingMatrix()} are >=1 or if the eigenvalue
    *         decomposition cannot be calculated
    */
-  public boolean
+  public final boolean
          isStationary()
   {
     EigenDecomposition eig;
@@ -817,7 +813,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return true;
   }
 
-  public Double
+  public final Double
          lastT(int m)
   {
     assert m < dim() : "m=" + m + " >= dim";
@@ -826,7 +822,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public void
+  public final void
          loadParameters(File modelFile) throws IOException
   {
     throw new UnsupportedOperationException("TODO");
@@ -886,7 +882,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public double
+  public final double
          meanRecurrenceTime(int m)
   {
   
@@ -932,7 +928,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * 
    * @return number of events of type m before time t
    */
-  public int
+  public final  int
          Nclosed(int type,
                  double t)
   {
@@ -940,7 +936,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
-  public ExponentialMutuallyExcitingProcess
+  public final ExponentialMutuallyExcitingProcess
          newProcess(double[] point)
   {
     ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
@@ -958,7 +954,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * 
    * @return number of events of type m before time t
    */
-  public int
+  public final int
          Nopen(int type,
                double t)
   {
@@ -982,7 +978,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    *          i.i.d. exponential random variable with mean 1
    * @return
    */
-  public double
+  public final double
          predict(Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair,
                  final int m)
   {
@@ -1056,7 +1052,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
 
   @Override
-  public double
+  public final double
          totalΛ()
   {
     return sum(k -> Λ(k).sum(), 0, dim() - 1);
@@ -1069,7 +1065,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * 
    * @return ∏(∏(β(m,n,j),j=1..P),n=1..M)
    */
-  public double
+  public final double
          v(int m)
   {
     return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
@@ -1101,7 +1097,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return normalizing constant such that the branching rate equals 1
    */
   @Override
-  public double
+  public final double
          Z(int m,
            int n)
   {

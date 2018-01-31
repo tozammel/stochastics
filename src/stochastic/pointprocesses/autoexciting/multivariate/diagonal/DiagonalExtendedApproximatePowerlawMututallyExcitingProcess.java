@@ -4,10 +4,6 @@ import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
-import static java.lang.System.out;
-import static org.fusesource.jansi.Ansi.ansi;
-
-import java.util.Arrays;
 
 import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
@@ -63,13 +59,6 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
          getBoundedParameters()
   {
     return ExtendedApproximatePowerlawSelfExcitingProcess.Parameter.values();
-  }
-
-  @Override
-  public double
-         mean()
-  {
-    throw new UnsupportedOperationException("TODO");
   }
 
   /**

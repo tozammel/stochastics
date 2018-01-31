@@ -1,7 +1,6 @@
-package stochastic.pointprocesses.autoexciting.multivariate;
+package stochastic.pointprocesses.autoexciting.multivariate.diagonal;
 
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
 
 /**

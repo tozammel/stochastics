@@ -20,7 +20,6 @@ import org.apache.commons.math3.optim.PointValuePair;
 import org.apache.commons.math3.optim.SimpleBounds;
 
 import dnl.utils.text.table.TextTable;
-import fastmath.AbstractMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
@@ -149,8 +148,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract Object[]
          evaluateParameterStatistics(double[] point);
 
-  public abstract double
-         mean();
 
   public abstract double
          getΛmomentMeasure();
@@ -392,7 +389,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
          invΛ(int tk,
               double y);
 
-  public double
+  public final double
          getMeanPredictionError()
   {
     int n = T.size() - 1;

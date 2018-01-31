@@ -1,7 +1,6 @@
 package stochastic.pointprocesses.autoexciting;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.pow;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;

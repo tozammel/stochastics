@@ -5,21 +5,17 @@ import static java.lang.Math.pow;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Console.println;
-import static util.Plotter.display;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
-import org.knowm.xchart.XYChart;
 
 import fastmath.IntVector;
-import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
-import util.Plotter;
 
 @SuppressWarnings(
 { "unused" })

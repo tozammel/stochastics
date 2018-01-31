@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import util.TerseThreadFactory;
 
-public class MultivariateProcessSimulator
+public class MututallyExcitingProcessSimulator
 {
 
   static
@@ -33,7 +33,7 @@ public class MultivariateProcessSimulator
 
   private AbstractMutuallyExcitingProcess process;
 
-  public MultivariateProcessSimulator(MutuallyExcitingProcess process)
+  public MututallyExcitingProcessSimulator(MutuallyExcitingProcess process)
   {
     this.process = (AbstractMutuallyExcitingProcess) process;
   }
@@ -49,7 +49,7 @@ public class MultivariateProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
       process.τ.assign(10.0843321348, 8.4890790143);
       process.ε.assign(0, 0);
       process.η.assign(2.8483343724, 2.5714437398);
@@ -190,7 +190,7 @@ public class MultivariateProcessSimulator
 
     try
     {
-      MatFile outFile = new MatFile(testFile, MultivariateProcessSimulator.class.getSimpleName());
+      MatFile outFile = new MatFile(testFile, MututallyExcitingProcessSimulator.class.getSimpleName());
       outFile.write(data.createMiMatrix());
       out.println("writing timestamp data, compensators and intensities to " + testFile.getAbsolutePath());
       for (int m = 0; m < process.dim(); m++)

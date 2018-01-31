@@ -18,13 +18,13 @@ import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
-public class ExtendedApproximatePowerlawMututallyExcitingProcessTest extends TestCase
+public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest extends TestCase
 {
 
   public void
          testMeanRecurrenceTime()
   {
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedApproximatePowerlawMututallyExcitingProcessTest.constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
     process.τ.assign(0.4663536036, 0.4343345865);
     process.ε.assign(0, 0);
     process.η.assign(2.6985900988, 2.4276896668);
