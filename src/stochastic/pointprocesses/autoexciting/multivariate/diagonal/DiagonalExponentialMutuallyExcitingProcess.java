@@ -4,8 +4,11 @@ import static java.lang.Math.abs;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.IntStream.range;
 
 import java.lang.reflect.Field;
+
+import org.apache.commons.math3.optim.SimpleBounds;
 
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
@@ -13,6 +16,25 @@ import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyEx
 
 public abstract class DiagonalExponentialMutuallyExcitingProcess extends ExponentialMutuallyExcitingProcess
 {
+
+  public SimpleBounds
+         getParameterBounds()
+  {
+    BoundedParameter[] bounds = getBoundedParameters();
+    final int paramCount = bounds.length;
+    double[] lowerBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i % bounds.length].getMin()).toArray();
+    double[] upperBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i % bounds.length].getMax()).toArray();
+    // Vector lowerBounds = new Vector(paramCount * (dim * dim));
+    // Vector upperBounds = new Vector(paramCount * (dim * dim));
+    // for (int i = 0; i < bounds.length; i++)
+    // {
+    // lowerBounds.slice(i * (dim * dim), (i + 1) * (dim *
+    // dim)).assign(bounds[i].getMin());
+    // upperBounds.slice(i * (dim * dim), (i + 1) * (dim *
+    // dim)).assign(bounds[i].getMax());
+    // }
+    return new SimpleBounds(lowerBounds, upperBounds);
+  }
 
   @Override
   public Vector
