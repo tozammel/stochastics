@@ -11,7 +11,7 @@ import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 
-public abstract class DiagonalExponentialMututallyExcitingProcess extends ExponentialMutuallyExcitingProcess
+public abstract class DiagonalExponentialMutuallyExcitingProcess extends ExponentialMutuallyExcitingProcess
 {
 
   @Override

@@ -60,7 +60,7 @@ import fastmath.optim.SolutionValidator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMututallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import util.DateUtils;
@@ -907,10 +907,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
-  public final DiagonalExponentialMututallyExcitingProcess
+  public ExponentialMutuallyExcitingProcess
          newProcess(double[] point)
   {
-    DiagonalExponentialMututallyExcitingProcess process = (DiagonalExponentialMututallyExcitingProcess) this.clone();
+    ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
     process.assignParameters(point);
     return process;
   }

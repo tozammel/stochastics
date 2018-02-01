@@ -21,7 +21,7 @@ import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExc
  * {@link ExtendedApproximatePowerlawSelfExcitingProcess} with null
  * cross-terms.. that is, the branching matrix is a diagonal vector
  */
-public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMututallyExcitingProcess
+public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMutuallyExcitingProcess
 {
 
   public DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(int dim)
@@ -147,7 +147,7 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public Object[]
          evaluateParameterStatistics(double[] point)
   {
-    DiagonalExponentialMututallyExcitingProcess process = newProcess(point);
+    DiagonalExponentialMutuallyExcitingProcess process = newProcess(point);
     double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
 
     DoubleAdder meanCompMean = new DoubleAdder();
@@ -178,6 +178,12 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
     }).toArray(), statisticsVector);
   }
 
- 
+  public DiagonalExponentialMutuallyExcitingProcess
+         newProcess(double[] point)
+  {
+    DiagonalExponentialMutuallyExcitingProcess process = (DiagonalExponentialMutuallyExcitingProcess) this.clone();
+    process.assignParameters(point);
+    return process;
+  }
 
 }
