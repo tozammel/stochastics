@@ -136,7 +136,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract Object[]
          evaluateParameterStatistics(double[] point);
 
-
   public abstract double
          getΛmomentMeasure();
 
@@ -231,7 +230,9 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   public abstract ParallelMultistartMultivariateOptimizer
          estimateParameters(int numStarts,
-                            IntConsumer progressNotifier, String filename, int section);
+                            IntConsumer progressNotifier,
+                            String filename,
+                            int section);
 
   public abstract String[]
          getColumnHeaders();
@@ -354,21 +355,22 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
    * @return
    */
   public Vector
-         getInnovationSequence()
+         getInnovationSequence(int m)
   {
     int n = T.size() - 1;
-    return new Vector(seq((IntToDoubleFunction) tk -> invΛ(tk, 1) - (T.get(tk + 1) - T.get(tk)), 0, n)).slice(forecastStartIndex, n);
+    return new Vector(seq((IntToDoubleFunction) tk -> invΛ(m, tk, 1) - (T.get(tk + 1) - T.get(tk)), 0, n)).slice(forecastStartIndex, n);
   }
 
   public abstract double
-         invΛ(int tk,
+         invΛ(int m,
+              int tk,
               double y);
 
   public final double
-         getMeanPredictionError()
+         getMeanPredictionError(int m)
   {
     int n = T.size() - 1;
-    return getInnovationSequence().mean();
+    return getInnovationSequence(m).mean();
   }
 
   /**
@@ -376,15 +378,15 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
    * @return {@link Math#sqrt(double)}(this{@link #getMeanSquaredPredictionError()}
    */
   public double
-         getRootMeanSquaredPredictionError()
+         getRootMeanSquaredPredictionError(int m)
   {
-    return sqrt(getMeanSquaredPredictionError());
+    return sqrt(getMeanSquaredPredictionError(m));
   }
 
   public double
-         getMeanSquaredPredictionError()
+         getMeanSquaredPredictionError(int m)
   {
-    return getInnovationSequence().pow(2).mean();
+    return getInnovationSequence(m).pow(2).mean();
   }
 
   public TextTable
@@ -425,12 +427,14 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
          getType();
 
   public abstract double
-         Φδ(double t,
+         φδ(int m,
+            double t,
             double y,
             int tk);
 
   public abstract double
-         Φδ(double t,
+         φδ(int m,
+            double t,
             double y);
 
   public abstract Vector

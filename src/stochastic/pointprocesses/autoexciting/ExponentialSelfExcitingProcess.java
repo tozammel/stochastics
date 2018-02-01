@@ -82,13 +82,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     double numer = sum(j -> γ(j, 2), 0, order() - 1);
     double denom = (product(this::β, 0, order() - 1)) * sum(k -> γ(k, 1), 0, order() - 1) * Z();
     double ratio = numer / denom;
-//    out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
-//               numer,
-//               denom,
-//               ratio,
-//               order(),
-//               Arrays.toString(beta.toDoubleArray()),
-//               Arrays.toString(gamma.toDoubleArray()));
+    // out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f
+    // ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
+    // numer,
+    // denom,
+    // ratio,
+    // order(),
+    // Arrays.toString(beta.toDoubleArray()),
+    // Arrays.toString(gamma.toDoubleArray()));
     return ratio;
   }
 
@@ -114,7 +115,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
     for (int i = 0; i <= 1000; i++)
     {
-      δ = Φδ(dt = (nextTime - lastTime), y, tk);
+      δ = φδ(dt = (nextTime - lastTime), y, tk);
 
       if (trace)
       {
@@ -149,7 +150,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
     for (int i = 0; i <= 1000; i++)
     {
-      δ = Φδ(dt = (nextTime - lastTime), y);
+      δ = φδ(dt = (nextTime - lastTime), y);
 
       if (trace)
       {
@@ -264,11 +265,11 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          getΛmomentMeasure()
   {
     Vector dΛ = Λ();
-    if ( dΛ.size() == 0 )
+    if (dΛ.size() == 0)
     {
       return Double.NaN;
     }
-      
+
     Vector moments = dΛ.normalizedMoments(2);
     Vector normalizedSampleMoments = (moments.copy().subtract(1)).abs();
     return normalizedSampleMoments.sum();
@@ -409,11 +410,11 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public double
          getΛKolmogorovSmirnovStatistic()
   {
-   
+
     KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
     Vector comp = Λ();
-    
-    if ( comp.size() == 0 )
+
+    if (comp.size() == 0)
     {
       return Double.NaN;
     }
@@ -496,50 +497,49 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public final double
          logLik()
   {
-    if ( T == null )
+    if (T == null)
     {
       return Double.NaN;
     }
     Vector λvector = λvector().slice(1, T.size() - 1);
 
     Vector lslice = λvector.log();
-    
-    double tn = ( T.getRightmostValue() - T.getLeftmostValue() ) ;
-    //out.println( "tn=" + tn );
+
+    double tn = (T.getRightmostValue() - T.getLeftmostValue());
+    // out.println( "tn=" + tn );
     double compSum = totalΛ();
-    //out.println( "compSum=" + compSum );
-    
+    // out.println( "compSum=" + compSum );
 
     return tn + lslice.sum() - compSum;
-//    A = new double[n][order()];
-//
-//    double S[] = new double[order()];
-//    for (int tk = 1; tk < n; tk++)
-//    {
-//      double t = T.get(tk);
-//      double dt = t - T.get(tk - 1);
-//      double λ = evolveλ(dt, t, S);
-//
-//      if (λ > 0)
-//      {
-//        ll += log(λ);
-//      }
-//
-//      // ll -= Λ;
-//
-//    }
+    // A = new double[n][order()];
+    //
+    // double S[] = new double[order()];
+    // for (int tk = 1; tk < n; tk++)
+    // {
+    // double t = T.get(tk);
+    // double dt = t - T.get(tk - 1);
+    // double λ = evolveλ(dt, t, S);
+    //
+    // if (λ > 0)
+    // {
+    // ll += log(λ);
+    // }
+    //
+    // // ll -= Λ;
+    //
+    // }
 
-//    if (Double.isNaN(ll))
-//
-//    {
-//      if (verbose)
-//      {
-//        out.println(Thread.currentThread().getName() + " NaN for LL ");
-//      }
-//      ll = Double.NEGATIVE_INFINITY;
-//    }
-//
-//    return ll;
+    // if (Double.isNaN(ll))
+    //
+    // {
+    // if (verbose)
+    // {
+    // out.println(Thread.currentThread().getName() + " NaN for LL ");
+    // }
+    // ll = Double.NEGATIVE_INFINITY;
+    // }
+    //
+    // return ll;
 
   }
 
@@ -661,7 +661,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   {
     double tn = T.getRightmostValue();
 
-    return ( sum(i -> sum(j -> (α(j) / β(j)) * (1 - exp(-β(j) * (tn - T.get(i)))), 0, order() - 1), 0, T.size() - 1)) / Z();
+    return (sum(i -> sum(j -> (α(j) / β(j)) * (1 - exp(-β(j) * (tn - T.get(i)))), 0, order() - 1), 0, T.size() - 1)) / Z();
   }
 
   @Override
@@ -729,7 +729,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public Vector
          Λ()
   {
-    if ( T == null )
+    if (T == null)
     {
       return new Vector();
     }
@@ -779,7 +779,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
             double nextTime)
   {
     double lastTime = T.getRightmostValue();
-    return nextTime - Φδ(nextTime - lastTime, y);
+    return nextTime - φδ(nextTime - lastTime, y);
   }
 
   /**
@@ -790,15 +790,15 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
    * @return
    */
   public double
-         Φ(double dt,
+         φ(double dt,
            double y)
   {
     int tk = T.size() - 1;
-    return Φ(dt, y, tk);
+    return φ(dt, y, tk);
   }
 
   public double
-         Φ(double dt,
+         φ(double dt,
            double y,
            int tk)
   {
@@ -806,14 +806,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   }
 
   public double
-         Φdt(double dt)
+         φdt(double dt)
   {
     int tk = T.size() - 1;
-    return Φdt(dt, tk);
+    return φdt(dt, tk);
   }
 
   public double
-         Φdt(double dt,
+         φdt(double dt,
              int tk)
   {
     return sum(j -> γ(j) * A(tk, j) * β(j) * exp(-(dt) * β(j)), 0, order() - 1);
@@ -823,22 +823,22 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
    * 
    * @param t
    * @param y
-   * @return this{@link #Φ(double, double)} / this{@link #Φdt(double)}
+   * @return this{@link #φ(double, double)} / this{@link #φdt(double)}
    */
   public double
-         Φδ(double t,
+         φδ(double t,
             double y)
   {
     int tk = T == null ? -1 : (T.size() - 1);
-    return Φδ(t, y, tk);
+    return φδ(t, y, tk);
   }
 
   public double
-         Φδ(double t,
+         φδ(double t,
             double y,
             int tk)
   {
-    return Φ(t, y, tk) / Φdt(t, tk);
+    return φ(t, y, tk) / φdt(t, tk);
   }
 
   public Vector

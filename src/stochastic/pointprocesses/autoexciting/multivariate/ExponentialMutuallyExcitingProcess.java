@@ -5,6 +5,7 @@ import static fastmath.Functions.product;
 import static fastmath.Functions.seq;
 import static fastmath.Functions.sum;
 import static fastmath.Functions.uniformRandom;
+import static java.lang.Math.abs;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
@@ -376,7 +377,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
       ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
-      //ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * ( dim() * dim() ) * 2 + 1, 10, 1E-5);
+      // ExtendedBOBYQAOptimizer optimizer = new
+      // ExtendedBOBYQAOptimizer(getParamCount() * ( dim() * dim() ) * 2 + 1, 10,
+      // 1E-5);
       // optimizer.
       return optimizer;
     };
@@ -511,13 +514,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public final double
-         getMeanSquaredPredictionError()
+         getMeanSquaredPredictionError(int m)
   {
     throw new UnsupportedOperationException("TODO");
   }
 
   public final int
-         getPredictionIntegrationLimit()
+         getPredictionIntegrationLimit(int m)
   {
     return predictionIntegrationLimit;
   }
@@ -626,7 +629,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public final double
-         getRootMeanSquaredPredictionError()
+         getRootMeanSquaredPredictionError(int m)
   {
     throw new UnsupportedOperationException("TODO");
   }
@@ -1312,6 +1315,41 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   }
 
+  /**
+   * 
+   * @param y
+   *          exponentially distributed random variable
+   * @return the value of T[n+1] that will cause the compensator to be equal to
+   *         Λ(T[n],T[N+1])=y
+   */
+  public double
+         invΛ(int m,
+              double y)
+  {
+    double dt = 0;
+
+    double δ = 0;
+    double lastTime = T == null ? 0 : T.getRightmostValue();
+    double nextTime = lastTime;
+
+    for (int i = 0; i <= 1000; i++)
+    {
+      δ = φδ(m, dt = (nextTime - lastTime), y);
+
+      if (trace)
+      {
+        out.println("double dt[" + i + "]=" + dt + " δ=" + δ);
+      }
+      nextTime = nextTime + δ;
+      if (abs(δ) < 1E-10 || !Double.isFinite(δ))
+      {
+        break;
+      }
+
+    }
+    return dt;
+  }
+
   public double
          σ(int m,
            int i,
@@ -1345,7 +1383,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         Φ(int m,
+         φ(int m,
            double dt,
            double y,
            int tk)
@@ -1364,7 +1402,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         Φdt(double t,
+         φdt(int m,
+             double t,
              int tk)
   {
     throw new UnsupportedOperationException("TODO");
@@ -1372,7 +1411,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public double
-         Φδ(double t,
+         φδ(int m,
+            double t,
             double y)
   {
     int tk = T.size() - 1;
@@ -1381,11 +1421,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public double
-         Φδ(double t,
+         φδ(int m,
+            double t,
             double y,
             int tk)
   {
-    return sum(m -> Φ(m, t, y, tk) / Φdt(t, tk), 0, dim() - 1);
+    return φ(m, t, y, tk) / φdt(m, t, tk);
   }
 
   public String

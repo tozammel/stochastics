@@ -49,7 +49,8 @@ public class MututallyExcitingProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
+      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process =
+                                                                          ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
       process.τ.assign(10.0843321348, 8.4890790143);
       process.ε.assign(0, 0);
       process.η.assign(2.8483343724, 2.5714437398);
@@ -89,85 +90,86 @@ public class MututallyExcitingProcessSimulator
     process.setAsize(sampleCount);
     for (int i = 0; i < sampleCount; i++)
     {
-
-      double y = expDist.sample();
-      process.trace = false;
-      // TODO: average over Λ and compare against the invariant projection
-      double dt = process.invΛ(0, y);
-      if (dt > 10000 || dt < 0.001)
+      for (int m = 0; m < process.dim(); i++)
       {
-        int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
-        lastRejectedPoint = i;
-        rejects++;
-        out.println("seed " + seed
-                    + ":"
-                    + ansi().fgBrightRed()
-                    + "rejecting dt="
-                    + dt
-                    + " for y="
-                    + y
-                    + "#"
-                    + rejects
-                    + " points since last reject="
-                    + pointsSinceLastRejection
-                    + ansi().fgDefault());
-        continue;
+        double y = expDist.sample();
+        process.trace = false;
+        // TODO: average over Λ and compare against the invariant projection
+        double dt = process.invΛ(m, 0, y);
+        if (dt > 10000 || dt < 0.001)
+        {
+          int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
+          lastRejectedPoint = i;
+          rejects++;
+          out.println("seed " + seed
+                      + ":"
+                      + ansi().fgBrightRed()
+                      + "rejecting dt="
+                      + dt
+                      + " for y="
+                      + y
+                      + "#"
+                      + rejects
+                      + " points since last reject="
+                      + pointsSinceLastRejection
+                      + ansi().fgDefault());
+          continue;
+        }
+        process.trace = false;
+        // Real dtReal = process.invΛReal(y);
+        // if ( dtReal.fpValue() > 6669)
+        // {
+        // out.println( "clamping " + dtReal );
+        // dtReal = new Real(dt);
+        // }
+        process.trace = false;
+
+        // double dtRealFpValue = dtReal.fpValue();
+        double q = process.Λ(0, n - 1, dt);
+        nextTime = (process.T.getRightmostValue() + dt);
+        double marginalΛ = process.invΛ(m, 0, 1);
+        // out.println("marginalΛ=" + marginalΛ);
+
+        TestCase.assertEquals("y != q", y, q, 1E-7);
+        n++;
+        process.appendTime(0, nextTime);
+        double Edt = nextTime / n;
+        // out.println("T=" + process.T.toIntVector());
+        // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
+        // process.T.size() - 1));
+        if (i % 1000 == 0)
+        {
+          String msg = "seed=" + seed
+                       + " i="
+                       + i
+                       + " y="
+                       + y
+                       + " = q = "
+                       + q
+                       + " dt="
+                       + dt
+                       + " marginal="
+                       + marginalΛ
+                       + " Λmean="
+                       + process.Λ(0).mean()
+                       + " Λvar="
+                       + process.Λ(0).variance()
+                       + " nextTime="
+                       + nextTime
+                       + " Edt="
+                       + Edt;
+          out.println(msg);
+
+        }
+
+        // String msg = "i=" + i + " y=" + y + " = q = " + q + " dt=" + dt + " dtReal="
+        // + dtReal + " dtRealFpValue=" + dtRealFpValue + " nextTime=" + nextTime;
+        if (abs(y - q) > 1E-8)
+        {
+          out.println(seed + ":" + ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
+          continue;
+        }
       }
-      process.trace = false;
-      // Real dtReal = process.invΛReal(y);
-      // if ( dtReal.fpValue() > 6669)
-      // {
-      // out.println( "clamping " + dtReal );
-      // dtReal = new Real(dt);
-      // }
-      process.trace = false;
-
-      // double dtRealFpValue = dtReal.fpValue();
-      double q = process.Λ(0, n - 1, dt);
-      nextTime = (process.T.getRightmostValue() + dt);
-      double marginalΛ = process.invΛ(0, 1);
-      // out.println("marginalΛ=" + marginalΛ);
-
-      TestCase.assertEquals("y != q", y, q, 1E-7);
-      n++;
-      process.appendTime(0, nextTime);
-      double Edt = nextTime / n;
-      // out.println("T=" + process.T.toIntVector());
-      // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
-      // process.T.size() - 1));
-      if (i % 1000 == 0)
-      {
-        String msg = "seed=" + seed
-                     + " i="
-                     + i
-                     + " y="
-                     + y
-                     + " = q = "
-                     + q
-                     + " dt="
-                     + dt
-                     + " marginal="
-                     + marginalΛ
-                     + " Λmean="
-                     + process.Λ(0).mean()
-                     + " Λvar="
-                     + process.Λ(0).variance()
-                     + " nextTime="
-                     + nextTime
-                     + " Edt="
-                     + Edt;
-        out.println(msg);
-
-      }
-
-      // String msg = "i=" + i + " y=" + y + " = q = " + q + " dt=" + dt + " dtReal="
-      // + dtReal + " dtRealFpValue=" + dtRealFpValue + " nextTime=" + nextTime;
-      if (abs(y - q) > 1E-8)
-      {
-        out.println(seed + ":" + ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
-        continue;
-      }
-
     }
     double duration = startTime - currentTimeMillis();
 

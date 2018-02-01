@@ -97,14 +97,6 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
   }
 
   @Override
-  public double
-         invΛ(int tk,
-              double y)
-  {
-    throw new UnsupportedOperationException("TODO");
-  }
-
-  @Override
   public Type
          getType()
   {
@@ -199,6 +191,15 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
     StringBuilder sb = new StringBuilder();
     range(0, getParamCount()).forEachOrdered(k -> sb.append(getMatrixField(k).toString()));
     return sb.toString();
+  }
+
+  @Override
+  public double
+         invΛ(int m,
+              int tk,
+              double y)
+  {
+    throw new UnsupportedOperationException("TODO");
   }
 
 }

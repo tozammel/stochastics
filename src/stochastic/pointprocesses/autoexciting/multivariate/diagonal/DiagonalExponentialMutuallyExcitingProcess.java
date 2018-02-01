@@ -143,7 +143,8 @@ public abstract class DiagonalExponentialMutuallyExcitingProcess extends Exponen
 
   @Override
   public double
-         invΛ(int tk,
+         invΛ(int m,
+              int tk,
               double y)
   {
     double dt = 0;
@@ -154,7 +155,7 @@ public abstract class DiagonalExponentialMutuallyExcitingProcess extends Exponen
 
     for (int i = 0; i <= 1000; i++)
     {
-      δ = Φδ(dt = (nextTime - lastTime), y, tk);
+      δ = φδ(m, dt = (nextTime - lastTime), y, tk);
 
       if (trace)
       {

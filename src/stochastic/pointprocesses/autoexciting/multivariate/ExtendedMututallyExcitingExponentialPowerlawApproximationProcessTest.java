@@ -361,7 +361,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   {
     ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
-    double x = process.Φ(0, 0.25, 1, process.N(0) - 1);
+    double x = process.φ(0, 0.25, 1, process.N(0) - 1);
     assertTrue(Double.isFinite(x));
     out.println("x=" + x);
   }
