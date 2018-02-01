@@ -5,6 +5,7 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.System.out;
 import static java.util.Arrays.stream;
+import static java.util.stream.IntStream.range;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.apache.commons.lang.ArrayUtils.addAll;
 
@@ -16,8 +17,15 @@ import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 
-public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess extends ExponentialMutuallyExcitingProcess
+public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess extends ExponentialMutuallyExcitingProcess
 {
+
+  @Override
+  public String
+         toString()
+  {
+    return getClass().getSimpleName() + "[" + getParamString() + "]";
+  }
 
   private DoubleColMatrix τ;
 
@@ -32,7 +40,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
    */
   public double base = exp(log(60000) / M);
 
-  public ExtendedMututallyExcitingExponentialPowerlawApproximationProcess(int dim)
+  public ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(int dim)
   {
     this.dim = dim;
     τ = new DoubleColMatrix(dim, dim).setName("τ");
@@ -117,7 +125,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
       }
       params.slice(i * getParamCount(), (i + 1) * getParamCount()).assign(fieldArray.asVector());
     }
-    //out.println("returning " + params.size() );
+    // out.println("returning " + params.size() );
     return params;
   }
 
@@ -135,9 +143,9 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
   public void
          assignParameters(double[] point)
   {
-    
+
     int parameterDim = getParamCount() * (dim * dim);
-    Vector params = new Vector(parameterDim);
+    Vector params = new Vector(point);
     assert point.length == parameterDim : "need " + parameterDim + " params, not " + point.length;
 
     for (int i = 0; i < getParamCount(); i++)
@@ -189,7 +197,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
          getParamString()
   {
     StringBuilder sb = new StringBuilder();
-    rangeClosed(0, getParamCount()).forEachOrdered(k -> sb.append(getMatrixField(k).toString()));
+    range(0, getParamCount()).forEachOrdered(k -> sb.append(getMatrixField(k).toString()));
     return sb.toString();
   }
 

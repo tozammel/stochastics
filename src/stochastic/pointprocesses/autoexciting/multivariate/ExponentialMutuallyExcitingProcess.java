@@ -101,7 +101,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     else if (type == AutoExcitingProcessFactory.Type.MultivariateFullExtendedApproximatePowerlaw)
     {
-      ExponentialMutuallyExcitingProcess process = new ExtendedMututallyExcitingExponentialPowerlawApproximationProcess(2);
+      ExponentialMutuallyExcitingProcess process = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
       process.T = filtration.times;
       process.K = filtration.types;
       process.X = filtration.markedPoints;
