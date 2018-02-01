@@ -4,11 +4,15 @@ import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.IntStream.rangeClosed;
+import static org.apache.commons.lang.ArrayUtils.addAll;
 
-import fastmath.DoubleColMatrix;
-import fastmath.DoubleMatrix;
+import java.util.concurrent.atomic.DoubleAdder;
+
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
+import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 
@@ -74,9 +78,9 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
    */
   @Override
   public double
-            α(int j,
-              int m,
-              int n)
+         α(int j,
+           int m,
+           int n)
   {
     if (m != n)
     {
@@ -93,9 +97,9 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
 
   @Override
   public double
-            β(int j,
-              int m,
-              int n)
+         β(int j,
+           int m,
+           int n)
   {
     if (m != n)
     {
@@ -121,26 +125,7 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public Type
          getType()
   {
-    return Type.MultivariateExtendedApproximatePowerlaw;
-  }
-
-  public String
-         getαβString()
-  {
-    StringBuilder sb = new StringBuilder();
-    sb.append("{");
-    for (int j = 0; j < order(); j++)
-    {
-      for (int m = 0; m < dim(); m++)
-      {
-        for (int n = 0; n < dim(); n++)
-        {
-          sb.append(format(", alpha[%d,%d,%d]=%s, beta[%d,%d,%d]=%s", j + 1, m + 1, n + 1, α(j, m, n), j + 1, m + 1, n + 1, β(j, m, n)));
-        }
-      }
-    }
-    sb.append("}");
-    return sb.toString();
+    return Type.MultivariateDiagonalExtendedApproximatePowerlaw;
   }
 
   public Vector
@@ -149,53 +134,50 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
     return (dT != null) ? dT : (dT = T.diff());
   }
 
-  public DoubleMatrix
-         getαMatrix(int j)
-  {
-    DoubleColMatrix alpha = new DoubleColMatrix(dim, dim);
-    for (int m = 0; m < dim(); m++)
-    {
-      for (int n = 0; n < dim(); n++)
-      {
-        alpha.set(m, n, α(j, m, n));
-      }
-    }
-    return alpha.setName("α[" + j + "]");
-  }
-
-  public DoubleMatrix
-         getβMatrix(int j)
-  {
-    DoubleColMatrix β = new DoubleColMatrix(dim, dim);
-    for (int m = 0; m < dim(); m++)
-    {
-      for (int n = 0; n < dim(); n++)
-      {
-        β.set(m, n, β(j, m, n));
-      }
-    }
-    return β.setName("β[" + j + "]");
-  }
-
-  public DoubleMatrix
-         getαβMatrix(int j)
-  {
-    DoubleColMatrix αβ = new DoubleColMatrix(dim, dim);
-    for (int m = 0; m < dim(); m++)
-    {
-      for (int n = 0; n < dim(); n++)
-      {
-        αβ.set(m, n, α(j, m, n) / β(j, m, n));
-      }
-    }
-    return αβ.setName("(α/β)[" + j + "]");
-  }
-
   public void
          appendTime(int type,
                     double time)
   {
     throw new UnsupportedOperationException("TODO");
   }
+
+  /**
+   * @return an array whose elements correspond to this{@link #statisticNames}
+   */
+  public Object[]
+         evaluateParameterStatistics(double[] point)
+  {
+    DiagonalExponentialMututallyExcitingProcess process = newProcess(point);
+    double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
+
+    DoubleAdder meanCompMean = new DoubleAdder();
+    DoubleAdder meanCompVar = new DoubleAdder();
+
+    rangeClosed(0, dim() - 1).forEach(m -> {
+      meanCompMean.add(process.Λ(m).mean());
+      meanCompVar.add(process.Λ(m).variance());
+    });
+    double compMean = meanCompMean.doubleValue() / dim();
+    double compVar = meanCompVar.doubleValue() / dim();
+
+    // out.println(compensated.autocor(30));
+
+    Object[] statisticsVector = new Object[]
+    { process.logLik(),
+      ksStatistic,
+      compMean,
+      compVar,
+      process.getΛmomentMeasure(),
+      process.getLjungBoxMeasure(),
+      process.getΛmomentLjungBoxMeasure(),
+      process.meanRecurrenceTimeVector().toString() };
+
+    return addAll(stream(getParameterFields()).map(param -> {
+      Vector value = process.getVectorField(param);
+      return value;
+    }).toArray(), statisticsVector);
+  }
+
+ 
 
 }

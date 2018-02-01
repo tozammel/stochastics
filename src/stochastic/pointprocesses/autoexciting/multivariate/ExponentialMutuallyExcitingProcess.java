@@ -18,19 +18,18 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Stream.concat;
-import static org.apache.commons.lang.ArrayUtils.addAll;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.DoubleAdder;
 import java.util.function.IntConsumer;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.Supplier;
@@ -48,6 +47,7 @@ import org.apache.commons.math3.random.RandomVectorGenerator;
 import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 
 import fastmath.DoubleColMatrix;
+import fastmath.DoubleMatrix;
 import fastmath.EigenDecomposition;
 import fastmath.Pair;
 import fastmath.Vector;
@@ -58,14 +58,15 @@ import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
 import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
+import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMututallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import util.DateUtils;
 
 public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitingProcess
 {
-
 
   public ExponentialMutuallyExcitingProcess()
   {
@@ -90,7 +91,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     assert filtration.types != null : "tradingProcess.types is null";
     assert filtration.markedPoints != null : "tradingProcess.markedPoints is null";
 
-    if (type == AutoExcitingProcessFactory.Type.MultivariateExtendedApproximatePowerlaw)
+    if (type == AutoExcitingProcessFactory.Type.MultivariateDiagonalExtendedApproximatePowerlaw)
     {
       ExponentialMutuallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
       process.T = filtration.times;
@@ -367,7 +368,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-6);
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
       // optimizer.
       return optimizer;
     };
@@ -417,44 +418,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     return multiopt;
   }
-
-  /**
-   * @return an array whose elements correspond to this{@link #statisticNames}
-   */
-  public Object[]
-         evaluateParameterStatistics(double[] point)
-  {
-    ExponentialMutuallyExcitingProcess process = newProcess(point);
-    double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
-
-    DoubleAdder meanCompMean = new DoubleAdder();
-    DoubleAdder meanCompVar = new DoubleAdder();
-
-    rangeClosed(0, dim() - 1).forEach(m -> {
-      meanCompMean.add(process.Λ(m).mean());
-      meanCompVar.add(process.Λ(m).variance());
-    });
-    double compMean = meanCompMean.doubleValue() / dim();
-    double compVar = meanCompVar.doubleValue() / dim();
-
-    // out.println(compensated.autocor(30));
-
-    Object[] statisticsVector = new Object[]
-    { process.logLik(),
-      ksStatistic,
-      compMean,
-      compVar,
-      process.getΛmomentMeasure(),
-      process.getLjungBoxMeasure(),
-      process.getΛmomentLjungBoxMeasure(),
-      process.meanRecurrenceTimeVector().toString() };
-
-    return addAll(stream(getParameterFields()).map(param -> {
-      Vector value = process.getVectorField(param);
-      return value;
-    }).toArray(), statisticsVector);
-  }
-
 
   @Override
   public final double
@@ -654,7 +617,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   @Override
-  public final  double
+  public final double
          getRootMeanSquaredPredictionError()
   {
     throw new UnsupportedOperationException("TODO");
@@ -759,7 +722,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final double
          getΛmomentLjungBoxMeasure()
   {
-    //return getΛmomentMeasure() * getLjungBoxMeasure() * -logLik();
+    // return getΛmomentMeasure() * getLjungBoxMeasure() * -logLik();
     return getΛmomentMeasure() * log(1 + getLjungBoxMeasure());
   }
 
@@ -885,7 +848,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final double
          meanRecurrenceTime(int m)
   {
-  
+
     Vector beta = new Vector(seq((IntToDoubleFunction) j -> β(j, m, m), 0, order() - 1));
     Vector gamma = new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m, 2), 0, order() - 1));
     double numerator = sum(j -> γ(j, m, m, 2), 0, order() - 1);
@@ -928,7 +891,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * 
    * @return number of events of type m before time t
    */
-  public final  int
+  public final int
          Nclosed(int type,
                  double t)
   {
@@ -936,10 +899,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return entry == null ? 0 : (entry.getValue() + 1);
   }
 
-  public final ExponentialMutuallyExcitingProcess
+  public final DiagonalExponentialMututallyExcitingProcess
          newProcess(double[] point)
   {
-    ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
+    DiagonalExponentialMututallyExcitingProcess process = (DiagonalExponentialMututallyExcitingProcess) this.clone();
     process.assignParameters(point);
     return process;
   }
@@ -1050,7 +1013,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return Tm.get(i);
   }
 
-
   @Override
   public final double
          totalΛ()
@@ -1077,19 +1039,19 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     ExponentialMutuallyExcitingProcess clone = copy();
     clone.assignParameters(point);
-  
+
     double score = Double.NaN;
-  
+
     score = clone.logLik();
-  
+
     // if (verbose)
     // {
     // out.println(Thread.currentThread().getName() + " " + this + " LL score=" +
     // score);
     // }
-  
+
     return score;
-  
+
   }
 
   /**
@@ -1416,6 +1378,112 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             int tk)
   {
     return sum(m -> Φ(m, t, y, tk) / Φdt(t, tk), 0, dim() - 1);
+  }
+
+  public String
+         getαβString()
+  {
+    StringBuilder sb = new StringBuilder();
+    sb.append("{");
+    for (int j = 0; j < order(); j++)
+    {
+      for (int m = 0; m < dim(); m++)
+      {
+        for (int n = 0; n < dim(); n++)
+        {
+          sb.append(format(", alpha[%d,%d,%d]=%s, beta[%d,%d,%d]=%s", j + 1, m + 1, n + 1, α(j, m, n), j + 1, m + 1, n + 1, β(j, m, n)));
+        }
+      }
+    }
+    sb.append("}");
+    return sb.toString();
+  }
+
+  public DoubleMatrix
+         getαMatrix(int j)
+  {
+    DoubleColMatrix alpha = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        alpha.set(m, n, α(j, m, n));
+      }
+    }
+    return alpha.setName("α[" + j + "]");
+  }
+
+  public DoubleMatrix
+         getβMatrix(int j)
+  {
+    DoubleColMatrix β = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        β.set(m, n, β(j, m, n));
+      }
+    }
+    return β.setName("β[" + j + "]");
+  }
+
+  public DoubleMatrix
+         getαβMatrix(int j)
+  {
+    DoubleColMatrix αβ = new DoubleColMatrix(dim, dim);
+    for (int m = 0; m < dim(); m++)
+    {
+      for (int n = 0; n < dim(); n++)
+      {
+        αβ.set(m, n, α(j, m, n) / β(j, m, n));
+      }
+    }
+    return αβ.setName("(α/β)[" + j + "]");
+  }
+
+  public abstract Vector
+         getParameters();
+
+  public abstract void
+         assignParameters(double[] point);
+
+  /**
+   * 
+   * @param field
+   * @param j
+   * @return the n-th element of the {@link Vector} referenced by field
+   */
+  public double
+         getFieldValue(Field field,
+                       int m,
+                       int n)
+  {
+    return getMatrixField(field).get(m, n);
+  }
+
+  public abstract String
+         getParamString();
+
+  public final synchronized Field[]
+         getParameterFields()
+  {
+    if (parameterFields == null)
+    {
+      BoundedParameter[] parameters = getBoundedParameters();
+      parameterFields = new Field[parameters.length];
+      int i = 0;
+      for (BoundedParameter param : parameters)
+      {
+        parameterFields[i++] = getField(param.getName());
+      }
+    }
+    return parameterFields;
+  }
+
+  public DoubleColMatrix
+         getMatrixField(Field param)
+  {
+    throw new UnsupportedOperationException("TODO");
   }
 
 }

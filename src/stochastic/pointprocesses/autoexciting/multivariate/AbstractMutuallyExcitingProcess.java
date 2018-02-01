@@ -78,7 +78,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
     return (E) clone();
   }
 
-  Field[] parameterFields = null;
+  protected Field[] parameterFields = null;
 
   public SimpleBounds
          getParameterBounds()
@@ -164,21 +164,8 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public abstract AbstractMutuallyExcitingProcess
          newProcess(double[] point);
 
-  public final synchronized Field[]
-         getParameterFields()
-  {
-    if (parameterFields == null)
-    {
-      BoundedParameter[] parameters = getBoundedParameters();
-      parameterFields = new Field[parameters.length];
-      int i = 0;
-      for (BoundedParameter param : parameters)
-      {
-        parameterFields[i++] = getField(param.getName());
-      }
-    }
-    return parameterFields;
-  }
+  public abstract Field[]
+         getParameterFields();
 
   /**
    * Uses this{@link #getParameterFields()} to assign values from an array to the

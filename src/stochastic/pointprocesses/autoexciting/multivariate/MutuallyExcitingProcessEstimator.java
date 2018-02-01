@@ -54,7 +54,7 @@ public class MutuallyExcitingProcessEstimator
          main(String[] args) throws IOException,
                              CloneNotSupportedException
   {
-    Type type = Type.MultivariateExtendedApproximatePowerlaw;
+    Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
     int trajectoryCount = Runtime.getRuntime().availableProcessors() * 2;
@@ -65,7 +65,7 @@ public class MutuallyExcitingProcessEstimator
     String symbol = "SPY";
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateSelfExcitingTradingProcess(type, filename, trajectoryCount, symbol);
+    ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateMutuallyExcitingTradingProcess(type, filename, trajectoryCount, symbol);
 
   }
 
@@ -84,17 +84,17 @@ public class MutuallyExcitingProcessEstimator
                                      String symbol) throws IOException
 
   {
-    return estimateSelfExcitingTradingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
+    return estimateMutuallyExcitingTradingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
   }
 
   public static ArrayList<ExponentialMutuallyExcitingProcess>
-         estimateSelfExcitingTradingProcess(Type type,
-                                            String filename,
-                                            int trajectoryCount,
-                                            String symbol) throws IOException
+         estimateMutuallyExcitingTradingProcess(Type type,
+                                                String filename,
+                                                int trajectoryCount,
+                                                String symbol) throws IOException
   {
     assert type != null;
-    return estimateSelfExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
+    return estimateMututallyExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
   }
 
   /**
@@ -113,10 +113,10 @@ public class MutuallyExcitingProcessEstimator
    * @throws IOException
    */
   public static ArrayList<ExponentialMutuallyExcitingProcess>
-         estimateSelfExcitingTradingProcesses(Type type,
-                                              int trajectoryCount,
-                                              TradingFiltration tradingProcess,
-                                              String filename) throws IOException
+         estimateMututallyExcitingTradingProcesses(Type type,
+                                                   int trajectoryCount,
+                                                   TradingFiltration tradingProcess,
+                                                   String filename) throws IOException
   {
     assert type != null;
     Vector times = tradingProcess.times;
@@ -132,7 +132,8 @@ public class MutuallyExcitingProcessEstimator
     {
       Vector timeSlice = times.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
       IntVector typeSlice = tradingProcess.types.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
-      DoubleMatrix markedPointSlice = tradingProcess.markedPoints.sliceRows(section == 0 ? 0 : tradingProcess.tradeIndexes[section - 1], tradingProcess.tradeIndexes[section]);
+      DoubleMatrix markedPointSlice = tradingProcess.markedPoints.sliceRows(section == 0 ? 0 : tradingProcess.tradeIndexes[section - 1],
+                                                                            tradingProcess.tradeIndexes[section]);
 
       ExponentialMutuallyExcitingProcess process = ExponentialMutuallyExcitingProcess.spawnNewProcess(type, tradingProcess);
 
@@ -220,7 +221,8 @@ public class MutuallyExcitingProcessEstimator
   public MutuallyExcitingProcess
          estimate(DoubleMatrix markedPoints,
                   IntVector types,
-                  String filename, int section) throws IOException
+                  String filename,
+                  int section) throws IOException
   {
     process.T = markedPoints.col(0);
     process.X = markedPoints;

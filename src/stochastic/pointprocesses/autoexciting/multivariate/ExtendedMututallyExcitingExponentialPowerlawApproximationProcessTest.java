@@ -121,7 +121,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testIntensity() throws InterruptedException
   {
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
 
     Vector trueIntensity0 = new Vector(new double[]
     { 0.0000000000, 0.0009772861, 0.1226659480, 0.0020090410, 0.1236901367 });
@@ -359,7 +359,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testΦ()
   {
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
+    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
     double x = process.Φ(0, 0.25, 1, process.N(0) - 1);
     assertTrue(Double.isFinite(x));
