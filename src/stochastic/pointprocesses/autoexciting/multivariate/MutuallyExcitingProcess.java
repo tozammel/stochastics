@@ -1,10 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
-
-import java.lang.reflect.Field;
 
 import org.apache.commons.math3.optim.SimpleBounds;
 
@@ -33,9 +29,18 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
   {
     BoundedParameter[] bounds = getBoundedParameters();
     final int paramCount = bounds.length;
-    double[] lowerBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i % bounds.length].getMin()).toArray();
-    double[] upperBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i % bounds.length].getMax()).toArray();
-    return new SimpleBounds(lowerBounds, upperBounds);
+    // double[] lowerBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i %
+    // bounds.length].getMin()).toArray();
+    // double[] upperBounds = range(0, paramCount * dim).mapToDouble(i -> bounds[i %
+    // bounds.length].getMax()).toArray();
+    Vector lowerBounds = new Vector(paramCount * (dim * dim));
+    Vector upperBounds = new Vector(paramCount * (dim * dim));
+    for (int i = 0; i < bounds.length; i++)
+    {
+      lowerBounds.slice(i * (dim * dim), (i + 1) * (dim * dim)).assign(bounds[i].getMin());
+      upperBounds.slice(i * (dim * dim), (i + 1) * (dim * dim)).assign(bounds[i].getMax());
+    }
+    return new SimpleBounds(lowerBounds.toDoubleArray(), upperBounds.toDoubleArray());
   }
 
   @Override

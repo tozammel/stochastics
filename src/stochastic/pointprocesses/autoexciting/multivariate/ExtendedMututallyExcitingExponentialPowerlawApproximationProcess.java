@@ -3,6 +3,7 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
+import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.apache.commons.lang.ArrayUtils.addAll;
@@ -30,6 +31,15 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
    * choose m such that m^M=1 minute, in units of milliseconds
    */
   public double base = exp(log(60000) / M);
+
+  public ExtendedMututallyExcitingExponentialPowerlawApproximationProcess(int dim)
+  {
+    this.dim = dim;
+    τ = new DoubleColMatrix(dim, dim).setName("τ");
+    ε = new DoubleColMatrix(dim, dim).setName("ε");
+    η = new DoubleColMatrix(dim, dim).setName("η");
+    b = new DoubleColMatrix(dim, dim).setName("b");
+  }
 
   @Override
   protected double
@@ -107,13 +117,8 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
       }
       params.slice(i * getParamCount(), (i + 1) * getParamCount()).assign(fieldArray.asVector());
     }
+    //out.println("returning " + params.size() );
     return params;
-  }
-
-  private DoubleColMatrix
-          getMatrixField(int i)
-  {
-    throw new UnsupportedOperationException("TODO");
   }
 
   /**
@@ -130,13 +135,15 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
   public void
          assignParameters(double[] point)
   {
-    Vector params = new Vector(getParamCount() * (dim * dim));
-    assert point.length == params.size() * (dim * dim) : "need " + params.size() * (dim * dim) + " params, not " + point.length;
+    
+    int parameterDim = getParamCount() * (dim * dim);
+    Vector params = new Vector(parameterDim);
+    assert point.length == parameterDim : "need " + parameterDim + " params, not " + point.length;
 
-    for (int i = 0; i < point.length; i++)
+    for (int i = 0; i < getParamCount(); i++)
     {
       DoubleColMatrix fieldArray = getMatrixField(i);
-      fieldArray.asVector().assign(params.slice(i * getParamCount(), (i + 1) * getParamCount()));
+      fieldArray.asVector().assign(params.slice(i * (dim * dim), (i + 1) * (dim * dim)));
     }
   }
 
@@ -181,7 +188,9 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcess ex
   public String
          getParamString()
   {
-    return "TODO(getParamString)";
+    StringBuilder sb = new StringBuilder();
+    rangeClosed(0, getParamCount()).forEachOrdered(k -> sb.append(getMatrixField(k).toString()));
+    return sb.toString();
   }
 
 }

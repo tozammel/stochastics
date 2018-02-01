@@ -130,20 +130,8 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
     super();
   }
 
-  public Vector
-         getParameters()
-  {
-    return new Vector(stream(getParameterFields()).mapToDouble(field -> {
-      try
-      {
-        return field.getDouble(this);
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e.getMessage(), e);
-      }
-    }));
-  }
+  public abstract Vector
+         getParameters();
 
   public abstract Object[]
          evaluateParameterStatistics(double[] point);

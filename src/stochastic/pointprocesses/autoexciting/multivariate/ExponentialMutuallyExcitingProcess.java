@@ -99,7 +99,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       process.X = filtration.markedPoints;
       return process;
     }
-    else
+    else if (type == AutoExcitingProcessFactory.Type.MultivariateFullExtendedApproximatePowerlaw)
+    {
+      ExponentialMutuallyExcitingProcess process = new ExtendedMututallyExcitingExponentialPowerlawApproximationProcess(2);
+      process.T = filtration.times;
+      process.K = filtration.types;
+      process.X = filtration.markedPoints;
+      return process;
+    }
     {
       throw new UnsupportedOperationException("TODO: " + type);
     }
@@ -368,7 +375,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
+      //ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * ( dim() * dim() ) * 2 + 1, 10, 1E-5);
       // optimizer.
       return optimizer;
     };
@@ -1480,10 +1488,29 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return parameterFields;
   }
 
-  public DoubleColMatrix
-         getMatrixField(Field param)
+  public final DoubleColMatrix
+         getMatrixField(int field)
   {
-    throw new UnsupportedOperationException("TODO");
+    return getMatrixField(getParameterFields()[field]);
+  }
+
+  public final DoubleColMatrix
+         getMatrixField(Field field)
+  {
+    try
+    {
+      DoubleColMatrix matrix = (DoubleColMatrix) field.get(this);
+      if (matrix == null)
+      {
+        matrix = new DoubleColMatrix(dim, dim).setName(field.getName());
+        field.set(this, matrix);
+      }
+      return matrix;
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e.getMessage(), e);
+    }
   }
 
 }

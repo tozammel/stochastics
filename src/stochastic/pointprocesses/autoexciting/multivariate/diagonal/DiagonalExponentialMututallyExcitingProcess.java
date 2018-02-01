@@ -65,6 +65,12 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
     }
   }
 
+  public final Vector
+         getVectorField(int field)
+  {
+    return getVectorField(getParameterFields()[field]);
+  }
+
   /**
    * 
    * @param field
@@ -92,20 +98,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
 
   /**
    * 
-   * @param i
-   *          index of the parameter to return
-   * 
-   * @return the {@link Vector} corresponding to the i-th parameter as determined
-   *         by this{@link #getParameterFields()}
-   */
-  public final Vector
-         getVectorField(int i)
-  {
-    return getVectorField(getParameterFields()[i]);
-  }
-
-  /**
-   * 
    * @param field
    * @param j
    * @return the n-th element of the {@link Vector} referenced by field
@@ -126,8 +118,6 @@ public abstract class DiagonalExponentialMututallyExcitingProcess extends Expone
            + "}";
 
   }
-
-
 
   @Override
   public double
