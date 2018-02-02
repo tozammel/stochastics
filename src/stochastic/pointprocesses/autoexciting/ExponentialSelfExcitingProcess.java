@@ -82,14 +82,13 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     double numer = sum(j -> γ(j, 2), 0, order() - 1);
     double denom = (product(this::β, 0, order() - 1)) * sum(k -> γ(k, 1), 0, order() - 1) * Z();
     double ratio = numer / denom;
-    // out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f
-    // ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
-    // numer,
-    // denom,
-    // ratio,
-    // order(),
-    // Arrays.toString(beta.toDoubleArray()),
-    // Arrays.toString(gamma.toDoubleArray()));
+//    out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
+//               numer,
+//               denom,
+//               ratio,
+//               order(),
+//               Arrays.toString(beta.toDoubleArray()),
+//               Arrays.toString(gamma.toDoubleArray()));
     return ratio;
   }
 
