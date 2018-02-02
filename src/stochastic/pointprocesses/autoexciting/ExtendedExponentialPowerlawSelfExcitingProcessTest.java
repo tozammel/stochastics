@@ -307,7 +307,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
       for (int i = 0; i < process.T.size(); i++)
       {
         double a = process.Asum(i, j);
-        double b = process.A(i, j);
+        double b = process.A(j, i);
         double d = process.B(i, j);
         // out.println("a=" + a + " b=" + b + " c=" + c + " d=" + d);
         assertEquals(a, b, 1E-14);

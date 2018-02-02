@@ -82,13 +82,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     double numer = sum(j -> γ(j, 2), 0, order() - 1);
     double denom = (product(this::β, 0, order() - 1)) * sum(k -> γ(k, 1), 0, order() - 1) * Z();
     double ratio = numer / denom;
-//    out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
-//               numer,
-//               denom,
-//               ratio,
-//               order(),
-//               Arrays.toString(beta.toDoubleArray()),
-//               Arrays.toString(gamma.toDoubleArray()));
+    // out.format("meanRecurrenceTime(univar) numerator=%20.20f denominator=%20.20f
+    // ratio=%20.20f order=%d\nbeta=%s\ngamma=%s\n",
+    // numer,
+    // denom,
+    // ratio,
+    // order(),
+    // Arrays.toString(beta.toDoubleArray()),
+    // Arrays.toString(gamma.toDoubleArray()));
     return ratio;
   }
 
@@ -379,7 +380,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     {
       double α = α(j);
       double β = β(j);
-      Λ += (α / β) * (1 - exp(-β * dt)) * A(tk, j);
+      Λ += (α / β) * (1 - exp(-β * dt)) * A(j, tk);
     }
     if (trace)
     {
@@ -602,7 +603,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   public double
          Λ(int i)
   {
-    return sum(j -> (α(j) / β(j)) * (1 - (exp(-β(j) * (T.get(i + 1) - T.get(i))))) * A(i, j), 0, order() - 1) / Z();
+    return sum(j -> (α(j) / β(j)) * (1 - (exp(-β(j) * (T.get(i + 1) - T.get(i))))) * A(j, i), 0, order() - 1) / Z();
   }
 
   /**
@@ -617,7 +618,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          Λ(int i,
            double dt)
   {
-    return sum(j -> (α(j) / β(j)) * (1 - (exp(-β(j) * dt))) * A(i, j), 0, order() - 1) / Z();
+    return sum(j -> (α(j) / β(j)) * (1 - (exp(-β(j) * dt))) * A(j, i), 0, order() - 1) / Z();
   }
 
   Vector dT;
@@ -801,7 +802,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
            double y,
            int tk)
   {
-    return sum(j -> γ(j) * A(tk, j) * (exp(-dt * β(j)) - 1), 0, order() - 1) + y * βproduct() * Z();
+    return sum(j -> γ(j) * A(j, tk) * (exp(-dt * β(j)) - 1), 0, order() - 1) + y * βproduct() * Z();
   }
 
   public double
@@ -815,7 +816,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          φdt(double dt,
              int tk)
   {
-    return sum(j -> γ(j) * A(tk, j) * β(j) * exp(-(dt) * β(j)), 0, order() - 1);
+    return sum(j -> γ(j) * A(j, tk) * β(j) * exp(-(dt) * β(j)), 0, order() - 1);
   }
 
   /**
@@ -874,7 +875,6 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
   double A[][];
 
-  private double[][] B;
 
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}
@@ -915,8 +915,8 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
   }
 
   public double
-         A(int tk,
-           int j)
+         A(int j,
+           int tk)
   {
     if (tk < 0)
     {
@@ -934,7 +934,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     double val = A[tk][j];
     if (val == 0)
     {
-      val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A[tk - 1][j]);
+      val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A(j,tk-1));
       assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
       A[tk][j] = val;
     }
@@ -961,7 +961,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
          B(int tk,
            int j)
   {
-    return A(tk, j) - 1;
+    return A(j, tk) - 1;
   }
 
   protected final double

@@ -16,7 +16,9 @@ import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
+import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import util.Plotter;
 
@@ -232,39 +234,6 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   }
 
   public void
-         testInvLambda()
-  {
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = constructLongerProcess();
-    // process.ε = 0.05;
-
-    // process.T = process.T.subtract(process.T.get(0));
-    process.trace = false;
-
-    // process.printResults( process.estimateParameters(25) );
-
-    // out.println( " Λ=" + process.Λ() );
-    // for (int tk = 0; tk < 10; tk++)
-    // {
-    // out.println("A[" + tk + "]=" + Arrays.toString(process.A[tk]));
-    // }
-    out.println("estimated " + ansi().fgBrightYellow() + process + ansi().fgDefault() + " from " + process.T.size() + " points");
-    out.println(process.getαβString());
-    process.trace = false;
-    for (int k = 0; k < process.dim(); k++)
-    {
-      double Λmean = process.Λ(k).mean();
-      process.trace = false;
-      double Λvar = process.Λ(k).variance();
-      out.println("k=" + k + " Λmean=" + ansi().fgBrightRed() + Λmean + ansi().fgDefault() + " Λvar=" + ansi().fgBrightRed() + Λvar + ansi().fgDefault());
-    }
-
-    out.println(ansi().fgBrightGreen() + process.T.toString() + ansi().fgDefault());
-    process.dT = null;
-    out.println(ansi().fgBrightGreen() + process.dT().toString() + ansi().fgDefault());
-
-  }
-
-  public void
          testLikelihood()
   {
     ExponentialMutuallyExcitingProcess process = constructLongerProcess();
@@ -359,20 +328,94 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
   }
 
-  public void
-         testφ() throws InterruptedException
+  public void testAlphaBetaAndGamma()
   {
-    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
-    out.println("params = " + process.getαβString());
-    display( Plotter.chart("a", "b", t -> process.φ(0, t, 1, process.N(0) - 1), 0, 500, t -> t) );
-    double x =2;
-    while(!Double.isNaN(x))
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    mprocess.assignParameters(process.getParameters().toDoubleArray());
+    for ( int j = 0; j < process.M; j++ )
     {
-      Thread.sleep(1000);
+      assertEquals( process.α(j), mprocess.α(j, 0, 0));
+      assertEquals( process.β(j), mprocess.β(j, 0, 0));
+      assertEquals( process.γ(j), mprocess.γ(j, 0, 0));
     }
+  }
+  
+  public void
+         testinvΛ() throws InterruptedException
+  {
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    process.T = new Vector(3);
+    process.T.set(0, 0);
+    process.T.set(1, 19);
+    process.T.set(2, 27);
+    mprocess.K = new IntVector(process.T.size());
+    mprocess.T = process.T;
+    process.τ = 1;
+    process.ε = 0;
+    process.η = 3;
+    process.b = 1.75;
+    mprocess.assignParameters(process.getParameters().toDoubleArray());
+
+    out.println(process + " " + process.meanRecurrenceTime() + " LL " + process.logLik());
+    out.println(mprocess + " " + mprocess.meanRecurrenceTime(0) + " LL " + process.logLik());
+    // ExponentialMutuallyExcitingProcess process = constructLongerProcess();
+
+    process.trace = true;
+    double hmm = process.φ(34, 1.9);
+    out.println("HOGWASH");
+    mprocess.trace = true;
+
+    int tk = process.T.size() - 1;
+    double alsoHmm = mprocess.φ(0, 34, 1.9, tk);
+
+    out.println(hmm + " = " + alsoHmm);
+    assertEquals(hmm, alsoHmm, pow(10, -13));
+
+    double woo = process.φdt(34);
+    out.println("HOGWASH");
+    mprocess.trace = true;
+
+    double waa = mprocess.φdt(0, 34);
+    out.println(woo + " = " + waa);
+
+    assertEquals(woo, waa, pow(10, -13));
+
+
+    double dumb = process.invΛ(1.9);
+    double cunt = mprocess.invΛ(0, 1.9);
+    //assertEquals(cunt, dumb, pow(10, -13));
+
+    double nice = process.βproduct();
+    double tits = mprocess.βproduct(0, 0);
+    out.println( "nice=" + nice + " should equal tits=" + tits );
     
-    assertTrue(Double.isFinite(x));
-    out.println("x=" + x);
+    out.println( "tk=" + tk );
+    double cute = process.A(0, tk );
+    double chick = mprocess.A(0, 0,0,tk );
+    out.println( "cute=" + cute + " chick=" + chick );
+    
+    double ass = process.φ(34, 1.9);
+    double hat = mprocess.φ(0, 34, 1.9);
+    out.println( "ass=" + ass + " should equal hat=" + hat );
+    //assertEquals(ass, hat, pow(10, -13));
+
+    
+    //double hmm = process.φδ(27, 1.2);
+     out.println( "hmm=" + hmm );
+     hmm = process.φδ(37, 1.2);
+     out.println( "hmm=" + hmm );
+     out.println("params = " + process.getαβString());
+//     display( Plotter.chart("a", "b", t -> process.φδ(2.2, t), -1,1, t -> t) );
+//     double x =2;
+//     while(!Double.isNaN(x))
+//     {
+//     Thread.sleep(1000);
+//     }
+//    
+//     assertTrue(Double.isFinite(x));
+//     out.println("x=" + x);
   }
 
 }

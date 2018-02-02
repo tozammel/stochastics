@@ -1385,6 +1385,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public double
          φ(int m,
            double dt,
+           double y)
+  {
+    return φ(m, dt, y, T.size() - 1);
+  }
+
+  public double
+         φ(int m,
+           double dt,
            double y,
            int tk)
   {
@@ -1404,6 +1412,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int l)
   {
     return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> n == i && j == l ? α(m, n, j) : β(m, n, j), 0, dim() - 1), 0, order() - 1);
+  }
+
+  public double
+         φdt(int m,
+             double dt)
+  {
+    return φdt(m, dt, T.size() - 1);
   }
 
   public double
