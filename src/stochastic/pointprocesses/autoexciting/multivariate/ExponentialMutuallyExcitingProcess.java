@@ -1259,10 +1259,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int i,
            double dt)
   {
-    /**
-     * FIXME: sum over n ?
-     */
-    return sum(j -> (α(j, m, m) / β(j, m, m)) * (1 - (exp(-β(j, m, m) * dt))) * A(j, m, m, i), 0, order() - 1) / Z(m, m);
+  
+    return sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - (exp(-β(j, m, n) * dt))) * A(j, m, n, i), 0, order() - 1) / Z(m, n), 0, dim() - 1);
   }
 
   public Vector

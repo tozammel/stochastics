@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static fastmath.Functions.seq;
 import static fastmath.Functions.sum;
 import static java.lang.Math.pow;
 import static java.lang.Math.random;
@@ -9,6 +10,7 @@ import static util.Plotter.display;
 
 import java.util.Arrays;
 import java.util.TreeMap;
+import java.util.function.IntToDoubleFunction;
 
 import org.apache.commons.math3.optim.PointValuePair;
 
@@ -328,19 +330,20 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
   }
 
-  public void testAlphaBetaAndGamma()
+  public void
+         testAlphaBetaAndGamma()
   {
     DiagonalExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
     mprocess.assignParameters(process.getParameters().toDoubleArray());
-    for ( int j = 0; j < process.M; j++ )
+    for (int j = 0; j < process.M; j++)
     {
-      assertEquals( process.α(j), mprocess.α(j, 0, 0));
-      assertEquals( process.β(j), mprocess.β(j, 0, 0));
-      assertEquals( process.γ(j), mprocess.γ(j, 0, 0));
+      assertEquals(process.α(j), mprocess.α(j, 0, 0));
+      assertEquals(process.β(j), mprocess.β(j, 0, 0));
+      assertEquals(process.γ(j), mprocess.γ(j, 0, 0));
     }
   }
-  
+
   public void
          testinvΛ() throws InterruptedException
   {
@@ -382,40 +385,39 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     assertEquals(woo, waa, pow(10, -13));
 
-
     double dumb = process.invΛ(1.9);
     double cunt = mprocess.invΛ(0, 1.9);
-    //assertEquals(cunt, dumb, pow(10, -13));
+    // assertEquals(cunt, dumb, pow(10, -13));
 
     double nice = process.βproduct();
     double tits = mprocess.βproduct(0, 0);
-    out.println( "nice=" + nice + " should equal tits=" + tits );
-    
-    out.println( "tk=" + tk );
-    double cute = process.A(0, tk );
-    double chick = mprocess.A(0, 0,0,tk );
-    out.println( "cute=" + cute + " chick=" + chick );
-    
+    out.println("nice=" + nice + " should equal tits=" + tits);
+
+    out.println("tk=" + tk);
+    Vector cute = new Vector(seq((IntToDoubleFunction) n -> process.A(0, n), 0, process.T.size() - 1));
+
+    Vector chick = new Vector(seq((IntToDoubleFunction) n -> mprocess.A(0, 0, 0, n), 0, process.T.size() - 1));
+    out.println("Auni=" + cute + " Amulti=" + chick);
+
     double ass = process.φ(34, 1.9);
     double hat = mprocess.φ(0, 34, 1.9);
-    out.println( "ass=" + ass + " should equal hat=" + hat );
-    //assertEquals(ass, hat, pow(10, -13));
+    out.println("ass=" + ass + " should equal hat=" + hat);
+    // assertEquals(ass, hat, pow(10, -13));
 
-    
-    //double hmm = process.φδ(27, 1.2);
-     out.println( "hmm=" + hmm );
-     hmm = process.φδ(37, 1.2);
-     out.println( "hmm=" + hmm );
-     out.println("params = " + process.getαβString());
-//     display( Plotter.chart("a", "b", t -> process.φδ(2.2, t), -1,1, t -> t) );
-//     double x =2;
-//     while(!Double.isNaN(x))
-//     {
-//     Thread.sleep(1000);
-//     }
-//    
-//     assertTrue(Double.isFinite(x));
-//     out.println("x=" + x);
+    // double hmm = process.φδ(27, 1.2);
+    out.println("hmm=" + hmm);
+    hmm = process.φδ(37, 1.2);
+    out.println("hmm=" + hmm);
+    out.println("params = " + process.getαβString());
+    // display( Plotter.chart("a", "b", t -> process.φδ(2.2, t), -1,1, t -> t) );
+    // double x =2;
+    // while(!Double.isNaN(x))
+    // {
+    // Thread.sleep(1000);
+    // }
+    //
+    // assertTrue(Double.isFinite(x));
+    // out.println("x=" + x);
   }
 
 }
