@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.function.IntToDoubleFunction;
 
 import org.apache.commons.math3.optim.PointValuePair;
+import org.knowm.xchart.XYChart;
 
 import fastmath.IntVector;
 import fastmath.Pair;
@@ -396,6 +397,11 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     assertEquals(woo, waa, pow(10, -13));
 
+    double yay = process.φδ(27, 1.7);
+    double woop = mprocess.φδ(0, 27, 1.7);
+    assertEquals( yay, woop );
+    out.println( "yay=" + yay + " should equal woop=" + woop );
+    
     double invuni = process.invΛ(1);
     double invmulti = mprocess.invΛ(0, 1);
     out.println("inv uni " + invuni);
@@ -414,15 +420,22 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
     // hmm = process.φδ(37, 1.2);
     // out.println("hmm=" + hmm);
     out.println("params = " + process.getαβString());
-    // display( Plotter.chart("a", "b", t -> process.φδ(2.2, t), -1,1, t -> t) );
-    // double x =2;
-    // while(!Double.isNaN(x))
-    // {
-    // Thread.sleep(1000);
-    // }
-    //
-    // assertTrue(Double.isFinite(x));
-    // out.println("x=" + x);
+    XYChart chart = Plotter.chart("a", "φδ(t, y=1)", t -> process.φδ(t, 1), -30,550, t -> t);
+    Pair<double[], double[]> sample = Plotter.sampleFunction(t->process.φδ(t, 0.5 ), 1000, -30, 550, t->t);
+    chart.addSeries("φδ(t, y=0.5)", sample.left, sample.right );
+    sample = Plotter.sampleFunction(t->process.φδ(t, 0.75 ), 1000, -30, 550, t->t);
+    chart.addSeries("φδ(t, y=0.75)", sample.left, sample.right );
+    sample = Plotter.sampleFunction(t->process.φδ(t, 1.25 ), 1000, -30, 550, t->t);
+    chart.addSeries("φδ(t, y=1.25)", sample.left, sample.right );
+    display(chart);
+    double x = 2;
+    while (!Double.isNaN(x))
+    {
+      Thread.sleep(1000);
+    }
+
+    assertTrue(Double.isFinite(x));
+    out.println("x=" + x);
   }
 
 }
