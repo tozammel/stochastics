@@ -114,7 +114,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
             double a = process.Asum(j, m, n, tk);
             double b = process.AsumToo(j, m, n, tk);
             double c = process.A(j, m, n, tk);
-            out.format("m=%d n=%d tk=%d j=%d Asum=%f AsumToo A=%f\n", m, n, tk, j, a, b, c);
+            out.format("m=%d n=%d tk=%d j=%d Asum=%f AsumToo=%f A=%f\n", m, n, tk, j, a, b, c);
             out.flush();
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Asum=%s != A=%s", j, m, n, tk, a, b), a, b, 1E-8);
             assertEquals(String.format("j=%s m=%s n=%s tk=%s Asum=%s != A=%s", j, m, n, tk, a, b), a, c, 1E-8);
@@ -365,10 +365,10 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
     out.println(mprocess + " " + mprocess.meanRecurrenceTime(0) + " LL " + process.logLik());
     // ExponentialMutuallyExcitingProcess process = constructLongerProcess();
 
-//    process.trace = true;
-//    double hmm = process.φ(34, 1.9);
-//    out.println("HOGWASH");
-//    mprocess.trace = true;
+    process.trace = true;
+    // double hmm = process.φ(34, 1.9);
+    // out.println("HOGWASH");
+    mprocess.trace = true;
 
     Vector uvec = process.φvec(12, 1.9, process.T.size() - 1);
     Vector mvec = mprocess.φvec(0, 12, 1.9, process.T.size() - 1);
@@ -376,46 +376,44 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
     out.println("uvec=" + Arrays.toString(uvec.toDoubleArray()));
     out.println("mvec=" + Arrays.toString(mvec.toDoubleArray()));
 
-//    int tk = process.T.size() - 1;
-//    double alsoHmm = mprocess.φ(0, 34, 1.9, tk);
-//
-//    out.println("hmm=" + hmm + " = alsoHmm = " + alsoHmm);
-//    assertEquals(hmm, alsoHmm, pow(10, -13));
-//
-//    double woo = process.φdt(34);
-//    out.println("HOGWASH");
-//    mprocess.trace = true;
-//
-//    double waa = mprocess.φdt(0, 34);
-//    out.println("woo=" + woo + " = waa=" + waa);
-//
-//    assertEquals(woo, waa, pow(10, -13));
-//
-//    double dumb = process.invΛ(1.9);
-//    double cunt = mprocess.invΛ(0, 1.9);
-//
-//    double nice = process.βproduct();
-//    double tits = mprocess.βproduct(0, 0);
-//    out.println("nice=" + nice + " should equal tits=" + tits);
-//
-//    out.println("tk=" + tk);
-//    Vector cute = new Vector(seq((IntToDoubleFunction) n -> process.A(0, n), 0, process.T.size() - 1));
-//
-//    Vector chick = new Vector(seq((IntToDoubleFunction) n -> mprocess.A(0, 0, 0, n), 0, process.T.size() - 1));
-//    out.println("Auni=" + cute + " Amulti=" + chick);
-//
-//    assertEquals(cunt, dumb, pow(10, -13));
-//
-//    double ass = process.φ(34, 1.9);
-//    double hat = mprocess.φ(0, 34, 1.9);
-//    out.println("ass=" + ass + " should equal hat=" + hat);
-//    // assertEquals(ass, hat, pow(10, -13));
-//
-//    // double hmm = process.φδ(27, 1.2);
-//    out.println("hmm=" + hmm);
-//    hmm = process.φδ(37, 1.2);
-//    out.println("hmm=" + hmm);
-//    out.println("params = " + process.getαβString());
+    int tk = process.T.size() - 1;
+    double alsoHmm = mprocess.φ(0, 34, 1.9, tk);
+
+    // out.println("hmm=" + hmm + " = alsoHmm = " + alsoHmm);
+    // assertEquals(hmm, alsoHmm, pow(10, -13));
+
+    double woo = process.φdt(34);
+    out.println("HOGWASH");
+    mprocess.trace = true;
+
+    double ass = process.φ(34, 1.9);
+    double hat = mprocess.φ(0, 34, 1.9);
+    out.println("ass=" + ass + " should equal hat=" + hat);
+    assertEquals(ass, hat, pow(10, -13));
+
+    double waa = mprocess.φdt(0, 34);
+    out.println("woo=" + woo + " = waa=" + waa);
+
+    assertEquals(woo, waa, pow(10, -13));
+
+    double invuni = process.invΛ(1);
+    double invmulti = mprocess.invΛ(0, 1);
+    out.println("inv uni " + invuni);
+    out.println("inv multi " + invmulti);
+
+    out.println("tk=" + tk);
+    Vector cute = new Vector(seq((IntToDoubleFunction) n -> process.A(0, n), 0, process.T.size() - 1));
+
+    Vector chick = new Vector(seq((IntToDoubleFunction) n -> mprocess.A(0, 0, 0, n), 0, process.T.size() - 1));
+    out.println("Auni=" + cute + " Amulti=" + chick);
+
+    assertEquals(invmulti, invuni, pow(10, -13));
+
+    // // double hmm = process.φδ(27, 1.2);
+    // out.println("hmm=" + hmm);
+    // hmm = process.φδ(37, 1.2);
+    // out.println("hmm=" + hmm);
+    out.println("params = " + process.getαβString());
     // display( Plotter.chart("a", "b", t -> process.φδ(2.2, t), -1,1, t -> t) );
     // double x =2;
     // while(!Double.isNaN(x))
