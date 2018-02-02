@@ -1259,7 +1259,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            int i,
            double dt)
   {
-  
+
     return sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - (exp(-β(j, m, n) * dt))) * A(j, m, n, i), 0, order() - 1) / Z(m, n), 0, dim() - 1);
   }
 
@@ -1388,6 +1388,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return φ(m, dt, y, T.size() - 1);
   }
 
+  public Vector
+         φvec(int m,
+              double dt,
+              double y,
+              int tk)
+  {
+    return new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m) * ( 1 + A(j, m, m, tk) ) * (exp(-dt * β(j, m, m)) - 1), 0, order() - 1));
+  }
+
   public double
          φ(int m,
            double dt,
@@ -1405,14 +1414,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public double
-         Φ(int m,
-           int i,
-           int l)
-  {
-    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> n == i && j == l ? α(m, n, j) : β(m, n, j), 0, dim() - 1), 0, order() - 1);
-  }
-
-  public double
          φdt(int m,
              double dt)
   {
@@ -1424,7 +1425,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
              double dt,
              int tk)
   {
-    return sum(n -> sum(j -> γ(j, m, n) * A(j, m, n, tk) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
   }
 
   @Override

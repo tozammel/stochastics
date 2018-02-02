@@ -797,6 +797,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     return φ(dt, y, tk);
   }
 
+  public Vector
+         φvec(double dt,
+              double y,
+              int tk)
+  {
+    return new Vector(seq((IntToDoubleFunction) j -> γ(j) * A(j, tk) * (exp(-dt * β(j)) - 1), 0, order() - 1));
+  }
+
   public double
          φ(double dt,
            double y,
@@ -875,7 +883,6 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
 
   double A[][];
 
-
   /**
    * @return an array whose elements correspond to this{@link #statisticNames}
    */
@@ -934,7 +941,7 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     double val = A[tk][j];
     if (val == 0)
     {
-      val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A(j,tk-1));
+      val = 1 + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A(j, tk - 1));
       assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
       A[tk][j] = val;
     }
