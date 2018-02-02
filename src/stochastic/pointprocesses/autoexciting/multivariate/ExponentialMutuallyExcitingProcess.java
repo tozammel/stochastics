@@ -1388,9 +1388,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            double y,
            int tk)
   {
-    double τ = τ(m, dt, y);
-    out.println("τ=" + τ);
-    return τ + sum(l -> sum(i -> Φ(m, i, l) * sum(k -> σ(m, i, l, k, dt, dt) - σ(m, i, l, k, dt, lastT(m)), 0, tk), 0, dim() - 1), 0, order() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * A(j, m, n, tk) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
+  }
+
+  public double
+         βproduct(int m,
+                  int n)
+  {
+    return product(k -> β(k, m, n), 0, order() - 1);
   }
 
   public double
@@ -1403,10 +1408,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   public double
          φdt(int m,
-             double t,
+             double dt,
              int tk)
   {
-    throw new UnsupportedOperationException("TODO");
+    return sum(n -> sum(j -> γ(j, m, n) * A(j, m, n, tk) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
   }
 
   @Override
@@ -1416,7 +1421,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             double y)
   {
     int tk = T.size() - 1;
-    throw new UnsupportedOperationException("TODO");
+    return φ(m, t, y, tk) / φdt(m, t, tk);
   }
 
   @Override

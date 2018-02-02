@@ -5,6 +5,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
+import static util.Plotter.display;
 
 import java.util.Arrays;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
+import util.Plotter;
 
 public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest extends TestCase
 {
@@ -24,7 +26,8 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testMeanRecurrenceTime()
   {
-    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
+    DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process =
+                                                                        ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
     process.τ.assign(0.4663536036, 0.4343345865);
     process.ε.assign(0, 0);
     process.η.assign(2.6985900988, 2.4276896668);
@@ -39,17 +42,17 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     double z2 = process.Z(0, 0);
     double z = univarProcess.Z();
-    
-    for ( int i = 0; i < process.order(); i++ )
+
+    for (int i = 0; i < process.order(); i++)
     {
       double alpham = process.α(i, 0, 0);
       double alphau = univarProcess.α(i);
       double betam = process.β(i, 0, 0);
       double betau = univarProcess.β(i);
-      out.println( i + " multi alpha=" + alpham + " uni alpha=" + alphau + " multi beta=" + betam + " uni beta= "+ betau );
+      out.println(i + " multi alpha=" + alpham + " uni alpha=" + alphau + " multi beta=" + betam + " uni beta= " + betau);
     }
-    out.println( "univar params: " + univarProcess.getαβString() );
-    out.println( "multivar params: " + process.getαβString() );
+    out.println("univar params: " + univarProcess.getαβString());
+    out.println("multivar params: " + process.getαβString());
     out.println("meanRecurrenceTime=" + univarProcess.meanRecurrenceTime());
     univarProcess.printResults(new PointValuePair[]
     { new PointValuePair(univarProcess.getParameters().toDoubleArray(), 100) });
@@ -357,11 +360,17 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   }
 
   public void
-         testΦ()
+         testφ() throws InterruptedException
   {
     ExponentialMutuallyExcitingProcess process = constructLongerProcess();
     out.println("params = " + process.getαβString());
-    double x = process.φ(0, 0.25, 1, process.N(0) - 1);
+    display( Plotter.chart("a", "b", t -> process.φ(0, t, 1, process.N(0) - 1), 0, 500, t -> t) );
+    double x =2;
+    while(!Double.isNaN(x))
+    {
+      Thread.sleep(1000);
+    }
+    
     assertTrue(Double.isFinite(x));
     out.println("x=" + x);
   }
