@@ -16,11 +16,11 @@ public interface SelfExcitingProcess
   double getStationaryλ();
 
   public double
-         Φδ(double t,
+         φδ(double t,
             double y);
 
   public double
-         Φδ(double t,
+         φδ(double t,
             double y,
             int tk);
 
