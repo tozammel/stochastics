@@ -51,7 +51,7 @@ public class MututallyExcitingProcessSimulator
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
       DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process =
                                                                           ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
-      process.τ.assign(10.0843321348, 8.4890790143);
+      process.τ.assign(1, 1);
       process.ε.assign(0, 0);
       process.η.assign(2.8483343724, 2.5714437398);
       process.b.assign(3.4935467810, 2.9798206550);
@@ -125,7 +125,7 @@ public class MututallyExcitingProcessSimulator
         process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
-        double q = process.Λ(0, n - 1, dt);
+        double q = process.Λ(m, n - 1, dt);
         nextTime = (process.T.getRightmostValue() + dt);
         double marginalΛ = process.invΛ(m, 0, 1);
         // out.println("marginalΛ=" + marginalΛ);
@@ -140,6 +140,8 @@ public class MututallyExcitingProcessSimulator
         if (i % 1000 == 0)
         {
           String msg = "seed=" + seed
+                       + " m="
+                       + m
                        + " i="
                        + i
                        + " y="
@@ -151,9 +153,9 @@ public class MututallyExcitingProcessSimulator
                        + " marginal="
                        + marginalΛ
                        + " Λmean="
-                       + process.Λ(0).mean()
+                       + process.Λ(m).mean()
                        + " Λvar="
-                       + process.Λ(0).variance()
+                       + process.Λ(m).variance()
                        + " nextTime="
                        + nextTime
                        + " Edt="
