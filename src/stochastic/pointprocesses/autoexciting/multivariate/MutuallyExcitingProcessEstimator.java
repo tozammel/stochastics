@@ -54,7 +54,8 @@ public class MutuallyExcitingProcessEstimator
          main(String[] args) throws IOException,
                              CloneNotSupportedException
   {
-    Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
+    Type type = Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw;
+    //Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
     //Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 

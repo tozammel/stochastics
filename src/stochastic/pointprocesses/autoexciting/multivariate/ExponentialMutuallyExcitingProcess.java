@@ -60,6 +60,7 @@ import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import stochastic.pointprocesses.selfexciting.ExponentialSelfExcitingProcess;
@@ -103,6 +104,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     else if (type == Type.MultivariateFullExtendedApproximatePowerlaw)
     {
       ExponentialMutuallyExcitingProcess process = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
+      process.T = filtration.times;
+      process.K = filtration.types;
+      process.X = filtration.markedPoints;
+      return process;
+    }
+    else if (type == Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw)
+    {
+      ExponentialMutuallyExcitingProcess process = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
       process.T = filtration.times;
       process.K = filtration.types;
       process.X = filtration.markedPoints;
@@ -160,7 +169,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double Tmi1 = T(m, i - 1);
 
       double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
-      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j,m,n,i - 1) );
+      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j, m, n, i - 1));
       A[j][m][n][i] = val;
     }
     return val;
@@ -1394,7 +1403,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
               double y,
               int tk)
   {
-    return new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m) * ( Asum(j, m, m, tk) ) * (exp(-dt * β(j, m, m)) - 1), 0, order() - 1));
+    return new Vector(seq((IntToDoubleFunction) j -> γ(j, m, m) * (Asum(j, m, m, tk)) * (exp(-dt * β(j, m, m)) - 1), 0, order() - 1));
   }
 
   public double
@@ -1403,7 +1412,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            double y,
            int tk)
   {
-    return sum(n -> sum(j -> γ(j, m, n) * ( 1 + A(j, m, n, tk) ) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
   }
 
   public double
