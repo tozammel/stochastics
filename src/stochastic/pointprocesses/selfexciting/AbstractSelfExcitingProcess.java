@@ -1,4 +1,4 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.selfexciting;
 
 import static fastmath.Functions.seq;
 import static java.lang.Math.sqrt;
@@ -29,7 +29,7 @@ import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 public abstract class AbstractSelfExcitingProcess implements MultivariateFunction, SelfExcitingProcess
 {
 
-  public abstract AutoExcitingProcessFactory.Type
+  public abstract Type
          getType();
 
   public Vector T;

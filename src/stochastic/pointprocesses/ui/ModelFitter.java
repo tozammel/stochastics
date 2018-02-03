@@ -27,10 +27,10 @@ import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingStrategy;
+import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 import util.DateUtils;
 import util.Plotter;
 

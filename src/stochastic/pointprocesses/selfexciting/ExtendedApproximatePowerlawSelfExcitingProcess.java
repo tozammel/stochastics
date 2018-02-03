@@ -1,4 +1,4 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.selfexciting;
 
 import static java.lang.Math.abs;
 import static java.lang.System.currentTimeMillis;
@@ -14,7 +14,6 @@ import org.apache.commons.math3.random.JDKRandomGenerator;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import junit.framework.TestCase;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
 public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximatePowerlawSelfExcitingProcess implements MultivariateFunction, Serializable
 {

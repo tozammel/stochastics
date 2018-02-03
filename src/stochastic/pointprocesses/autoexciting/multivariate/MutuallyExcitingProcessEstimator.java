@@ -24,11 +24,11 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.Type;
 import util.DateUtils;
 import util.TerseThreadFactory;
 

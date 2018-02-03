@@ -58,12 +58,12 @@ import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.ExponentialSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 import util.DateUtils;
 
 public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitingProcess
@@ -85,14 +85,14 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return
    */
   public static ExponentialMutuallyExcitingProcess
-         spawnNewProcess(AutoExcitingProcessFactory.Type type,
+         spawnNewProcess(Type type,
                          TradingFiltration filtration)
   {
     assert filtration.times != null : "tradingProcess.times is null";
     assert filtration.types != null : "tradingProcess.types is null";
     assert filtration.markedPoints != null : "tradingProcess.markedPoints is null";
 
-    if (type == AutoExcitingProcessFactory.Type.MultivariateDiagonalExtendedApproximatePowerlaw)
+    if (type == Type.MultivariateDiagonalExtendedApproximatePowerlaw)
     {
       ExponentialMutuallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
       process.T = filtration.times;
@@ -100,7 +100,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       process.X = filtration.markedPoints;
       return process;
     }
-    else if (type == AutoExcitingProcessFactory.Type.MultivariateFullExtendedApproximatePowerlaw)
+    else if (type == Type.MultivariateFullExtendedApproximatePowerlaw)
     {
       ExponentialMutuallyExcitingProcess process = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
       process.T = filtration.times;

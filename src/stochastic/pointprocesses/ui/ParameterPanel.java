@@ -22,8 +22,8 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import util.SpringLayoutUtils;
 
 public class ParameterPanel extends JPanel

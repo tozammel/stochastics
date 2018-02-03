@@ -1,11 +1,9 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.selfexciting;
 
 import static fastmath.Functions.sum;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
-
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 
 public class ApproximatePowerlawSelfExcitingProcess extends ExponentialSelfExcitingProcess
 {

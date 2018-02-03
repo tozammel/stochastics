@@ -13,7 +13,7 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Pair;
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
 import util.Plotter;
 import util.RelativeLayout;
 

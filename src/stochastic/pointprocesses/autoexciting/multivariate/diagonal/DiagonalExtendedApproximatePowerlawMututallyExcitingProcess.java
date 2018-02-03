@@ -11,10 +11,10 @@ import static org.apache.commons.lang.ArrayUtils.addAll;
 import java.util.concurrent.atomic.DoubleAdder;
 
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 
 /**
  * a multivariate version of

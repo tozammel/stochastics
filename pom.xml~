@@ -3,84 +3,24 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sc</groupId>
 	<artifactId>stochastics</artifactId>
+	<version>7.0</version>
 	<properties>
 		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 		<mdep.outputFile>class.path</mdep.outputFile>
-		<maven.compiler.source>1.9</maven.compiler.source>
-		<maven.compiler.target>1.9</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-	<version>7.0</version>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<configuration>
-						<failOnError>false</failOnError>
-						<additionalparam>-Xdoclint:none</additionalparam>
-						<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-						<destDir>docs</destDir>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.7.0</version>
-					<configuration>
-						<source>1.9</source>
-						<target>1.9</target>
-					</configuration>
-				</plugin>
-
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.4.0</version>
-					<configuration>
-						<executable>echo</executable>
-						<arguments>
-							<classpath />
-						</arguments>
-					</configuration>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.9</version>
-					<executions>
-						<execution>
-							<id>build-classpath</id>
-							<phase>package</phase>
-							<goals>
-								<goal>build-classpath</goal>
-							</goals>
-							<configuration>
-								<outputFile>class.path</outputFile>
-								<outputAbsoluteArtifactFilename>true</outputAbsoluteArtifactFilename>								
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>native</directory>
-			</resource>
-		</resources>
 		<plugins>
-
+ <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.3</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -91,8 +31,17 @@
 					<testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
 				</configuration>
 			</plugin>
-
 		</plugins>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 
 	</build>
 
@@ -106,13 +55,9 @@
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>fastmath</artifactId>
-			<version>7.1</version>
+			<version>7.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org</groupId>
-			<artifactId>arblib</artifactId>
-			<version>0.3</version>
-		</dependency>
+
 
 		<dependency>
 			<artifactId>junit</artifactId>
@@ -123,11 +68,22 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
 			<version>3.6</version>
+			
 		</dependency>
+		 <dependency>
+		         <groupId>org.eclipse.swt</groupId>
+			         <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+				         <version>4.4</version>
+					     </dependency>
 	</dependencies>
 
 
 	<repositories>
+               <repository>
+                  <id>swt-repo</id>
+	            <url>https://raw.githubusercontent.com/maven-eclipse/swt-repo/master/</url>
+		        </repository>
+			</repositories>
 		<repository>
 			<url>https://github.com/eugener/oxbow/raw/master/maven/repository</url>
 			<id>oxbowrepo</id>

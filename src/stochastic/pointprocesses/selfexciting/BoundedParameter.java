@@ -1,4 +1,4 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.selfexciting;
 
 public interface BoundedParameter
 {

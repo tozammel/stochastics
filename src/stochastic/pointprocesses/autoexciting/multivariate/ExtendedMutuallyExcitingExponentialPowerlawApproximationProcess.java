@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.DoubleAdder;
 
 import fastmath.DoubleColMatrix;
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 
 public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess extends ExponentialMutuallyExcitingProcess
 {

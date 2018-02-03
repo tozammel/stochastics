@@ -23,8 +23,8 @@ import dnl.utils.text.table.TextTable;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.Type;
 
 public abstract class AbstractMutuallyExcitingProcess implements MultivariateFunction
 {

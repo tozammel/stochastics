@@ -11,8 +11,8 @@ import java.lang.reflect.Field;
 import org.apache.commons.math3.optim.SimpleBounds;
 
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
 
 public abstract class DiagonalExponentialMutuallyExcitingProcess extends ExponentialMutuallyExcitingProcess
 {

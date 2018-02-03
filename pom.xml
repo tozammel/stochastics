@@ -68,11 +68,21 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
 			<version>3.6</version>
+			
 		</dependency>
+		 <dependency>
+		         <groupId>org.eclipse.swt</groupId>
+			         <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+				         <version>4.4</version>
+					     </dependency>
 	</dependencies>
 
 
 	<repositories>
+               <repository>
+                  <id>swt-repo</id>
+	            <url>https://raw.githubusercontent.com/maven-eclipse/swt-repo/master/</url>
+	        </repository>
 		<repository>
 			<url>https://github.com/eugener/oxbow/raw/master/maven/repository</url>
 			<id>oxbowrepo</id>

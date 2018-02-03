@@ -19,10 +19,10 @@ import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
-import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExponentialSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 import util.Plotter;
 
 public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest extends TestCase

@@ -7,9 +7,9 @@ import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
 import junit.framework.TestCase;
-import stochastic.pointprocesses.autoexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {

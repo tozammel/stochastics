@@ -45,13 +45,12 @@ import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
-import stochastic.pointprocesses.autoexciting.AbstractSelfExcitingProcess;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
-import stochastic.pointprocesses.autoexciting.BoundedParameter;
-import stochastic.pointprocesses.autoexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
+import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.BoundedParameter;
+import stochastic.pointprocesses.selfexciting.ExponentialSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 import util.Plotter;
 
 public class ProcessModeller
@@ -93,7 +92,7 @@ public class ProcessModeller
   }
 
   private JFrame frame;
-  private JComboBox<AutoExcitingProcessFactory.Type> processTypeComboBox;
+  private JComboBox<Type> processTypeComboBox;
   private ParameterPanel parameterPanel;
   private ExponentialSelfExcitingProcess process;
   private Container contentPane;
@@ -164,7 +163,7 @@ public class ProcessModeller
 
     JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
 
-    Type[] processTypes = AutoExcitingProcessFactory.Type.values();
+    Type[] processTypes = Type.values();
     processTypeComboBox = new JComboBox<>(processTypes);
     processTypeComboBox.addActionListener(this::refreshTypeComboBox);
 
@@ -450,7 +449,7 @@ public class ProcessModeller
   public Type
          getSelectedType()
   {
-    return AutoExcitingProcessFactory.Type.values()[processTypeComboBox.getSelectedIndex()];
+    return Type.values()[processTypeComboBox.getSelectedIndex()];
   }
 
   String[] tableColumnNames = new String[]

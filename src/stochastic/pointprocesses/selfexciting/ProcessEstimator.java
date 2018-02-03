@@ -1,4 +1,4 @@
-package stochastic.pointprocesses.autoexciting;
+package stochastic.pointprocesses.selfexciting;
 
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
@@ -20,7 +20,6 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
-import stochastic.pointprocesses.autoexciting.AutoExcitingProcessFactory.Type;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
@@ -51,7 +50,7 @@ public class ProcessEstimator
                              CloneNotSupportedException
   {
 
-    AutoExcitingProcessFactory.Type type = Type.ExtendedApproximatePowerlaw;
+    Type type = Type.ExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
     int cpuMultiplier = 2;
 
@@ -79,7 +78,7 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(Type type,
                                      String filename,
                                      String symbol) throws IOException
 
@@ -88,7 +87,7 @@ public class ProcessEstimator
   }
 
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(Type type,
                                      String filename,
                                      int trajectoryCount,
                                      String symbol) throws IOException
@@ -115,7 +114,7 @@ public class ProcessEstimator
    * @throws IOException
    */
   public static ArrayList<AbstractSelfExcitingProcess>
-         estimateSelfExcitingProcesses(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcesses(Type type,
                                        int trajectoryCount,
                                        Vector times,
                                        String sourcefilename) throws IOException
@@ -149,12 +148,12 @@ public class ProcessEstimator
   }
 
   public static AbstractSelfExcitingProcess
-         estimateSelfExcitingProcess(AutoExcitingProcessFactory.Type type,
+         estimateSelfExcitingProcess(Type type,
                                      int trajectoryCount,
                                      Vector slice,
                                      String filename, int section)
   {
-    AbstractSelfExcitingProcess process = AutoExcitingProcessFactory.spawnNewProcess(type);
+    AbstractSelfExcitingProcess process = SelfExcitingProcessFactory.spawnNewProcess(type);
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
