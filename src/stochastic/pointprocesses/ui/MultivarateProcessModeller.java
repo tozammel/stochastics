@@ -1,6 +1,14 @@
 package stochastic.pointprocesses.ui;
 
+import static java.lang.System.out;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,7 +20,12 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import fastmath.Vector;
+import stochastic.pointprocesses.autoexciting.multivariate.ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest;
 import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
 import stochastic.pointprocesses.selfexciting.Type;
 
 public class MultivarateProcessModeller
@@ -50,7 +63,6 @@ public class MultivarateProcessModeller
 
     fileSaveItem = new MenuItem(fileMenu, SWT.PUSH);
     fileSaveItem.setText("&Load");
-    
 
     fileExitItem = new MenuItem(fileMenu, SWT.PUSH);
     fileExitItem.setText("E&xit");
@@ -94,18 +106,40 @@ public class MultivarateProcessModeller
       display.dispose();
     }
   }
-  
-  public void openFile()
+
+  public void
+         openFile()
   {
     FileDialog fd = new FileDialog(shell, SWT.OPEN);
     fd.setText("Open");
     fd.setFilterPath(new File(new File(".").getAbsolutePath()).getAbsolutePath());
-    
-    String[] filterExt = { "*.model" };
+
+    String[] filterExt =
+    { "*.model" };
     fd.setFilterExtensions(filterExt);
     String selected = fd.open();
     System.out.println(selected);
-    label.setText("TODO: open " + selected );
+    label.setText("TODO: open " + selected);
+
+    ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess process = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
+    File file = new File(selected);
+    Vector vec = new Vector((int) (file.length() / Double.BYTES));
+    RandomAccessFile store;
+    try
+    {
+      store = new RandomAccessFile(file, "rw");
+      FileChannel channel = store.getChannel();
+      while ( channel.read(vec.buffer) > 0 );
+      store.close();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e.getMessage(), e);
+
+    }
+
+    process.assignParameters(vec.toDoubleArray());
+    out.println( "Read " + process );
   }
 
   class fileOpenItemListener implements SelectionListener
