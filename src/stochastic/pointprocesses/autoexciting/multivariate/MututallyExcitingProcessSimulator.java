@@ -43,8 +43,8 @@ public class MututallyExcitingProcessSimulator
                              CloneNotSupportedException,
                              InterruptedException
   {
-    int threadCount = Runtime.getRuntime().availableProcessors();
-    // int threadCount = 1;
+    // int threadCount = Runtime.getRuntime().availableProcessors();
+    int threadCount = 1;
 
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
@@ -95,7 +95,7 @@ public class MututallyExcitingProcessSimulator
         double y = expDist.sample();
         process.trace = false;
         // TODO: average over Λ and compare against the invariant projection
-        double dt = process.invΛ(m, 0, y);
+        double dt = process.invΛ(m, y);
         if (dt > 10000 || dt < 0.001)
         {
           int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
@@ -125,10 +125,11 @@ public class MututallyExcitingProcessSimulator
         process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
+        out.println( "dt=" + dt );
         double q = process.Λ(m, n - 1, dt);
         nextTime = (process.T.getRightmostValue() + dt);
-        double marginalΛ = process.invΛ(m, 0, 1);
-        // out.println("marginalΛ=" + marginalΛ);
+        double marginalΛ = process.invΛ(m, 1);
+        out.println("marginalΛ=" + marginalΛ);
 
         TestCase.assertEquals("y != q", y, q, 1E-7);
         n++;

@@ -1263,13 +1263,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return sum(k -> iψ(T.get(i + 1) - T.get(k)) - iψ(T.get(i) - T.get(k)), 0,
    *         i-1)
    */
-  public double
+  public final double
          Λ(int m,
            int i,
            double dt)
   {
-
-    return sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - (exp(-β(j, m, n) * dt))) * A(j, m, n, i), 0, order() - 1) / Z(m, n), 0, dim() - 1);
+    return sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - (exp(-β(j, m, n) * dt))) * (1 + A(j, m, n, i)), 0, order() - 1) / Z(m, n), 0, dim() - 1);
   }
 
   public Vector
@@ -1412,6 +1411,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
            double y,
            int tk)
   {
+    // return sum(j -> γ(j, m, m) * (1 + A(j, m, m, tk)) * (exp(-dt * β(j, m, m)) -
+    // 1), 0, order() - 1) + y * βproduct(m, m) * Z(m, m);
+
     return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
   }
 
