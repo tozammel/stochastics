@@ -1,29 +1,23 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static fastmath.Functions.seq;
 import static fastmath.Functions.sum;
 import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
-import static util.Plotter.display;
 
 import java.util.Arrays;
 import java.util.TreeMap;
-import java.util.function.IntToDoubleFunction;
 
 import org.apache.commons.math3.optim.PointValuePair;
-import org.knowm.xchart.XYChart;
 
 import fastmath.IntVector;
 import fastmath.Pair;
 import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
-import stochastic.pointprocesses.selfexciting.ExponentialSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
-import util.Plotter;
 
 public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest extends TestCase
 {

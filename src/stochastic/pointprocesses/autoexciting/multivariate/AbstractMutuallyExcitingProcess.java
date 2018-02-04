@@ -3,7 +3,6 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 import static fastmath.Functions.seq;
 import static java.lang.Math.sqrt;
 import static java.lang.System.out;
-import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.range;
 import static util.Console.println;
 

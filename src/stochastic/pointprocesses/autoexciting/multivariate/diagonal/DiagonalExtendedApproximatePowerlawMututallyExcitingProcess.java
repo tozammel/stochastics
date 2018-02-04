@@ -11,7 +11,6 @@ import static org.apache.commons.lang.ArrayUtils.addAll;
 import java.util.concurrent.atomic.DoubleAdder;
 
 import fastmath.Vector;
-import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.Type;
@@ -27,6 +26,7 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(int dim)
   {
     this.dim = dim;
+    this.dT = new Vector[dim];
     τ = new Vector(dim).setName("τ");
     ε = new Vector(dim).setName("ε");
     η = new Vector(dim).setName("η");
@@ -56,7 +56,7 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
    */
   public double base = exp(log(60000) / M);
 
-  public Vector dT;
+  public Vector[] dT;
 
   @Override
   public BoundedParameter[]
@@ -129,9 +129,9 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   }
 
   public Vector
-         dT()
+         dT(int m)
   {
-    return (dT != null) ? dT : (dT = T.diff());
+    return (dT[m] != null) ? dT[m] : (dT[m] = getTimes(m).diff());
   }
 
   public void

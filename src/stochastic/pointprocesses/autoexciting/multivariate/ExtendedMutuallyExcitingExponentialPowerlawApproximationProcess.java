@@ -3,7 +3,6 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
-import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.range;
 import static java.util.stream.IntStream.rangeClosed;

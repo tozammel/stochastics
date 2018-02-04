@@ -1,7 +1,5 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
-import static java.util.stream.IntStream.range;
-
 import org.apache.commons.math3.optim.SimpleBounds;
 
 import fastmath.IntVector;

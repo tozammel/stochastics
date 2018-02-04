@@ -58,7 +58,6 @@ import fastmath.optim.ObjectiveFunctionSupplier;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import fastmath.optim.PointValuePairComparator;
 import fastmath.optim.SolutionValidator;
-import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
@@ -156,6 +155,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     if (A == null)
     {
       A = new double[order()][dim()][dim()][T.size()];
+    }
+    if ( i < 0 )
+    {
+      return 0;
     }
     if (i == 0)
     {
@@ -1335,7 +1338,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     double dt = 0;
 
     double δ = 0;
-    double lastTime = T == null ? 0 : T.getRightmostValue();
+    double lastTime = ( T == null || T.isEmpty() ) ? 0 : T.getRightmostValue();
     double nextTime = lastTime;
 
     for (int i = 0; i <= 1000; i++)

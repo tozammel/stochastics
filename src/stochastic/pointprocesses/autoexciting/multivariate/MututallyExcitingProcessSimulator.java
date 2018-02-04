@@ -16,6 +16,7 @@ import org.apache.commons.math3.random.JDKRandomGenerator;
 
 import dnl.utils.text.table.TextTable;
 import fastmath.DoubleColMatrix;
+import fastmath.IntVector;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
@@ -49,17 +50,17 @@ public class MututallyExcitingProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process =
-                                                                          ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
-      process.τ.assign(1, 1);
-      process.ε.assign(0, 0);
-      process.η.assign(2.8483343724, 2.5714437398);
-      process.b.assign(3.4935467810, 2.9798206550);
+      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+                                                                          //ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
+      //process.T = ;
+      process.τ.assign(1);
+      process.ε.assign(0);
+      process.η.assign(2.8483343724);
+      process.b.assign(3.4935467810);
 
       // process.ε = 0.05;0
-      process.T = new Vector(new double[]
-      { 0 });
-      process.dT = new Vector(new double[] {});
+      process.T = new Vector(new double[] {});
+      process.K = new IntVector(process.T.size());
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
     out.println("mean times: " + hello);
@@ -125,9 +126,9 @@ public class MututallyExcitingProcessSimulator
         process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
-        out.println( "dt=" + dt );
+        out.println("dt=" + dt);
         double q = process.Λ(m, n - 1, dt);
-        nextTime = (process.T.getRightmostValue() + dt);
+        nextTime = (!process.T.isEmpty()  ? process.T.getRightmostValue() : 0 ) + dt;
         double marginalΛ = process.invΛ(m, 1);
         out.println("marginalΛ=" + marginalΛ);
 

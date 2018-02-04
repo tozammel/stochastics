@@ -2,10 +2,7 @@ package stochastic.pointprocesses.ui;
 
 import static java.lang.System.out;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -22,11 +19,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.multivariate.ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess;
-import stochastic.pointprocesses.autoexciting.multivariate.ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest;
-import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
-import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
-import stochastic.pointprocesses.selfexciting.Type;
 
 public class MultivarateProcessModeller
 {
