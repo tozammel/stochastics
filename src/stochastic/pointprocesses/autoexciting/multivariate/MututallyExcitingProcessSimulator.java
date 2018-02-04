@@ -139,7 +139,7 @@ public class MututallyExcitingProcessSimulator
         // out.println("T=" + process.T.toIntVector());
         // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
         // process.T.size() - 1));
-        if (i % 1000 == 0)
+        if (i % 1000 == 1)
         {
           String msg = "seed=" + seed
                        + " m="
