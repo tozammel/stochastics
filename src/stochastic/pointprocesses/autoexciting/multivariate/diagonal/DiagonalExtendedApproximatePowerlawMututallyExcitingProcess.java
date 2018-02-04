@@ -145,6 +145,10 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   {
     double dt = nextTime - ( T.isEmpty() ? 0 : T.getRightmostValue() ) ;
     assert dt >= 0 : "dt cannot be negative, dt=" + dt + " where nextTime=" + nextTime + " and max(T)=" + T.getRightmostValue();
+    if ( trace )
+    {
+      out.println( "appendTime(m=" + m + ", nextTime=" + nextTime );
+    }
     T = T.copyAndAppend(nextTime);
     K = K.copyAndAppend(m);
     dT[m] = dT[m].copyAndAppend(dt);

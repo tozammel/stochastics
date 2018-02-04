@@ -149,12 +149,12 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     assert j < order();
     assert 0 <= n && n < dim();
-    assert i < N(m);
+    assert i <= N(m) : "i=" + i + " N(" + m + ")=" + N(m);
     assert 0 <= m && m < dim() : format("type=%d tk=%d j=%d dim=%d order=%d\n", m, n, j, dim(), order());
 
     if (A == null)
     {
-      A = new double[T.size()][order()][dim()][dim()];
+      A = new double[T.size()+1][order()][dim()][dim()];
     }
     if ( i < 0 )
     {
@@ -989,7 +989,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public void
          setAsize(int sampleCount)
   {
-    A = new double[order()][dim()][dim()][sampleCount];
+    A = new double[sampleCount][order()][dim()][dim()];
   }
 
   public void
@@ -1347,7 +1347,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
       if (trace)
       {
-        out.println("double dt[" + i + "]=" + dt + " δ=" + δ);
+        out.println("double dt[" + i + "]=" + dt + " δ=" + δ + " for y=" + y );
       }
       nextTime = nextTime + δ;
       if (abs(δ) < 1E-10 || !Double.isFinite(δ))
@@ -1357,20 +1357,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     }
     return dt;
-  }
-
-  public double
-         σ(int m,
-           int i,
-           int l,
-           int k,
-           double ds,
-           double dt)
-  {
-    assert m < dim() : "m=" + m + " >= dim";
-    double Tm = lastT(m);
-
-    return exp(sum(j -> sum(n -> β(m, n, j) * ((n == i && j == l) ? (ds + T(n, k)) : (dt + lastT(n))), 0, dim() - 1), 0, order() - 1));
   }
 
   /**

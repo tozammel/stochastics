@@ -61,6 +61,7 @@ public class MututallyExcitingProcessSimulator
       // process.ε = 0.05;0
       process.T = new Vector(new double[] {});
       process.K = new IntVector(process.T.size());
+      process.trace = true;
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
     out.println("mean times: " + hello);
@@ -94,7 +95,7 @@ public class MututallyExcitingProcessSimulator
       for (int m = 0; m < process.dim(); i++)
       {
         double y = expDist.sample();
-        process.trace = false;
+        //process.trace = false;
         // TODO: average over Λ and compare against the invariant projection
         double dt = process.invΛ(m, y);
         if (dt > 10000 || dt < 0.001)
@@ -116,25 +117,25 @@ public class MututallyExcitingProcessSimulator
                       + ansi().fgDefault());
           continue;
         }
-        process.trace = false;
+        //process.trace = false;
         // Real dtReal = process.invΛReal(y);
         // if ( dtReal.fpValue() > 6669)
         // {
         // out.println( "clamping " + dtReal );
         // dtReal = new Real(dt);
         // }
-        process.trace = false;
+        //process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
-        out.println("dt=" + dt);
+        out.println("dt=" + dt + " for y=" + y );
         double q = process.Λ(m, n - 1, dt);
         nextTime = (!process.T.isEmpty()  ? process.T.getRightmostValue() : 0 ) + dt;
-        double marginalΛ = process.invΛ(m, 1);
+        double marginalΛ = process.invΛ(m, 0.46);
         out.println("marginalΛ=" + marginalΛ);
 
         TestCase.assertEquals("y != q", y, q, 1E-7);
         n++;
-        process.appendTime(0, nextTime);
+        process.appendTime(m, nextTime);
         double Edt = nextTime / n;
         // out.println("T=" + process.T.toIntVector());
         // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
