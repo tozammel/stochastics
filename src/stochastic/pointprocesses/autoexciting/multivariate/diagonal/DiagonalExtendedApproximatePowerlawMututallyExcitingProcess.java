@@ -4,6 +4,7 @@ import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.String.format;
+import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.apache.commons.lang.ArrayUtils.addAll;
@@ -27,6 +28,10 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   {
     this.dim = dim;
     this.dT = new Vector[dim];
+    for ( int i = 0; i < dim; i++ )
+    {
+      dT[i] = new Vector(0).setName("dT" + i );
+    }
     τ = new Vector(dim).setName("τ");
     ε = new Vector(dim).setName("ε");
     η = new Vector(dim).setName("η");
@@ -135,10 +140,36 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   }
 
   public void
-         appendTime(int type,
-                    double time)
+         appendTime(int m,
+                    double nextTime)
   {
-    throw new UnsupportedOperationException("TODO");
+    double dt = nextTime - ( T.isEmpty() ? 0 : T.getRightmostValue() ) ;
+    assert dt >= 0 : "dt cannot be negative, dt=" + dt + " where nextTime=" + nextTime + " and max(T)=" + T.getRightmostValue();
+    T = T.copyAndAppend(nextTime);
+    K = K.copyAndAppend(m);
+    dT[m] = dT[m].copyAndAppend(dt);
+    if (A.length < T.size())
+    {
+      expandA();
+    }
+  }
+
+  public void
+         expandA()
+  {
+    // if (trace)
+    {
+      out.println("Expanding A to size " + (int) (T.size() * 1.2));
+    }
+    double[][][][] newA = new double[(int) (T.size() * 1.2)][order()][dim()][dim()];
+
+    for (int i = 0; i < A.length; i++)
+    {
+      double[][][] bMatrix = A[i];
+      newA[i] = new double[order()][dim()][dim()];
+      System.arraycopy(bMatrix, 0, newA[i], 0, order());
+    }
+    A = newA;
   }
 
   /**

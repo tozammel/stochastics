@@ -21,7 +21,7 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
   {
     super();
   }
-
+  
   public SimpleBounds
          getParameterBounds()
   {

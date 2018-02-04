@@ -127,7 +127,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
-  private double[][][][] A;
+  protected double[][][][] A;
 
   protected boolean verbose = false;
 
@@ -154,7 +154,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     if (A == null)
     {
-      A = new double[order()][dim()][dim()][T.size()];
+      A = new double[T.size()][order()][dim()][dim()];
     }
     if ( i < 0 )
     {
@@ -165,7 +165,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       A[j][m][n][i] = 0;
       return 0;
     }
-    double val = A[j][m][n][i];
+    double val = A[i][j][m][n];
     if (val == 0)
     {
       double Tmi = T(m, i);
@@ -173,7 +173,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
       double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
       val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j, m, n, i - 1));
-      A[j][m][n][i] = val;
+      A[i][j][m][n] = val;
     }
     return val;
   }
