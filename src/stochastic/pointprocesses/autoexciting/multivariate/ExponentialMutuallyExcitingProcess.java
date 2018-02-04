@@ -162,7 +162,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     if (i == 0)
     {
-      A[j][m][n][i] = 0;
+      A[i][j][m][n] = 0;
       return 0;
     }
     double val = A[i][j][m][n];
