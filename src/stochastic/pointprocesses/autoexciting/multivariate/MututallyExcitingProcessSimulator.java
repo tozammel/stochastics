@@ -127,7 +127,7 @@ public class MututallyExcitingProcessSimulator
         // process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
-        out.println("dt=" + dt + " for y=" + y);
+        out.println("i=" + i + " m=" + m + " dt=" + dt + " for y=" + y);
         double q = process.Λ(m, n - 1, dt);
         nextTime = (!process.T.isEmpty() ? process.T.getRightmostValue() : 0) + dt;
         // double marginalΛ = process.invΛ(m, 0.46);
