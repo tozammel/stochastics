@@ -51,8 +51,8 @@ public class MututallyExcitingProcessSimulator
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
       DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
-                                                                          //ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
-      //process.T = ;
+      // ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
+      // process.T = ;
       process.τ.assign(1);
       process.ε.assign(0);
       process.η.assign(2.8483343724);
@@ -61,7 +61,7 @@ public class MututallyExcitingProcessSimulator
       // process.ε = 0.05;0
       process.T = new Vector(new double[] {});
       process.K = new IntVector(process.T.size());
-      process.trace = true;
+      // process.trace = true;
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
     out.println("mean times: " + hello);
@@ -92,10 +92,10 @@ public class MututallyExcitingProcessSimulator
     process.setAsize(sampleCount);
     for (int i = 0; i < sampleCount; i++)
     {
-      for (int m = 0; m < process.dim(); i++)
+      for (int m = 0; m < process.dim(); m++)
       {
         double y = expDist.sample();
-        //process.trace = false;
+        // process.trace = false;
         // TODO: average over Λ and compare against the invariant projection
         double dt = process.invΛ(m, y);
         if (dt > 10000 || dt < 0.001)
@@ -117,21 +117,21 @@ public class MututallyExcitingProcessSimulator
                       + ansi().fgDefault());
           continue;
         }
-        //process.trace = false;
+        // process.trace = false;
         // Real dtReal = process.invΛReal(y);
         // if ( dtReal.fpValue() > 6669)
         // {
         // out.println( "clamping " + dtReal );
         // dtReal = new Real(dt);
         // }
-        //process.trace = false;
+        // process.trace = false;
 
         // double dtRealFpValue = dtReal.fpValue();
-        out.println("dt=" + dt + " for y=" + y );
+        out.println("dt=" + dt + " for y=" + y);
         double q = process.Λ(m, n - 1, dt);
-        nextTime = (!process.T.isEmpty()  ? process.T.getRightmostValue() : 0 ) + dt;
-        double marginalΛ = process.invΛ(m, 0.46);
-        out.println("marginalΛ=" + marginalΛ);
+        nextTime = (!process.T.isEmpty() ? process.T.getRightmostValue() : 0) + dt;
+        // double marginalΛ = process.invΛ(m, 0.46);
+        // out.println("marginalΛ=" + marginalΛ);
 
         TestCase.assertEquals("y != q", y, q, 1E-7);
         n++;
@@ -153,8 +153,6 @@ public class MututallyExcitingProcessSimulator
                        + q
                        + " dt="
                        + dt
-                       + " marginal="
-                       + marginalΛ
                        + " Λmean="
                        + process.Λ(m).mean()
                        + " Λvar="
