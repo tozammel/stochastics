@@ -121,9 +121,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
   }
 
-  private Entry<Double, Integer>[][][] lowerEntries;
+  protected Entry<Double, Integer>[][][] lowerEntries;
 
-  private Entry<Double, Integer>[][][] upperEntries;
+  protected Entry<Double, Integer>[][][] upperEntries;
 
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
@@ -135,7 +135,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   private int predictionIntegrationLimit = 25;
 
-  private Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
+  protected Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
 
   protected boolean trace = false;
 

@@ -28,9 +28,9 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   {
     this.dim = dim;
     this.dT = new Vector[dim];
-    for ( int i = 0; i < dim; i++ )
+    for (int i = 0; i < dim; i++)
     {
-      dT[i] = new Vector(0).setName("dT" + i );
+      dT[i] = new Vector(0).setName("dT" + i);
     }
     τ = new Vector(dim).setName("τ");
     ε = new Vector(dim).setName("ε");
@@ -143,11 +143,11 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
          appendTime(int m,
                     double nextTime)
   {
-    double dt = nextTime - ( T.isEmpty() ? 0 : T.getRightmostValue() ) ;
+    double dt = nextTime - (T.isEmpty() ? 0 : T.getRightmostValue());
     assert dt >= 0 : "dt cannot be negative, dt=" + dt + " where nextTime=" + nextTime + " and max(T)=" + T.getRightmostValue();
-    if ( trace )
+    if (trace)
     {
-      out.println( "appendTime(m=" + m + ", nextTime=" + nextTime );
+      out.println("appendTime(m=" + m + ", nextTime=" + nextTime);
     }
     T = T.copyAndAppend(nextTime);
     K = K.copyAndAppend(m);
@@ -156,6 +156,11 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
     {
       expandA();
     }
+    // TODO: updated cachedSubTimes, upperEntries and lowerEntries instead of
+    // rebuilding it each call
+    cachedSubTimes = null;
+    upperEntries = null;
+    lowerEntries = null;
   }
 
   public void
