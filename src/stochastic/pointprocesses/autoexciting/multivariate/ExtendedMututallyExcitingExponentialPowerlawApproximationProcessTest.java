@@ -339,8 +339,6 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
     }
   }
 
-  
-
   public void
          testinvΛ() throws InterruptedException
   {
@@ -407,14 +405,41 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     assertEquals(invmulti, invuni, pow(10, -13));
 
-    double stfu = process.Λ(process.T.size() - 1, invuni );
-    assertEquals( 1, stfu, pow(10,-13));
-    //out.println( "stfu " + stfu );
-    
-    double wack = mprocess.Λ(0, process.T.size() - 1, invmulti );
-   // out.println( "wack " + wack );
-    assertEquals( 1, wack, pow(10,-13));
-    
+    double stfu = process.Λ(process.T.size() - 1, invuni);
+    assertEquals(1, stfu, pow(10, -13));
+    // out.println( "stfu " + stfu );
+
+    double wack = mprocess.Λ(0, process.T.size() - 1, invmulti);
+    // out.println( "wack " + wack );
+    assertEquals(1, wack, pow(10, -13));
+
+    process.appendTime(process.T.getRightmostValue() + invuni);
+    invuni = process.invΛ(1);
+    stfu = process.Λ(process.T.size() - 1, invuni);
+    assertEquals(1, stfu, pow(10, -13));
+    process.appendTime(process.T.getRightmostValue() + invuni);
+
+    double lastdt = 0;
+    double dtd = 1;
+    for (int i = 0; dtd > pow(10, -10); i++)
+    {
+      invuni = process.invΛ(1);
+      dtd = invuni - lastdt;
+      lastdt = invuni;
+      stfu = process.Λ(process.T.size() - 1, invuni);
+      assertEquals(1, stfu, pow(10, -13));
+      process.appendTime(process.T.getRightmostValue() + invuni);
+    }
+
+    /**
+     * converges to ergodic fixed spacing
+     */
+    assertEquals(2381.3936987561174, lastdt, pow(10, -10));
+    out.println(process.T.size());
+    out.println(process.T);
+    out.println(process.T.diff());
+    out.println(process.Λ());
+
     // // double hmm = process.φδ(27, 1.2);
     // out.println("hmm=" + hmm);
     // hmm = process.φδ(37, 1.2);
