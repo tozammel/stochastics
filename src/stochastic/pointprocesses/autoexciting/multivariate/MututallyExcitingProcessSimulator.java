@@ -61,7 +61,7 @@ public class MututallyExcitingProcessSimulator
       // process.ε = 0.05;0
       process.T = new Vector(new double[] {});
       process.K = new IntVector(process.T.size());
-      process.trace = true;
+      //process.trace = true;
       hello.set(thread, simulateProcess(process, seed + thread).diff().mean());
     });
     out.println("mean times: " + hello);
@@ -130,8 +130,8 @@ public class MututallyExcitingProcessSimulator
         out.println("dt=" + dt + " for y=" + y );
         double q = process.Λ(m, n - 1, dt);
         nextTime = (!process.T.isEmpty()  ? process.T.getRightmostValue() : 0 ) + dt;
-        double marginalΛ = process.invΛ(m, 0.46);
-        out.println("marginalΛ=" + marginalΛ);
+//        double marginalΛ = process.invΛ(m, 0.46);
+//        out.println("marginalΛ=" + marginalΛ);
 
         TestCase.assertEquals("y != q", y, q, 1E-7);
         n++;
@@ -153,8 +153,8 @@ public class MututallyExcitingProcessSimulator
                        + q
                        + " dt="
                        + dt
-                       + " marginal="
-                       + marginalΛ
+//                       + " marginal="
+//                       + marginalΛ
                        + " Λmean="
                        + process.Λ(m).mean()
                        + " Λvar="
