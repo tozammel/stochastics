@@ -813,12 +813,18 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final void
          loadParameters(File file) throws IOException
   {
+    int nv = (getBoundedParameters().length * dim) * Double.BYTES;
+    if (file.length() != nv)
+    {
+      throw new IllegalArgumentException(file + " is not the right size, should be " + nv + " bytes but was " + file.length());
+    }
     try
     {
       FileInputStream fileInputStream = new FileInputStream(file);
       DataInputStream dis = new DataInputStream(fileInputStream);
       Vector params = new Vector((int) (file.length() / Double.BYTES));
-      for (int i = 0; i < params.size() * dim; i++)
+
+      for (int i = 0; i < params.size(); i++)
       {
         params.set(i, dis.readDouble());
       }
