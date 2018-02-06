@@ -28,18 +28,27 @@ public class BivariateProcessPredictor
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix("/home/stephen/fastmath/SPY.mat", "SPY"));
     ArrayList<TradingFiltration> slices = sliceFiltration(filtration);
     TradingFiltration firstSlice = slices.get(0);
-    
+
     process.K = firstSlice.types;
     process.T = firstSlice.times;
     process.X = firstSlice.markedPoints;
     double ll = process.logLik();
     Vector innov = process.getInnovationSequence(0);
-    out.println( "ll=" + ll );
+    out.println("ll=" + ll);
     Vector buyTimes = process.getTimes(Side.Buy.ordinal());
     Vector sellTimes = process.getTimes(Side.Sell.ordinal());
-    assert( firstSlice.buyTimes.size() == buyTimes.size() );
-    assert( firstSlice.sellTimes.size() == sellTimes.size() );
-    
+    assert (firstSlice.buyTimes.size() == buyTimes.size());
+    assert (firstSlice.sellTimes.size() == sellTimes.size());
+
+    double mean = process.Λ(0).mean();
+    out.println("mean0=" + mean);
+
+    for (int i = 0; i < 20; i++)
+    {
+      double fuck = process.invΛ(0, i, 1);
+      out.println( "fuck=" + fuck );
+    }
+
     MatFile.write("innov.mat", innov.createMiMatrix());
   }
 
