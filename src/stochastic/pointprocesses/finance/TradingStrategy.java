@@ -94,7 +94,7 @@ public class TradingStrategy
          getIndices(Vector times)
   {
     int n = (int) (TradingProcess.tradingDuration / ProcessEstimator.W);
-    out.println("Dividing the interval containing " + times.size() + " points into " + n + " pieces");
+    //out.println("Dividing the interval containing " + times.size() + " points into " + n + " pieces");
     int indexes[] = new int[n];
     for (int i = 0; i < n; i++)
     {

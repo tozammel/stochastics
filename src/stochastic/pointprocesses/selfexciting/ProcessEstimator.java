@@ -20,7 +20,7 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
-import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.AbstractMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
@@ -158,7 +158,7 @@ public class ProcessEstimator
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
 
-    ExponentialMutuallyExcitingProcess multivarProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    AbstractMutuallyExcitingProcess multivarProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     multivarProcess.T = slice;
     multivarProcess.K = new IntVector(slice.size());
     out.println("estimating multivar ");

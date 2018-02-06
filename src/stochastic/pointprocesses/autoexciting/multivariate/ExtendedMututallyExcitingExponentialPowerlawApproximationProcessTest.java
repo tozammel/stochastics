@@ -233,7 +233,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testLikelihood()
   {
-    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
+    AbstractMutuallyExcitingProcess process = constructLongerProcess();
 
     double ll = process.logLik();
     out.println(ansi().fgBrightCyan() + "ll for " + process + " is " + ll + ansi().fgDefault());
@@ -243,7 +243,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testSubTimes()
   {
-    ExponentialMutuallyExcitingProcess process = constructProcess();
+    AbstractMutuallyExcitingProcess process = constructProcess();
     process.T = new Vector(new double[]
     { 25, 91, 93, 112, 166, 167, 175, 176, 189, 227 });
     process.K = new IntVector(new int[]
@@ -277,7 +277,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testf()
   {
-    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
+    AbstractMutuallyExcitingProcess process = constructLongerProcess();
     out.println("testing f for " + process);
     double val0 = process.f(0, 0, 6.5);
     double val1 = process.f(1, 1, 6.5);
@@ -291,7 +291,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testF()
   {
-    ExponentialMutuallyExcitingProcess process = constructLongerProcess();
+    AbstractMutuallyExcitingProcess process = constructLongerProcess();
     out.println("testing F for " + process);
     double val0 = process.F(0, 0, 6.5);
     double val1 = process.F(1, 1, 6.5);
@@ -313,7 +313,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
   public void
          testZ()
   {
-    ExponentialMutuallyExcitingProcess process = constructProcess();
+    AbstractMutuallyExcitingProcess process = constructProcess();
 
     double z0 = process.Z(0, 0);
     out.println("z0=" + z0);

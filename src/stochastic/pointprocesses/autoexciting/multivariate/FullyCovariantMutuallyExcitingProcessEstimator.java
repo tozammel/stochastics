@@ -157,7 +157,7 @@ public class FullyCovariantMutuallyExcitingProcessEstimator
   public static void
          storeParameterEstimationResults(File testFile,
                                          Vector data,
-                                         ExponentialMutuallyExcitingProcess process,
+                                         AbstractMutuallyExcitingProcess process,
                                          String filename,
                                          final int i) throws IOException
   {
