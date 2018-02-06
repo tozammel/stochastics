@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import util.TerseThreadFactory;
 
-public class MututallyExcitingProcessSimulator
+public class MutuallyExcitingProcessSimulator
 {
 
   static
@@ -34,7 +34,7 @@ public class MututallyExcitingProcessSimulator
 
   private AbstractMutuallyExcitingProcess process;
 
-  public MututallyExcitingProcessSimulator(MutuallyExcitingProcess process)
+  public MutuallyExcitingProcessSimulator(MutuallyExcitingProcess process)
   {
     this.process = (AbstractMutuallyExcitingProcess) process;
   }
@@ -187,7 +187,7 @@ public class MututallyExcitingProcessSimulator
 
     try
     {
-      MatFile outFile = new MatFile(testFile, MututallyExcitingProcessSimulator.class.getSimpleName());
+      MatFile outFile = new MatFile(testFile, MutuallyExcitingProcessSimulator.class.getSimpleName());
       outFile.write(data.createMiMatrix());
       out.println("writing timestamp data, compensators and intensities to " + testFile.getAbsolutePath());
       for (int m = 0; m < process.dim(); m++)

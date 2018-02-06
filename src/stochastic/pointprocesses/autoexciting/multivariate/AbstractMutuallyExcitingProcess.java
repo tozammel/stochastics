@@ -2,6 +2,7 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static fastmath.Functions.seq;
 import static java.lang.Math.sqrt;
+import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.util.stream.IntStream.range;
 import static util.Console.println;
@@ -9,8 +10,11 @@ import static util.Console.println;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.TreeMap;
 import java.util.function.IntConsumer;
 import java.util.function.IntToDoubleFunction;
 
@@ -20,6 +24,8 @@ import org.apache.commons.math3.optim.SimpleBounds;
 
 import dnl.utils.text.table.TextTable;
 import fastmath.DoubleMatrix;
+import fastmath.IntVector;
+import fastmath.Pair;
 import fastmath.Vector;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
@@ -32,12 +38,13 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   public Vector T;
 
-  public boolean verbose = false;
-
   /**
-   * constant deterministic intensity
+   * integer-array indicating which dimension to which each point in
+   * this{@link #T} corresponds
    */
-  public double κ = 0;
+  public IntVector K;
+
+  public boolean verbose = false;
 
   /*
    * The first column of this matrix is identical with T, the remaining columns,
@@ -54,6 +61,7 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
       AbstractMutuallyExcitingProcess spawn = getClass().getDeclaredConstructor().newInstance();
       spawn.assignParameters(getParameters().toDoubleArray());
       spawn.T = T;
+      spawn.K = K;
       spawn.X = X;
       spawn.llcnt = llcnt;
       return spawn;
@@ -348,6 +356,12 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   protected final int forecastStartIndex = 6;
 
+  protected Entry<Double, Integer>[][][] lowerEntries;
+
+  protected Entry<Double, Integer>[][][] upperEntries;
+
+  protected Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
+
   /**
    * @see this{@link #forecastStartIndex}
    * 
@@ -356,8 +370,15 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public Vector
          getInnovationSequence(int m)
   {
-    int n = T.size() - 1;
-    return new Vector(seq((IntToDoubleFunction) tk -> invΛ(m, tk, 1) - (T.get(tk + 1) - T.get(tk)), 0, n)).slice(forecastStartIndex, n);
+    int n = N(m) - 2;
+    return new Vector(seq((IntToDoubleFunction) tk -> innov(m, tk), 0, n)).slice(forecastStartIndex, n).setName("innov" + m);
+  }
+
+  public double
+         innov(int m,
+               int tk)
+  {
+    return invΛ(m, tk, 1) - (T(m, tk + 1) - T(m, tk));
   }
 
   public abstract double
@@ -368,7 +389,6 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
   public final double
          getMeanPredictionError(int m)
   {
-    int n = T.size() - 1;
     return getInnovationSequence(m).mean();
   }
 
@@ -438,5 +458,135 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
 
   public abstract Vector
          Λ(int m);
+
+  /**
+   * get time of i-th point of the m-th proces
+   * 
+   * @param m
+   *          ordinal, integer in [0,dim)
+   * @param i
+   *          time index, starts at 0
+   * @return
+   */
+  public double
+         T(int m,
+           int i)
+  {
+    if (i < 0)
+    {
+      return 0;
+    }
+    assert i >= 0 : "i cannot be negative, was " + i;
+    assert m < dim() : "m=" + m + " >= dim";
+    Vector Tm = getTimeSubsets().left[m];
+    assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
+    return Tm.get(i);
+  }
+
+  /**
+   * Given two Vectors (of times and types), calculate indices and partition
+   * subsets of different types
+   *
+   * 
+   * @return Pair<Vector times[dim],Map<time,type>[dim]>
+   */
+  @SuppressWarnings("unchecked")
+  public final Pair<Vector[], TreeMap<Double, Integer>[]>
+         getTimeSubsets()
+  {
+    assert T.size() == K.size();
+    if (cachedSubTimes != null)
+    {
+      return cachedSubTimes;
+    }
+    final ArrayList<Double>[] timesSub = new ArrayList[dim()];
+    final Vector[] timeVectors = new Vector[dim()];
+    TreeMap<Double, Integer>[] timeIndices = new TreeMap[dim()];
+
+    for (int i = 0; i < dim(); i++)
+    {
+      timesSub[i] = new ArrayList<Double>();
+      timeIndices[i] = new TreeMap<Double, Integer>();
+    }
+    for (int i = 0; i < T.size(); i++)
+    {
+      int k = K.get(i);
+      assert k >= 0;
+      assert k < dim() : format("k=%d dim=%d", k, dim());
+      timesSub[k].add(T.get(i));
+    }
+    for (int i = 0; i < dim(); i++)
+    {
+      ArrayList<Double> subTimes = timesSub[i];
+      TreeMap<Double, Integer> subTimeIndices = timeIndices[i];
+      for (int j = 0; j < subTimes.size(); j++)
+      {
+        subTimeIndices.put(subTimes.get(j), j);
+      }
+      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
+    }
+    cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
+
+    return cachedSubTimes;
+  }
+
+  /**
+   * 
+   * @param m
+   * @return number of time points in the m-th dimension
+   */
+  public final int
+         N(int m)
+  {
+    return getTimes(m).size();
+  }
+
+  @SuppressWarnings("unchecked")
+  protected final Entry<Double, Integer>
+            getLowerEntry(TreeMap<Double, Integer>[] subTimeIndex,
+                          final double lowerTime,
+                          int m,
+                          int n,
+                          int i)
+  {
+    Entry<Double, Integer> lowerEntry = lowerEntries == null ? null : lowerEntries[m][n][i];
+    if (lowerEntry == null)
+    {
+      lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
+      if (lowerEntries == null)
+      {
+        lowerEntries = new Entry[dim()][dim()][T.size()];
+      }
+      lowerEntries[m][n][i] = lowerEntry;
+    }
+    return lowerEntry;
+  }
+
+  public final Vector
+         getTimes(int type)
+  {
+    return getTimeSubsets().left[type];
+  }
+
+  @SuppressWarnings("unchecked")
+  protected final Entry<Double, Integer>
+            getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
+                          final double upperTime,
+                          int m,
+                          int n,
+                          int i)
+  {
+    Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
+    if (upperEntry == null)
+    {
+      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
+      if (upperEntries == null)
+      {
+        upperEntries = new Entry[dim()][dim()][T.size()];
+      }
+      upperEntries[m][n][i] = upperEntry;
+    }
+    return upperEntry;
+  }
 
 }

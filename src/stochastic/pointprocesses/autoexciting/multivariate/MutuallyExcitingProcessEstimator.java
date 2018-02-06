@@ -96,7 +96,7 @@ public class MutuallyExcitingProcessEstimator
                                                 String symbol) throws IOException
   {
     assert type != null;
-    return estimateMututallyExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
+    return estimateMutuallyExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
   }
 
   /**
@@ -115,7 +115,7 @@ public class MutuallyExcitingProcessEstimator
    * @throws IOException
    */
   public static ArrayList<ExponentialMutuallyExcitingProcess>
-         estimateMututallyExcitingTradingProcesses(Type type,
+         estimateMutuallyExcitingTradingProcesses(Type type,
                                                    int trajectoryCount,
                                                    TradingFiltration tradingProcess,
                                                    String filename) throws IOException
@@ -157,7 +157,7 @@ public class MutuallyExcitingProcessEstimator
   public static void
          storeParameterEstimationResults(File testFile,
                                          Vector data,
-                                         ExponentialMutuallyExcitingProcess process,
+                                         AbstractMutuallyExcitingProcess process,
                                          String filename,
                                          final int i) throws IOException
   {

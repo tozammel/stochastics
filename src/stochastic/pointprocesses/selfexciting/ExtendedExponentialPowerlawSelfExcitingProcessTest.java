@@ -14,7 +14,7 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 import fastmath.IntVector;
 import fastmath.Vector;
 import junit.framework.TestCase;
-import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.AbstractMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 
 @SuppressWarnings(
@@ -227,7 +227,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
     process.T.set(2, 24);
     process.T.set(3, 27);
 
-    ExponentialMutuallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    AbstractMutuallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     mprocess.assignParameters(process.getParameters().toDoubleArray());
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());
@@ -251,7 +251,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
     process.T.set(2, 24);
     process.T.set(3, 27);
 
-    ExponentialMutuallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    AbstractMutuallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     mprocess.assignParameters(process.getParameters().toDoubleArray());
     mprocess.T = process.T;
     mprocess.K = new IntVector(process.T.size());

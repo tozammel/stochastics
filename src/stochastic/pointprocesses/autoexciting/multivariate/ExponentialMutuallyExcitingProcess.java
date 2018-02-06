@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -123,10 +122,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
   }
 
-  protected Entry<Double, Integer>[][][] lowerEntries;
-
-  protected Entry<Double, Integer>[][][] upperEntries;
-
   private final ObjectiveFunctionSupplier objectiveFunctionSupplier = () -> new ObjectiveFunction(copy());
 
   protected double[][][][] A;
@@ -136,8 +131,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   private ExponentialDistribution expDist = new ExponentialDistribution(1);
 
   private int predictionIntegrationLimit = 25;
-
-  protected Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
 
   protected boolean trace = false;
 
@@ -505,27 +498,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return x / dim();
   }
 
-  @SuppressWarnings("unchecked")
-  private final Entry<Double, Integer>
-          getLowerEntry(TreeMap<Double, Integer>[] subTimeIndex,
-                        final double lowerTime,
-                        int m,
-                        int n,
-                        int i)
-  {
-    Entry<Double, Integer> lowerEntry = lowerEntries == null ? null : lowerEntries[m][n][i];
-    if (lowerEntry == null)
-    {
-      lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
-      if (lowerEntries == null)
-      {
-        lowerEntries = new Entry[dim()][dim()][T.size()];
-      }
-      lowerEntries[m][n][i] = lowerEntry;
-    }
-    return lowerEntry;
-  }
-
   @Override
   public final double
          getMeanSquaredPredictionError(int m)
@@ -646,80 +618,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          getRootMeanSquaredPredictionError(int m)
   {
     throw new UnsupportedOperationException("TODO");
-  }
-
-  public final Vector
-         getTimes(int type)
-  {
-    return getTimeSubsets().left[type];
-  }
-
-  /**
-   * Given two Vectors (of times and types), calculate indices and partition
-   * subsets of different types
-   *
-   * 
-   * @return Pair<Vector times[dim],Map<time,type>[dim]>
-   */
-  @SuppressWarnings("unchecked")
-  public final Pair<Vector[], TreeMap<Double, Integer>[]>
-         getTimeSubsets()
-  {
-    assert T.size() == K.size();
-    if (cachedSubTimes != null)
-    {
-      return cachedSubTimes;
-    }
-    final ArrayList<Double>[] timesSub = new ArrayList[dim()];
-    final Vector[] timeVectors = new Vector[dim()];
-    TreeMap<Double, Integer>[] timeIndices = new TreeMap[dim()];
-
-    for (int i = 0; i < dim(); i++)
-    {
-      timesSub[i] = new ArrayList<Double>();
-      timeIndices[i] = new TreeMap<Double, Integer>();
-    }
-    for (int i = 0; i < T.size(); i++)
-    {
-      int k = K.get(i);
-      assert k >= 0;
-      assert k < dim() : format("k=%d dim=%d", k, dim());
-      timesSub[k].add(T.get(i));
-    }
-    for (int i = 0; i < dim(); i++)
-    {
-      ArrayList<Double> subTimes = timesSub[i];
-      TreeMap<Double, Integer> subTimeIndices = timeIndices[i];
-      for (int j = 0; j < subTimes.size(); j++)
-      {
-        subTimeIndices.put(subTimes.get(j), j);
-      }
-      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
-    }
-    cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
-
-    return cachedSubTimes;
-  }
-
-  @SuppressWarnings("unchecked")
-  private final Entry<Double, Integer>
-          getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
-                        final double upperTime,
-                        int m,
-                        int n,
-                        int i)
-  {
-    Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
-    if (upperEntry == null)
-    {
-      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
-      if (upperEntries == null)
-      {
-        upperEntries = new Entry[dim()][dim()][T.size()];
-      }
-      upperEntries[m][n][i] = upperEntry;
-    }
-    return upperEntry;
   }
 
   /**
@@ -918,17 +816,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   /**
-   * 
-   * @param m
-   * @return number of time points in the m-th dimension
-   */
-  public final int
-         N(int m)
-  {
-    return getTimes(m).size();
-  }
-
-  /**
    * counting function for the number of events of a specified type and occuring
    * at or before a specified time
    * 
@@ -1036,30 +923,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     fileOutputStream.close();
   }
 
-  /**
-   * get time of i-th point of the m-th proces
-   * 
-   * @param m
-   *          ordinal, integer in [0,dim)
-   * @param i
-   *          time index, starts at 0
-   * @return
-   */
-  public double
-         T(int m,
-           int i)
-  {
-    if (i < 0)
-    {
-      return 0;
-    }
-    assert i >= 0 : "i cannot be negative, was " + i;
-    assert m < dim() : "m=" + m + " >= dim";
-    Vector Tm = getTimeSubsets().left[m];
-    assert i < Tm.size() : format("m=%s i=%s Tm.size=%s\n", m, i, Tm.size());
-    return Tm.get(i);
-  }
-
   @Override
   public final double
          totalΛ()
@@ -1067,24 +930,11 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return sum(k -> Λ(k).sum(), 0, dim() - 1);
   }
 
-  /**
-   * 
-   * @param m
-   *          dimension/index of the process, an integer in [0,dim)
-   * 
-   * @return ∏(∏(β(m,n,j),j=1..P),n=1..M)
-   */
-  public final double
-         v(int m)
-  {
-    return product((IntToDoubleFunction) j -> product((IntToDoubleFunction) n -> β(m, n, j), 0, dim() - 1), 0, order() - 1);
-  }
-
   @Override
   public final double
          value(double[] point)
   {
-    ExponentialMutuallyExcitingProcess clone = copy();
+    AbstractMutuallyExcitingProcess clone = copy();
     clone.assignParameters(point);
 
     double score = Double.NaN;
@@ -1383,23 +1233,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return dt;
   }
 
-  /**
-   * 
-   * @param m
-   * @param dt
-   * @param y
-   * @return -y * this{@link #v(int)}(m)*{@link #η(int, double)}(m,dt)
-   */
-  public double
-         τ(int m,
-           double dt,
-           double y)
-  {
-    double v = v(m);
-    double η = η(m, dt);
-    out.println("v=" + v + " η=" + η);
-    return -y * v * η;
-  }
 
   public double
          φ(int m,

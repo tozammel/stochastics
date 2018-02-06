@@ -2,6 +2,8 @@ package stochastic.pointprocesses.finance;
 
 import static java.lang.System.out;
 
+import java.util.ArrayList;
+
 import fastmath.DoubleMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
@@ -24,6 +26,36 @@ public class TradingFiltration
     sellTimes = new Vector(times.size());
 
     classifyTradeSequences();
+  }
+
+  public TradingFiltration(DoubleMatrix markedPointSlice, IntVector types)
+  {
+    super();
+    this.markedPoints = markedPointSlice;
+    assert markedPointSlice.getRowCount() == types.size();
+    times = markedPoints.col(0).setName("times");
+    prices = markedPoints.col(1).setName("prices");
+    this.types = types;
+    ArrayList<Double> b = new ArrayList<>();
+    ArrayList<Double> s = new ArrayList<>();
+    for (int i = 0; i < types.size(); i++)
+    {
+      if (types.get(i) == Side.Buy.ordinal())
+      {
+        b.add(markedPointSlice.get(i, 0));
+      }
+      else if (types.get(i) == Side.Sell.ordinal())
+      {
+        s.add(markedPointSlice.get(i, 0));
+      }
+      else
+      {
+        throw new IllegalArgumentException("hmm");
+      }
+
+    }
+    buyTimes = new Vector(b);
+    sellTimes = new Vector(s);
   }
 
   public void
@@ -63,7 +95,7 @@ public class TradingFiltration
     tradeIndexes = TradingStrategy.getIndices(times);
     buyIndexes = TradingStrategy.getIndices(buyTimes);
     sellIndexes = TradingStrategy.getIndices(sellTimes);
-    out.println("unclassified " + unclassifiedCount);
+    //out.println("unclassified " + unclassifiedCount);
   }
 
   public Vector times;

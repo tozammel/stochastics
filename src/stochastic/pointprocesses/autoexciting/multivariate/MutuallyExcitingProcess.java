@@ -11,11 +11,6 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
 
   protected int dim;
 
-  /**
-   * integer-array indicating which dimension to which each point in
-   * this{@link #T} corresponds
-   */
-  public IntVector K;
 
   public MutuallyExcitingProcess()
   {

@@ -22,7 +22,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
     
     //Vector points = process.simulate(5, 20000);
     //out.println("pdiff = " + points.diff().mean());
-    ExponentialMutuallyExcitingProcess multidimProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+    AbstractMutuallyExcitingProcess multidimProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
     multidimProcess.assignParameters(process.getParameters().toDoubleArray());
     
     double multiMrt = multidimProcess.meanRecurrenceTime(0);
