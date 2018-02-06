@@ -20,8 +20,10 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
 import static java.util.stream.Stream.concat;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -154,9 +156,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     if (A == null)
     {
-      A = new double[T.size()+1][order()][dim()][dim()];
+      A = new double[T.size() + 1][order()][dim()][dim()];
     }
-    if ( i < 0 )
+    if (i < 0)
     {
       return 0;
     }
@@ -809,9 +811,25 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public final void
-         loadParameters(File modelFile) throws IOException
+         loadParameters(File file) throws IOException
   {
-    throw new UnsupportedOperationException("TODO");
+    try
+    {
+      FileInputStream fileInputStream = new FileInputStream(file);
+      DataInputStream dis = new DataInputStream(fileInputStream);
+      Vector params = new Vector((int) (file.length() / Double.BYTES));
+      for (int i = 0; i < params.size() * dim; i++)
+      {
+        params.set(i, dis.readDouble());
+      }
+      dis.close();
+      fileInputStream.close();
+      assignParameters(params.toDoubleArray());
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e.getMessage(), e);
+    }
   }
 
   /**
@@ -1004,7 +1022,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     FileOutputStream fileOutputStream = new FileOutputStream(modelFile, false);
     DataOutputStream dos = new DataOutputStream(fileOutputStream);
     Vector params = getParameters();
-    for (int i = 0; i < getParamCount(); i++)
+    for (int i = 0; i < getParamCount() * dim; i++)
     {
       dos.writeDouble(params.get(i));
     }
@@ -1338,7 +1356,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     double dt = 0;
 
     double δ = 0;
-    double lastTime = ( T == null || T.isEmpty() ) ? 0 : T.getRightmostValue();
+    double lastTime = (T == null || T.isEmpty()) ? 0 : T.getRightmostValue();
     double nextTime = lastTime;
 
     for (int i = 0; i <= 1000; i++)
@@ -1347,7 +1365,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
       if (trace)
       {
-        out.println("double dt[" + i + "]=" + dt + " δ=" + δ + " for y=" + y );
+        out.println("double dt[" + i + "]=" + dt + " δ=" + δ + " for y=" + y);
       }
       nextTime = nextTime + δ;
       if (abs(δ) < 1E-10 || !Double.isFinite(δ))
