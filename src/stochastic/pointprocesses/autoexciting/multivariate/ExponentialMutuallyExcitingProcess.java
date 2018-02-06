@@ -1386,7 +1386,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     // return sum(j -> γ(j, m, m) * (1 + A(j, m, m, tk)) * (exp(-dt * β(j, m, m)) -
     // 1), 0, order() - 1) + y * βproduct(m, m) * Z(m, m);
 
-    return sum(n -> sum(j -> γ(j, m, n) * (1 + Asum(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
   }
 
   public double
@@ -1410,7 +1410,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
              double dt,
              int tk)
   {
-    return sum(n -> sum(j -> γ(j, m, n) * (1 + Asum(j, m, n, tk)) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
   }
 
   @Override
