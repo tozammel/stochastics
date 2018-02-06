@@ -50,13 +50,17 @@ public class MututallyExcitingProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
-      // ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
-      // process.T = ;
-      process.τ.assign(1);
-      process.ε.assign(0);
-      process.η.assign(2.8483343724);
-      process.b.assign(3.4935467810);
+       DiagonalExtendedApproximatePowerlawMututallyExcitingProcess shit = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
+       DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(2);
+       process.ε.set(shit.ε.get(0),shit.ε.get(0));
+       process.τ.set(shit.τ.get(0),shit.ε.get(0));
+       process.η.set(shit.η.get(0),shit.ε.get(0));
+       process.b.set(shit.b.get(0),shit.ε.get(0));
+
+      //process.τ.assign(1);
+     // process.ε.assign(0,0);
+      //process.η.assign(2.8483343724);
+      //process.b.assign(3.4935467810);
 
       // process.ε = 0.05;0
       process.T = new Vector(new double[] {});
@@ -73,7 +77,11 @@ public class MututallyExcitingProcessSimulator
          simulateProcess(DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process,
                          int seed)
   {
-    int lastRejectedPoint = -1;
+    IntVector lastRejectedPoint = new IntVector( process.dim );
+    for ( int i = 0; i < process.dim; i++ )
+    {
+      lastRejectedPoint.set(i, -1);
+    }
     int rejects = 0;
     ExponentialDistribution expDist = new ExponentialDistribution(new JDKRandomGenerator(seed), 1);
     out.println("simulating " + ansi().fgBrightYellow()
@@ -85,7 +93,6 @@ public class MututallyExcitingProcessSimulator
                 + seed
                 + " meanRecurrenceTimes="
                 + process.meanRecurrenceTimeVector());
-    int n = process.T.size();
     double nextTime = 0;
     int sampleCount = 130000;
     double startTime = currentTimeMillis();
@@ -94,14 +101,16 @@ public class MututallyExcitingProcessSimulator
     {
       for (int m = 0; m < process.dim(); m++)
       {
+        Vector mtimes = process.getTimes(m);
         double y = expDist.sample();
         // process.trace = false;
         // TODO: average over Λ and compare against the invariant projection
         double dt = process.invΛ(m, y);
         if (dt > 10000 || dt < 0.001)
         {
-          int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
-          lastRejectedPoint = i;
+          int lrp = lastRejectedPoint.get(m);
+          int pointsSinceLastRejection = lrp == -1 ? 0 : (i - lrp);
+          lastRejectedPoint.set(m, i);
           rejects++;
           out.println("seed " + seed
                       + ":"
@@ -117,6 +126,10 @@ public class MututallyExcitingProcessSimulator
                       + ansi().fgDefault());
           continue;
         }
+        else
+        {
+          out.println( "accepting" );
+        }
         // process.trace = false;
         // Real dtReal = process.invΛReal(y);
         // if ( dtReal.fpValue() > 6669)
@@ -128,15 +141,14 @@ public class MututallyExcitingProcessSimulator
 
         // double dtRealFpValue = dtReal.fpValue();
         out.println("i=" + i + " m=" + m + " dt=" + dt + " for y=" + y);
-        double q = process.Λ(m, n - 1, dt);
-        nextTime = (!process.T.isEmpty() ? process.T.getRightmostValue() : 0) + dt;
+        double q = process.Λ(m, mtimes.size() - 1, dt);
+        nextTime = (!mtimes.isEmpty() ? mtimes.getRightmostValue() : 0) + dt;
         // double marginalΛ = process.invΛ(m, 0.46);
         // out.println("marginalΛ=" + marginalΛ);
 
         TestCase.assertEquals("y != q", y, q, 1E-7);
-        n++;
         process.appendTime(m, nextTime);
-        double Edt = nextTime / n;
+        double Edt = nextTime / mtimes.size();
         // out.println("T=" + process.T.toIntVector());
         // out.println("Λ=" + process.Λ().slice(max(0, process.T.size() - 10),
         // process.T.size() - 1));
@@ -172,6 +184,15 @@ public class MututallyExcitingProcessSimulator
           out.println(seed + ":" + ansi().fgBrightRed() + " rejecting dt=" + dt + " for y=" + y + " q=" + q + "# " + rejects + ansi().fgDefault());
           continue;
         }
+      }
+      try
+      {
+        Thread.sleep(1000);
+      }
+      catch (InterruptedException e)
+      {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
     }
     double duration = startTime - currentTimeMillis();

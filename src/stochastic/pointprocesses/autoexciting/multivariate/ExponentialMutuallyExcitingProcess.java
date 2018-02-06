@@ -154,9 +154,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
     if (A == null)
     {
-      A = new double[T.size()+1][order()][dim()][dim()];
+      A = new double[T.size() + 1][order()][dim()][dim()];
     }
-    if ( i < 0 )
+    if (i < 0)
     {
       return 0;
     }
@@ -1338,7 +1338,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     double dt = 0;
 
     double δ = 0;
-    double lastTime = ( T == null || T.isEmpty() ) ? 0 : T.getRightmostValue();
+    double lastTime = (T == null || T.isEmpty()) ? 0 : T.getRightmostValue();
     double nextTime = lastTime;
 
     for (int i = 0; i <= 1000; i++)
@@ -1347,7 +1347,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
       if (trace)
       {
-        out.println("double dt[" + i + "]=" + dt + " δ=" + δ + " for y=" + y );
+        out.println("double dt[" + i + "]=" + dt + " δ=" + δ + " for y=" + y);
       }
       nextTime = nextTime + δ;
       if (abs(δ) < 1E-10 || !Double.isFinite(δ))
@@ -1359,30 +1359,13 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return dt;
   }
 
-  /**
-   * 
-   * @param m
-   * @param dt
-   * @param y
-   * @return -y * this{@link #v(int)}(m)*{@link #η(int, double)}(m,dt)
-   */
-  public double
-         τ(int m,
-           double dt,
-           double y)
-  {
-    double v = v(m);
-    double η = η(m, dt);
-    out.println("v=" + v + " η=" + η);
-    return -y * v * η;
-  }
-
   public double
          φ(int m,
            double dt,
            double y)
   {
-    return φ(m, dt, y, T.size() - 1);
+    int tk = getTimes(m).size() - 1;
+    return φ(m, dt, y, tk);
   }
 
   public Vector
@@ -1403,7 +1386,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     // return sum(j -> γ(j, m, m) * (1 + A(j, m, m, tk)) * (exp(-dt * β(j, m, m)) -
     // 1), 0, order() - 1) + y * βproduct(m, m) * Z(m, m);
 
-    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + Asum(j, m, n, tk)) * (exp(-dt * β(j, m, n)) - 1), 0, order() - 1) + y * βproduct(m, n) * Z(m, n), 0, dim() - 1);
   }
 
   public double
@@ -1417,7 +1400,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          φdt(int m,
              double dt)
   {
-    return φdt(m, dt, T.size() - 1);
+    int tk = getTimes(m).size() - 1;
+
+    return φdt(m, dt, tk );
   }
 
   public double
@@ -1425,7 +1410,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
              double dt,
              int tk)
   {
-    return sum(n -> sum(j -> γ(j, m, n) * (1 + A(j, m, n, tk)) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
+    return sum(n -> sum(j -> γ(j, m, n) * (1 + Asum(j, m, n, tk)) * β(j, m, n) * exp(-(dt) * β(j, m, n)), 0, order() - 1), 0, dim() - 1);
   }
 
   @Override
@@ -1434,7 +1419,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
             double t,
             double y)
   {
-    int tk = T.size() - 1;
+    int tk = getTimes(m).size() - 1;
     return φ(m, t, y, tk) / φdt(m, t, tk);
   }
 
