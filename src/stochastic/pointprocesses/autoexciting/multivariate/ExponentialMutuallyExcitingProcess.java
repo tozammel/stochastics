@@ -504,26 +504,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return x / dim();
   }
 
-  @SuppressWarnings("unchecked")
-  private final Entry<Double, Integer>
-          getLowerEntry(TreeMap<Double, Integer>[] subTimeIndex,
-                        final double lowerTime,
-                        int m,
-                        int n,
-                        int i)
-  {
-    Entry<Double, Integer> lowerEntry = lowerEntries == null ? null : lowerEntries[m][n][i];
-    if (lowerEntry == null)
-    {
-      lowerEntry = subTimeIndex[n].ceilingEntry(lowerTime);
-      if (lowerEntries == null)
-      {
-        lowerEntries = new Entry[dim()][dim()][T.size()];
-      }
-      lowerEntries[m][n][i] = lowerEntry;
-    }
-    return lowerEntry;
-  }
+
 
   @Override
   public final double
@@ -647,79 +628,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     throw new UnsupportedOperationException("TODO");
   }
 
-  public final Vector
-         getTimes(int type)
-  {
-    return getTimeSubsets().left[type];
-  }
 
-  /**
-   * Given two Vectors (of times and types), calculate indices and partition
-   * subsets of different types
-   *
-   * 
-   * @return Pair<Vector times[dim],Map<time,type>[dim]>
-   */
-  @SuppressWarnings("unchecked")
-  public final Pair<Vector[], TreeMap<Double, Integer>[]>
-         getTimeSubsets()
-  {
-    assert T.size() == K.size();
-    if (cachedSubTimes != null)
-    {
-      return cachedSubTimes;
-    }
-    final ArrayList<Double>[] timesSub = new ArrayList[dim()];
-    final Vector[] timeVectors = new Vector[dim()];
-    TreeMap<Double, Integer>[] timeIndices = new TreeMap[dim()];
 
-    for (int i = 0; i < dim(); i++)
-    {
-      timesSub[i] = new ArrayList<Double>();
-      timeIndices[i] = new TreeMap<Double, Integer>();
-    }
-    for (int i = 0; i < T.size(); i++)
-    {
-      int k = K.get(i);
-      assert k >= 0;
-      assert k < dim() : format("k=%d dim=%d", k, dim());
-      timesSub[k].add(T.get(i));
-    }
-    for (int i = 0; i < dim(); i++)
-    {
-      ArrayList<Double> subTimes = timesSub[i];
-      TreeMap<Double, Integer> subTimeIndices = timeIndices[i];
-      for (int j = 0; j < subTimes.size(); j++)
-      {
-        subTimeIndices.put(subTimes.get(j), j);
-      }
-      timeVectors[i] = new Vector(timesSub[i]).setName("T" + i);
-    }
-    cachedSubTimes = new Pair<Vector[], TreeMap<Double, Integer>[]>(timeVectors, timeIndices);
-
-    return cachedSubTimes;
-  }
-
-  @SuppressWarnings("unchecked")
-  private final Entry<Double, Integer>
-          getUpperEntry(TreeMap<Double, Integer>[] subTimeIndex,
-                        final double upperTime,
-                        int m,
-                        int n,
-                        int i)
-  {
-    Entry<Double, Integer> upperEntry = upperEntries == null ? null : upperEntries[m][n][i];
-    if (upperEntry == null)
-    {
-      upperEntry = subTimeIndex[n].ceilingEntry(upperTime);
-      if (upperEntries == null)
-      {
-        upperEntries = new Entry[dim()][dim()][T.size()];
-      }
-      upperEntries[m][n][i] = upperEntry;
-    }
-    return upperEntry;
-  }
 
   /**
    * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type
@@ -892,17 +802,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     // Arrays.toString(beta.toDoubleArray()),
     // Arrays.toString(gamma.toDoubleArray()));
     return ratio;
-  }
-
-  /**
-   * 
-   * @param m
-   * @return number of time points in the m-th dimension
-   */
-  public final int
-         N(int m)
-  {
-    return getTimes(m).size();
   }
 
   /**
