@@ -79,7 +79,7 @@ public class BivariateProcessPredictor
     double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
     int n = 100;
     double dt = W / n;
-    out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " minutes");
+    out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " seconds");
     AtomicInteger calculatedCounter = new AtomicInteger();
     rangeClosed(1, n).parallel().forEach(i -> {
       try
