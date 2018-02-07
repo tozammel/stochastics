@@ -1,11 +1,19 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static java.lang.System.out;
+import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
+
+import org.fusesource.jansi.Ansi.Color;
 
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
@@ -16,13 +24,15 @@ import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import util.DateUtils;
+import util.DoublePair;
 
 public class BivariateProcessPredictor
 {
 
   public static void
          main(String[] args) throws IOException,
-                             InterruptedException
+                             InterruptedException,
+                             ExecutionException
   {
     File modelFile = new File("/home/stephen/fm/SPY.mat.urweapl.0.model");
     UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
@@ -61,7 +71,11 @@ public class BivariateProcessPredictor
     out.println("buyTimes=" + buyTimes);
     out.println("sellTimes=" + sellTimes);
 
-    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += 1000)
+    TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
+    /**
+     * TODO: nmultithread
+     */
+    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += 10000)
     {
       buyProcess.T = buyTimes;
       sellProcess.T = sellTimes;
@@ -74,23 +88,31 @@ public class BivariateProcessPredictor
       buyProcess.verbose = true;
       sellProcess.verbose = true;
 
-      double predictedMeanBuyingDuration = predictProcess(buyProcess);
-      double predictedMeanSellingDuration = predictProcess(sellProcess);
+      ForkJoinPool pool = new ForkJoinPool(2);
+      ForkJoinTask<Double> buyPredictor = pool.submit(() -> predictProcess(buyProcess));
+
+      ForkJoinTask<Double> sellPredictor = pool.submit(() -> predictProcess(sellProcess));
+
+      double predictedMeanBuyingDuration = buyPredictor.get();
+      out.println("predictedMeanBuyingDuration@" + instant + "=" + predictedMeanBuyingDuration);
+      double predictedMeanSellingDuration = sellPredictor.get();
+      out.println("predictedMeanSellingDuration@" + instant + "=" + predictedMeanSellingDuration);
       double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
-      out.println("instant=" + instant + " projectedBuyOverSellRatio=" + projectedBuyOverSellRatio);
+      out.println(ansi().fg(Color.GREEN) + "instant="
+                  + instant
+                  + " predictedMeanBuyingDuration="
+                  + predictedMeanBuyingDuration
+                  + " predictedMeanSellingDuration="
+                  + predictedMeanSellingDuration
+                  + "\nprojectedBuyOverSellRatio="
+                  + projectedBuyOverSellRatio
+                  + ansi().fgDefault());
+      predictions.put(instant, new DoublePair(predictedMeanBuyingDuration, predictedMeanSellingDuration));
     }
 
+    out.println( "predictions=" + predictions );
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
-
-    double predictedMeanBuyingDuration = predictProcess(buyProcess);
-    double predictedMeanSellingDuration = predictProcess(sellProcess);
-    double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
-    out.println("predictedMeanBuyingDuration=" + predictedMeanBuyingDuration
-                + " predictedMeanSellingDuration="
-                + predictedMeanSellingDuration
-                + "\nprojectedBuyOverSellRatio="
-                + projectedBuyOverSellRatio);
 
     // XYChart chart = Plotter.chart("invΛ", "a", y -> buyProcess.invΛ(0, y), 0, 10,
     // t -> t);
