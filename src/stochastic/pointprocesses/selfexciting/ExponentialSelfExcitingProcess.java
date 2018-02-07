@@ -921,6 +921,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     return 1 + sum(k -> exp(-β(j) * (Ti - T.get(k))), 0, tk - 1);
   }
 
+  /**
+   * FIXME/NOTE!!!: A needs to be primed , that is, called for 0 to tk
+   * sequentially
+   * 
+   * @param j
+   * @param tk
+   * @return
+   */
   public double
          A(int j,
            int tk)
@@ -942,7 +950,14 @@ public abstract class ExponentialSelfExcitingProcess extends AbstractSelfExcitin
     if (val == 0)
     {
       double intersection = 1;
-      val = intersection + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * A(j, tk - 1));
+      double a = A[tk - 1][j];
+      if (a == 0)
+      {
+        throw new IllegalArgumentException("A needs to be primed , that is, called for 0 to tk sequentially, " + "a at tk="
+                                           + (tk - 1 + " j=" + j + " is " + a));
+      //  a = A(j, tk - 1);
+      }
+      val = intersection + (exp(-β(j) * (T.get(tk) - T.get(tk - 1))) * a);
       assert val != 0 : String.format("A[%d][%d]=%s\n", tk, j, val);
       A[tk][j] = val;
     }

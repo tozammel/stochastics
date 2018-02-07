@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static java.lang.System.out;
+import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
@@ -75,42 +76,32 @@ public class BivariateProcessPredictor
     /**
      * TODO: nmultithread
      */
-    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += 10000)
+    double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
+    int n = 1000;
+    double dt = W / n;
+    rangeClosed(1, n).parallel().forEach(i -> {
+      try
+      {
+        predictProcess(tradeProcess.T.getLeftmostValue() + dt * i, buyTimes, sellTimes, buyProcess.copy(), sellProcess.copy(), predictions);
+      }
+      catch (InterruptedException | ExecutionException e)
+      {
+        e.printStackTrace(System.err);
+        if (e instanceof RuntimeException)
+        {
+          throw (RuntimeException) e;
+        }
+        throw new RuntimeException(e.getMessage(), e);
+
+      }
+    });
+
+    out.println();
+    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += dt)
     {
-      buyProcess.T = buyTimes;
-      sellProcess.T = sellTimes;
-      int nBuys = buyProcess.N(instant);
-      int nSells = sellProcess.N(instant);
-      buyProcess.T = buyTimes.slice(0, nBuys);
-      sellProcess.T = sellTimes.slice(0, nSells);
-
-      out.println("instant=" + String.format("%20.20f", instant) + " nBuys=" + nBuys + " nSells=" + nSells);
-      buyProcess.verbose = true;
-      sellProcess.verbose = true;
-
-      ForkJoinPool pool = new ForkJoinPool(2);
-      ForkJoinTask<Double> buyPredictor = pool.submit(() -> predictProcess(buyProcess));
-
-      ForkJoinTask<Double> sellPredictor = pool.submit(() -> predictProcess(sellProcess));
-
-      double predictedMeanBuyingDuration = buyPredictor.get();
-      out.println("predictedMeanBuyingDuration@" + instant + "=" + predictedMeanBuyingDuration);
-      double predictedMeanSellingDuration = sellPredictor.get();
-      out.println("predictedMeanSellingDuration@" + instant + "=" + predictedMeanSellingDuration);
-      double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
-      out.println(ansi().fg(Color.GREEN) + "instant="
-                  + instant
-                  + " predictedMeanBuyingDuration="
-                  + predictedMeanBuyingDuration
-                  + " predictedMeanSellingDuration="
-                  + predictedMeanSellingDuration
-                  + "\nprojectedBuyOverSellRatio="
-                  + projectedBuyOverSellRatio
-                  + ansi().fgDefault());
-      predictions.put(instant, new DoublePair(predictedMeanBuyingDuration, predictedMeanSellingDuration));
     }
 
-    out.println( "predictions=" + predictions );
+    out.println("predictions=" + predictions);
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
 
@@ -125,6 +116,46 @@ public class BivariateProcessPredictor
 
     // MatFile.write("innov.mat", buyInnov.createMiMatrix(),
     // sellInnov.createMiMatrix());
+  }
+
+  public static void
+         predictProcess(double instant,
+                        Vector buyTimes,
+                        Vector sellTimes,
+                        ExtendedApproximatePowerlawSelfExcitingProcess buyProcess,
+                        ExtendedApproximatePowerlawSelfExcitingProcess sellProcess,
+                        TreeMap<Double, DoublePair> predictions) throws InterruptedException,
+                                                                 ExecutionException
+  {
+    buyProcess.T = buyTimes;
+    sellProcess.T = sellTimes;
+    int nBuys = buyProcess.N(instant);
+    int nSells = sellProcess.N(instant);
+    buyProcess.T = buyTimes.slice(0, nBuys);
+    sellProcess.T = sellTimes.slice(0, nSells);
+
+    out.println("instant=" + String.format("%20.20f", instant) + " nBuys=" + nBuys + " nSells=" + nSells);
+    buyProcess.verbose = true;
+    sellProcess.verbose = true;
+
+    ForkJoinPool pool = new ForkJoinPool(2);
+
+
+    double predictedMeanBuyingDuration =  predictProcess(buyProcess.copy());
+    out.println("predictedMeanBuyingDuration@" + instant + "=" + predictedMeanBuyingDuration);
+    double predictedMeanSellingDuration = predictProcess(sellProcess.copy());
+    out.println("predictedMeanSellingDuration@" + instant + "=" + predictedMeanSellingDuration);
+    double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
+    out.println(ansi().fg(Color.GREEN) + "instant="
+                + instant
+                + " predictedMeanBuyingDuration="
+                + predictedMeanBuyingDuration
+                + " predictedMeanSellingDuration="
+                + predictedMeanSellingDuration
+                + "\nprojectedBuyOverSellRatio="
+                + projectedBuyOverSellRatio
+                + ansi().fgDefault());
+    predictions.put(instant, new DoublePair(predictedMeanBuyingDuration, predictedMeanSellingDuration));
   }
 
   public static double
