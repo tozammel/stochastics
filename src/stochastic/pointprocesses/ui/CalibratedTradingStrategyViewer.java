@@ -27,6 +27,7 @@ import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
@@ -43,7 +44,7 @@ public class CalibratedTradingStrategyViewer
 
   public JFrame frame;
   private JTable table;
-  private List<AbstractSelfExcitingProcess> processes;
+  private List<MutuallyExcitingProcess> processes;
   private XChartPanel<XYChart> priceChartPanel;
   private JPanel bottomPanel;
 
@@ -55,13 +56,13 @@ public class CalibratedTradingStrategyViewer
 
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix(matFile, symbol));
 
-    ArrayList<AbstractSelfExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
+    ArrayList<MutuallyExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
 
     CalibratedTradingStrategyViewer.launchModelViewer(processes);
 
   }
 
-  public CalibratedTradingStrategyViewer(List<AbstractSelfExcitingProcess> processes)
+  public CalibratedTradingStrategyViewer(List<MutuallyExcitingProcess> processes)
   {
     Object[][] data = getProcessParametersAndStatisticsMatrix(processes);
 
@@ -84,7 +85,7 @@ public class CalibratedTradingStrategyViewer
   }
 
   public static Object[][]
-         getProcessParametersAndStatisticsMatrix(List<AbstractSelfExcitingProcess> processes)
+         getProcessParametersAndStatisticsMatrix(List<MutuallyExcitingProcess> processes)
   {
     List<Object[]> processStats = processes.stream()
                                            .map(process -> process.evaluateParameterStatistics(process.getParameters().toDoubleArray()))
@@ -142,14 +143,14 @@ public class CalibratedTradingStrategyViewer
   public void
          plotData()
   {
-    AbstractSelfExcitingProcess firstProcess = processes.get(0);
+    MutuallyExcitingProcess firstProcess = processes.get(0);
 
     plotProcess(firstProcess);
 
   }
 
   public void
-         plotProcess(AbstractSelfExcitingProcess process)
+         plotProcess(MutuallyExcitingProcess process)
   {
 
     XYChart priceChart = getLogPriceChart(process);
@@ -163,14 +164,14 @@ public class CalibratedTradingStrategyViewer
   }
 
   public XChartPanel<XYChart>
-         getIntensityChartPanel(AbstractSelfExcitingProcess process)
+         getIntensityChartPanel(MutuallyExcitingProcess process)
   {
     double firstTime = process.T.fmin();
     double intensityPlotLengthInSeconds = 5;
     double lastTime = firstTime + 1000 * intensityPlotLengthInSeconds;
 
     XChartPanel<XYChart> intensityChart =
-                                        plot("t (seconds)", "λ(t)", t -> process.λ(t) * 1000, firstTime, lastTime, 2000, t -> (t - firstTime) / 1000, chart -> {
+                                        plot("t (seconds)", "λ(t)", t -> process.λ(0,t) * 1000, firstTime, lastTime, 2000, t -> (t - firstTime) / 1000, chart -> {
                                           chart.setTitle("conditional intensity(event rate)");
                                           chart.setYAxisTitle("events per second");
                                           chart.getStyler().setSeriesColors(new Color[]
@@ -181,7 +182,7 @@ public class CalibratedTradingStrategyViewer
   }
 
   public static CalibratedTradingStrategyViewer
-         launchModelViewer(ArrayList<AbstractSelfExcitingProcess> processes)
+         launchModelViewer(ArrayList<MutuallyExcitingProcess> processes)
   {
     CalibratedTradingStrategyViewer viewer = new CalibratedTradingStrategyViewer(processes);
     viewer.show();
@@ -189,7 +190,7 @@ public class CalibratedTradingStrategyViewer
   }
 
   public static XYChart
-         getLogPriceChart(AbstractSelfExcitingProcess process)
+         getLogPriceChart(MutuallyExcitingProcess process)
   {
     double millisecondsToHours = DateUtils.convertTimeUnits(1, TimeUnit.MILLISECONDS, TimeUnit.HOURS);
     double millisecondsToSeconds = DateUtils.convertTimeUnits(1, TimeUnit.MILLISECONDS, TimeUnit.SECONDS);

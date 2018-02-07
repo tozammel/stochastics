@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.finance;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import fastmath.DoubleMatrix;
@@ -26,6 +27,16 @@ public class TradingFiltration
     classifyTradeSequences();
   }
 
+  public void saveToFile( File file )
+  {
+    
+  }
+  
+  public void readFromFile( File file )
+  {
+    
+  }
+  
   public TradingFiltration(DoubleMatrix markedPointSlice, IntVector types)
   {
     super();

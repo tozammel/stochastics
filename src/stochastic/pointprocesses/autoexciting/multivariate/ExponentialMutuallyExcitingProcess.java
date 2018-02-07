@@ -1013,7 +1013,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return the j-th element of the Vector of parameters corresponding to the
    *         k-th type
    */
-  protected abstract double
+  public abstract double
             α(int j,
               int m,
               int n);
@@ -1029,7 +1029,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    * @return the j-th element of the Vector of parameters corresponding to the
    *         k-th type
    */
-  protected abstract double
+  public abstract double
             β(int j,
               int m,
               int n);
@@ -1086,7 +1086,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public Vector
-         Λ(int m)
+  Λ(int m)
   {
     Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     final Vector[] timesSub = timesSubPair.left;

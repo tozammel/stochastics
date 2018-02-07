@@ -17,6 +17,10 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
     super();
   }
 
+  public abstract double
+         λ(int m,
+           double t);
+
   public SimpleBounds
          getParameterBounds()
   {
@@ -78,5 +82,13 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
   {
     return format("%s%s", getClass().getSimpleName(), getParamString());
   }
+
+  public abstract double
+         f(int i,
+           double t);
+
+  public abstract double
+         F(int i,
+           double t);
 
 }

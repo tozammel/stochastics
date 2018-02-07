@@ -53,7 +53,7 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
     return process;
 
   }
-  
+
   /**
    * choose m such that m^M=1 minute, in units of milliseconds
    */
@@ -69,10 +69,10 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
   }
 
   @Override
-  protected double
-            α(int j,
-              int m,
-              int n)
+  public double
+         α(int j,
+           int m,
+           int n)
   {
     if (j == M)
     {
@@ -89,10 +89,10 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
   }
 
   @Override
-  protected double
-            β(int j,
-              int m,
-              int n)
+  public double
+         β(int j,
+           int m,
+           int n)
   {
     if (j == M)
     {
@@ -219,6 +219,22 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
               double y)
   {
     throw new UnsupportedOperationException("TODO");
+  }
+
+  @Override
+  public double
+         f(int i,
+           double t)
+  {
+    return f(i, i, t);
+  }
+
+  @Override
+  public double
+         F(int i,
+           double t)
+  {
+    return F(i, i, t);
   }
 
 }

@@ -6,8 +6,6 @@ import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BinaryOperator;
 
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
@@ -16,7 +14,6 @@ import org.apache.commons.math3.random.JDKRandomGenerator;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import junit.framework.TestCase;
-import util.DateUtils;
 
 public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximatePowerlawSelfExcitingProcess implements MultivariateFunction, Serializable
 {

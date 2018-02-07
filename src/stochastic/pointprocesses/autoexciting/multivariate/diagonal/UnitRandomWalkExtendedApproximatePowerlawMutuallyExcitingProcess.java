@@ -20,7 +20,7 @@ public class UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess ex
   public Type
          getType()
   {
-    return Type.UnitRandomWalkExtendedApproximatePowerlaw;
+    return Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw;
   }
 
   /**

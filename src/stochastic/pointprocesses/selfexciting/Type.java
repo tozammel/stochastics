@@ -1,5 +1,8 @@
 package stochastic.pointprocesses.selfexciting;
 
+import stochastic.pointprocesses.autoexciting.multivariate.ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
+
 public enum Type
 {
   ApproximatePowerlaw, ExtendedApproximatePowerlaw, MultivariateDiagonalExtendedApproximatePowerlaw, UnitRandomWalkExtendedApproximatePowerlaw, UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw, MultivariateFullExtendedApproximatePowerlaw;
@@ -26,9 +29,34 @@ public enum Type
     }
   }
 
-  public AbstractSelfExcitingProcess
+  public <O>
+         O
          instantiate()
   {
-    return SelfExcitingProcessFactory.spawnNewProcess(this);
+    return instantiate(1);
+  }
+
+  @SuppressWarnings("unchecked")
+  public <O>
+         O
+         instantiate(int dim)
+  {
+    switch (this)
+    {
+    case ApproximatePowerlaw:
+      return (O) new ApproximatePowerlawSelfExcitingProcess();
+    case ExtendedApproximatePowerlaw:
+      return (O) new ExtendedApproximatePowerlawSelfExcitingProcess();
+    case UnitRandomWalkExtendedApproximatePowerlaw:
+      return (O) new UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess();
+    case MultivariateDiagonalExtendedApproximatePowerlaw:
+      return (O) new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(dim);
+    case MultivariateFullExtendedApproximatePowerlaw:
+      return (O) new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(dim);
+    case UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw:
+      return (O) new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(dim);
+    default:
+      throw new UnsupportedOperationException("TODO: " + this);
+    }
   }
 }

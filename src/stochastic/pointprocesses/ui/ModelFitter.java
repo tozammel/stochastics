@@ -27,6 +27,7 @@ import org.knowm.xchart.style.XYStyler;
 
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
@@ -55,7 +56,7 @@ public class ModelFitter
     final String symbol = args.length > 1 ? args[1] : "SPY";
 
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix(matFile, symbol));
-    ArrayList<AbstractSelfExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
+    ArrayList<MutuallyExcitingProcess> processes = TradingStrategy.getCalibratedProcesses(matFile, filtration, Type.ExtendedApproximatePowerlaw);
 
     CalibratedTradingStrategyViewer.launchModelViewer(processes);
 

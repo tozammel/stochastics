@@ -19,7 +19,8 @@ public class BivariateProcessPredictor
 {
 
   public static void
-         main(String[] args) throws IOException
+         main(String[] args) throws IOException,
+                             InterruptedException
   {
     File modelFile = new File("/home/stephen/fm/SPY.mat.urweapl.0.model");
     UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
@@ -48,14 +49,27 @@ public class BivariateProcessPredictor
     out.println("buyProcess=" + buyProcess);
     out.println("sellProcess=" + sellProcess);
 
-    Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
-    Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
-    
+    // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
+    // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
 
-    double mean = tradeProcess.Λ(0).mean();
-    out.println("mean0=" + mean + " var=" + tradeProcess.Λ(0).variance());
+    double buyΛMean = buyProcess.Λ().mean();
+    double buyΛVar = buyProcess.Λ().variance();
+    double sellΛMean = sellProcess.Λ().variance();
+    double sellΛVar = sellProcess.Λ().variance();
+    out.println("buyΛmean=" + buyΛMean + " buyΛvar=" + buyΛVar);
+    out.println("sellΛ=" + sellΛMean + " sellΛvar=" + sellΛVar);
 
-    MatFile.write("innov.mat", buyInnov.createMiMatrix(), sellInnov.createMiMatrix());
+    // XYChart chart = Plotter.chart("invΛ", "a", y -> buyProcess.invΛ(0, y), 0, 10,
+    // t -> t);
+    // display(chart);
+    //
+    // while (chart != null)
+    // {
+    // Thread.sleep(1000);
+    // }
+
+    // MatFile.write("innov.mat", buyInnov.createMiMatrix(),
+    // sellInnov.createMiMatrix());
   }
 
   public static ArrayList<TradingFiltration>

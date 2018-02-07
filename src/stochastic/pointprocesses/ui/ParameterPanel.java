@@ -22,29 +22,30 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 
+import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import util.SpringLayoutUtils;
 
 public class ParameterPanel extends JPanel
 {
-  private AbstractSelfExcitingProcess process;
+  private MutuallyExcitingProcess process;
   private Runnable callback;
 
-  public ParameterPanel(AbstractSelfExcitingProcess process, Runnable callback)
+  public ParameterPanel(MutuallyExcitingProcess process2, Runnable callback)
   {
     super(new SpringLayout());
     this.callback = callback;
-    this.process = process;
+    this.process = process2;
 
-    for (BoundedParameter param : process.getBoundedParameters())
+    for (BoundedParameter param : process2.getBoundedParameters())
     {
       double minValue = param.getMin();
       double maxValue = param.getMax();
       String paramName = param.getName();
       add(getParameterRowPanel(paramName, minValue, maxValue));
     }
-    SpringLayoutUtils.makeGrid(this, process.getParamCount(), 1, 5, 5, 5, 5);
+    SpringLayoutUtils.makeGrid(this, process2.getParamCount(), 1, 5, 5, 5, 5);
   }
 
   HashMap<String, JSlider> sliders = new HashMap<>();

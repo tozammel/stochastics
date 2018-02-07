@@ -45,6 +45,8 @@ import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
@@ -94,7 +96,7 @@ public class ProcessModeller
   private JFrame frame;
   private JComboBox<Type> processTypeComboBox;
   private ParameterPanel parameterPanel;
-  private ExponentialSelfExcitingProcess process;
+  private ExponentialMutuallyExcitingProcess process;
   private Container contentPane;
   private KernelPanel kernelPanel;
   private DefaultTableModel coeffecientModel;
@@ -198,7 +200,7 @@ public class ProcessModeller
             e.printStackTrace(System.err);
             throw new RuntimeException(e.getMessage(), e);
           }
-        });
+        }, "hmm", numStarts);
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         progressBar.setValue(0);
@@ -226,7 +228,7 @@ public class ProcessModeller
     topLeftPanel.add(buttonPanel);
     topPanel.add(topLeftPanel, BorderLayout.WEST);
 
-    process = (ExponentialSelfExcitingProcess) Type.values()[0].instantiate();
+    process = (ExponentialMutuallyExcitingProcess) Type.values()[0].instantiate();
 
     coeffecientModel = new DefaultTableModel(process != null ? process.order() : 0, tableColumnNames.length);
     coeffecientModel.setColumnIdentifiers(tableColumnNames);
@@ -258,7 +260,16 @@ public class ProcessModeller
       {
         EventQueue.invokeLater(() -> {
           out.println("Loading parameters from " + fileChooser.getSelectedFile());
-          process.loadParameters(fileChooser.getSelectedFile());
+          try
+          {
+            process.loadParameters(fileChooser.getSelectedFile());
+          }
+          catch (IOException e)
+          {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
+
+          }
           parameterPanel.sliderHandlerEnabled = false;
           for (Field field : process.getParameterFields())
           {
@@ -399,15 +410,15 @@ public class ProcessModeller
 
   }
 
-  public AbstractSelfExcitingProcess
+  public ExponentialMutuallyExcitingProcess
          refreshProcess()
   {
     Type type = getSelectedType();
     if (process == null || !process.getType().equals(type))
     {
       out.println("Switched kernel to " + type);
-      ExponentialSelfExcitingProcess prevProcess = process;
-      process = (ExponentialSelfExcitingProcess) type.instantiate();
+      ExponentialMutuallyExcitingProcess prevProcess = process;
+      process = (ExponentialMutuallyExcitingProcess) type.instantiate();
       if (prevProcess != null)
       {
         process.T = prevProcess.T;
@@ -431,16 +442,17 @@ public class ProcessModeller
   public void
          updateCoeffecientTableValues()
   {
-    for (int i = 0; i < process.order(); i++)
+    for (int m = 0; m < process.dim(); m++)
     {
-      double amplitude = process.α(i) / process.Z();
-      double decayRate = process.β(i) / process.Z();
-      double γ = process.γ(i);
-      double halfDuration = process.getHalfDuration(i);
-      coeffecientModel.setValueAt(i, i, 0);
-      coeffecientModel.setValueAt(amplitude, i, 1);
-      coeffecientModel.setValueAt(decayRate, i, 2);
-      coeffecientModel.setValueAt(halfDuration, i, 3);
+      for (int i = 0; i < process.order(); i++)
+      {
+        double amplitude = process.α(i, m, m) / process.Z(m, m);
+        double decayRate = process.β(i, m, m) / process.Z(m, m);
+        double γ = process.γ(i, m, m);
+        coeffecientModel.setValueAt(i, i, 0);
+        coeffecientModel.setValueAt(amplitude, i, 1);
+        coeffecientModel.setValueAt(decayRate, i, 2);
+      }
     }
     resizeColumns(coeffecientTable);
     coeffecientTable.repaint();

@@ -153,7 +153,7 @@ public class ProcessEstimator
                                      Vector slice,
                                      String filename, int section)
   {
-    AbstractSelfExcitingProcess process = SelfExcitingProcessFactory.spawnNewProcess(type);
+    AbstractSelfExcitingProcess process = type.instantiate();
     ProcessEstimator estimator = new ProcessEstimator(process);
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
