@@ -244,6 +244,14 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
   public Vector
          predict(double stoppingTime)
   {
+    /**
+     * "prime the pumps", that is, cache the entries of this#A so that stack
+     * overflow doesn't occur when it recursively tries to cache all the missing
+     * previous entries
+     */
+    Vector comp = Λ();
+    out.println("comp mean is " + comp.mean() + " and var is " + comp.variance());
+
     double nextTime = T.getRightmostValue();
     int i = 0;
     double prevdt = Double.MAX_VALUE;
@@ -257,18 +265,18 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
 
       nextTime = T.getRightmostValue() + dt;
       appendTime(nextTime);
-       if (trace)
+      if (trace)
       {
         if (i++ % 1000 == 999)
         {
-           double Tmean = T.diff().mean();
-          out.println("#" + i + " E[nextdt]=" + dt + " dtdt=" + dtdt + " mean(T)=" + Tmean );
+          double Tmean = T.diff().mean();
+          out.println("#" + i + " E[nextdt]=" + dt + " dtdt=" + dtdt + " mean(T)=" + Tmean);
         }
       }
 
       if (abs(dtdt) < pow(10, -10))
       {
-        out.println("dtdt=" + dtdt);
+        //out.println("dtdt=" + dtdt);
         break;
       }
     }
