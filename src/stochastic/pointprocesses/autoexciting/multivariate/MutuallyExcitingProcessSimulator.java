@@ -22,6 +22,7 @@ import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
 import util.TerseThreadFactory;
 
 public class MutuallyExcitingProcessSimulator
@@ -50,15 +51,17 @@ public class MutuallyExcitingProcessSimulator
     int seed = args.length > 0 ? Integer.valueOf(args[0]) : 0;
     Vector hello = new Vector(threadCount);
     rangeClosed(0, threadCount - 1).parallel().forEach(thread -> {
-      DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process =
-                                                                          ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
-      // process.T = ;
-      process.τ.assign(1);
-      process.ε.assign(0);
-      process.η.assign(2.8483343724);
-      process.b.assign(3.4935467810);
-
-      // process.ε = 0.05;0
+      UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess process = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
+      try
+      {
+        process.loadParameters(new File( "/home/stephen/git/fastmath/SPY.mat.urweapl.7.model"));
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace(System.err);        
+        throw new RuntimeException( e.getMessage(), e );        
+      }
+      
       process.T = new Vector(new double[] {});
       process.K = new IntVector(process.T.size());
       // process.trace = true;
@@ -69,6 +72,7 @@ public class MutuallyExcitingProcessSimulator
 
   }
 
+  
   public static Vector
          simulateProcess(DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process,
                          int seed)

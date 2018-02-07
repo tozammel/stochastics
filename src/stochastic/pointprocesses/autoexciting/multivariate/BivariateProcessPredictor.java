@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
 import stochastic.pointprocesses.finance.Side;
 import stochastic.pointprocesses.finance.TradingFiltration;
 import stochastic.pointprocesses.finance.TradingProcess;
@@ -20,8 +21,8 @@ public class BivariateProcessPredictor
   public static void
          main(String[] args) throws IOException
   {
-    File modelFile = new File("/home/stephen/fastmath/SPY.mat.meapl.0.model");
-    ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess tradeProcess = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
+    File modelFile = new File("/home/stephen/fm/SPY.mat.urweapl.0.model");
+    UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
     
     tradeProcess.loadParameters(modelFile);
     out.println("Loaded " + tradeProcess + " from " + modelFile.getAbsolutePath());

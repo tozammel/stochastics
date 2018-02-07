@@ -720,6 +720,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final void
          loadParameters(File modelFile) throws IOException
   {
+    out.println( modelFile.getAbsolutePath() + " length is " + modelFile.length() + " and paramCount=" + getParamCount() );
     FileInputStream fileInputStream = new FileInputStream(modelFile);
     DataInputStream dis = new DataInputStream(fileInputStream);
     Vector params = new Vector(getParamCount());
@@ -911,7 +912,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     FileOutputStream fileOutputStream = new FileOutputStream(modelFile, false);
     DataOutputStream dos = new DataOutputStream(fileOutputStream);
     Vector params = getParameters();
-    for (int i = 0; i < getParamCount(); i++)
+    for (int i = 0; i < params.size(); i++)
     {
       dos.writeDouble(params.get(i));
     }
