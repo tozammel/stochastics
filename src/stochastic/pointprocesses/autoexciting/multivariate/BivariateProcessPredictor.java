@@ -78,7 +78,7 @@ public class BivariateProcessPredictor
     TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
 
     double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
-    int n = 10;
+    int n = 2000;
     double dt = W / n;
     out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " seconds");
     AtomicInteger calculatedCounter = new AtomicInteger();
