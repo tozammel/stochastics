@@ -1,5 +1,6 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.lang.Math.log;
 import static java.lang.System.out;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -71,13 +72,13 @@ public class BivariateProcessPredictor
     out.println("buyΛmean=" + buyΛMean + " buyΛvar=" + buyΛVar);
     out.println("sellΛ=" + sellΛMean + " sellΛvar=" + sellΛVar);
 
-//    out.println("buyTimes=" + buyTimes);
-//    out.println("sellTimes=" + sellTimes);
+    // out.println("buyTimes=" + buyTimes);
+    // out.println("sellTimes=" + sellTimes);
 
     TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
 
     double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
-    int n = 1000;
+    int n = 10;
     double dt = W / n;
     out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " seconds");
     AtomicInteger calculatedCounter = new AtomicInteger();
@@ -100,18 +101,21 @@ public class BivariateProcessPredictor
       }
     });
 
-    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 3).setName("pred");
+    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 6).setName("pred");
     AtomicInteger rowCounter = new AtomicInteger();
     predictions.entrySet().stream().forEachOrdered(entry -> {
       int row = rowCounter.getAndIncrement();
       predictedPoints.set(row, 0, entry.getKey());
       predictedPoints.set(row, 1, entry.getValue().left);
       predictedPoints.set(row, 2, entry.getValue().right);
+      predictedPoints.set(row, 3, log(entry.getValue().left / entry.getValue().right));
+      predictedPoints.set(row, 4, filtration.buyPrices.get(buyProcess.N(entry.getKey() - 1)));
+      predictedPoints.set(row, 5, filtration.sellPrices.get(buyProcess.N(entry.getKey() - 1)));
     });
 
     out.println("predictions=" + predictions);
-    MatFile.write(new File( "pred.mat"), predictedPoints.createMiMatrix() );
-    
+    MatFile.write(new File("pred.mat"), predictedPoints.createMiMatrix());
+
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
 

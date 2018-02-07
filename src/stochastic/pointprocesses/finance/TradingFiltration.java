@@ -14,6 +14,9 @@ import fastmath.Vector;
  */
 public class TradingFiltration
 {
+  public Vector buyPrices;
+  public Vector sellPrices;
+
   public TradingFiltration(DoubleMatrix markedPoints)
   {
     super();
@@ -22,21 +25,25 @@ public class TradingFiltration
     prices = markedPoints.col(1).setName("prices");
     types = new IntVector(times.size());
     buyTimes = new Vector(times.size());
+    buyPrices = new Vector(times.size());
     sellTimes = new Vector(times.size());
+    sellPrices = new Vector(times.size());
 
     classifyTradeSequences();
   }
 
-  public void saveToFile( File file )
+  public void
+         saveToFile(File file)
   {
-    
+
   }
-  
-  public void readFromFile( File file )
+
+  public void
+         readFromFile(File file)
   {
-    
+
   }
-  
+
   public TradingFiltration(DoubleMatrix markedPointSlice, IntVector types)
   {
     super();
@@ -47,15 +54,19 @@ public class TradingFiltration
     this.types = types;
     ArrayList<Double> b = new ArrayList<>();
     ArrayList<Double> s = new ArrayList<>();
+    ArrayList<Double> bprices = new ArrayList<>();
+    ArrayList<Double> sprices = new ArrayList<>();
     for (int i = 0; i < types.size(); i++)
     {
       if (types.get(i) == Side.Buy.ordinal())
       {
         b.add(markedPointSlice.get(i, 0));
+        bprices.add(markedPointSlice.get(i, 1));
       }
       else if (types.get(i) == Side.Sell.ordinal())
       {
         s.add(markedPointSlice.get(i, 0));
+        sprices.add(markedPointSlice.get(i, 1));
       }
       else
       {
@@ -63,8 +74,11 @@ public class TradingFiltration
       }
 
     }
-    buyTimes = new Vector(b);
-    sellTimes = new Vector(s);
+    buyTimes = new Vector(b).setName("buytimes");
+    sellTimes = new Vector(s).setName("selltimes");
+    buyPrices = new Vector(bprices).setName("buyprices");
+    sellPrices = new Vector(sprices).setName("sellprices");
+
   }
 
   public void
@@ -100,11 +114,13 @@ public class TradingFiltration
     }
     buyTimes = buyTimes.slice(0, buyCount);
     sellTimes = sellTimes.slice(0, sellCount);
+    buyPrices = buyPrices.slice(0, buyCount);
+    sellPrices = sellPrices.slice(0, sellCount);
 
     tradeIndexes = TradingStrategy.getIndices(times);
     buyIndexes = TradingStrategy.getIndices(buyTimes);
     sellIndexes = TradingStrategy.getIndices(sellTimes);
-    //out.println("unclassified " + unclassifiedCount);
+    // out.println("unclassified " + unclassifiedCount);
   }
 
   public Vector times;
