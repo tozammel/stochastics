@@ -100,7 +100,7 @@ public class BivariateProcessPredictor
       }
     });
 
-    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 3);
+    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 3).setName("pred");
     AtomicInteger rowCounter = new AtomicInteger();
     predictions.entrySet().stream().forEachOrdered(entry -> {
       int row = rowCounter.getAndIncrement();
@@ -110,6 +110,8 @@ public class BivariateProcessPredictor
     });
 
     out.println("predictions=" + predictions);
+    MatFile.write(new File( "pred.mat"), predictedPoints.createMiMatrix() );
+    
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
 
