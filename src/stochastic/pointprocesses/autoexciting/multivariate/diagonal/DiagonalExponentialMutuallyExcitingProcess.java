@@ -36,6 +36,8 @@ public abstract class DiagonalExponentialMutuallyExcitingProcess extends Exponen
     return new SimpleBounds(lowerBounds, upperBounds);
   }
 
+
+  
   @Override
   public Vector
          getParameters()
@@ -84,37 +86,6 @@ public abstract class DiagonalExponentialMutuallyExcitingProcess extends Exponen
           fieldArray.set(j, point[offset]);
         }
       }
-    }
-  }
-
-  public final Vector
-         getVectorField(int field)
-  {
-    return getVectorField(getParameterFields()[field]);
-  }
-
-  /**
-   * 
-   * @param field
-   * @return a Vector of dimension this{@link #dim()}, one is constructed if it
-   *         does not already exist
-   */
-  public final Vector
-         getVectorField(Field field)
-  {
-    try
-    {
-      Vector vector = (Vector) field.get(this);
-      if (vector == null)
-      {
-        vector = new Vector(dim).setName(field.getName());
-        field.set(this, vector);
-      }
-      return vector;
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException(e.getMessage(), e);
     }
   }
 

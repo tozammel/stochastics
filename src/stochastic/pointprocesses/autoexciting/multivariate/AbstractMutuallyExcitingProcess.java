@@ -137,6 +137,14 @@ public abstract class AbstractMutuallyExcitingProcess implements MultivariateFun
     super();
   }
 
+  /**
+   * 
+   * @param m
+   * @return the parameters corresponding to the specified dimension
+   */
+  public abstract Vector
+         getParameters(int m);
+
   public abstract Vector
          getParameters();
 

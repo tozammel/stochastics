@@ -12,6 +12,7 @@ import static org.apache.commons.lang.ArrayUtils.addAll;
 import java.util.concurrent.atomic.DoubleAdder;
 
 import fastmath.Vector;
+import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.Type;
@@ -187,7 +188,7 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public Object[]
          evaluateParameterStatistics(double[] point)
   {
-    DiagonalExponentialMutuallyExcitingProcess process = newProcess(point);
+    ExponentialMutuallyExcitingProcess process = newProcess(point);
     double ksStatistic = process.getΛKolmogorovSmirnovStatistic();
 
     DoubleAdder meanCompMean = new DoubleAdder();
@@ -218,10 +219,10 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
     }).toArray(), statisticsVector);
   }
 
-  public DiagonalExponentialMutuallyExcitingProcess
+  public ExponentialMutuallyExcitingProcess
          newProcess(double[] point)
   {
-    DiagonalExponentialMutuallyExcitingProcess process = (DiagonalExponentialMutuallyExcitingProcess) this.clone();
+    ExponentialMutuallyExcitingProcess process = (ExponentialMutuallyExcitingProcess) this.clone();
     process.assignParameters(point);
     return process;
   }

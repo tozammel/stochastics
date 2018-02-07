@@ -1458,4 +1458,56 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
   }
 
+  @Override
+  public Vector
+         getParameters(int m )
+  {
+    Vector params = new Vector(getParamCount() * dim);
+    for (int i = 0; i < getParamCount(); i++)
+    {
+      Vector fieldArray = getVectorField(i);
+      if (fieldArray == null)
+      {
+        throw new IllegalArgumentException("Vector field '" + getParameterFields()[i].getName() + "' not found in " + getClass().getSimpleName());
+      }
+      for (int j = 0; j < dim; j++)
+      {
+        int offset = getBoundedParameters()[i].getOrdinal() + (j * getParamCount());
+        params.set(offset, fieldArray.get(j));
+      }
+    }
+    throw new UnsupportedOperationException( "in progress" );
+    //return params;
+  }
+
+  public final Vector
+         getVectorField(int field)
+  {
+    return getVectorField(getParameterFields()[field]);
+  }
+
+  /**
+   * 
+   * @param field
+   * @return a Vector of dimension this{@link #dim()}, one is constructed if it
+   *         does not already exist
+   */
+  public final Vector
+         getVectorField(Field field)
+  {
+    try
+    {
+      Vector vector = (Vector) field.get(this);
+      if (vector == null)
+      {
+        vector = new Vector(dim).setName(field.getName());
+        field.set(this, vector);
+      }
+      return vector;
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e.getMessage(), e);
+    }
+  }
 }
