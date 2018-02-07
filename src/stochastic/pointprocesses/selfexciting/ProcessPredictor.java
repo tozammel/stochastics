@@ -43,7 +43,7 @@ public class ProcessPredictor
                              InterruptedException
   {
 
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
     process.T = new Vector(new double[]
     { 1 });

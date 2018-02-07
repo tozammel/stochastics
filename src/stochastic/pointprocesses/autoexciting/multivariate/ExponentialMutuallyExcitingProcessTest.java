@@ -9,7 +9,7 @@ import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcessTest;
 
 public class ExponentialMutuallyExcitingProcessTest extends TestCase
 {
@@ -17,7 +17,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testMeanRecurrentTime()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     double mrt = process.meanRecurrenceTime();
     
     //Vector points = process.simulate(5, 20000);
@@ -39,7 +39,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testTotalΛ() throws InterruptedException
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     process.T = new Vector(4);
     process.T.set(0, 0);
     process.T.set(1, 19);
@@ -83,7 +83,7 @@ public class ExponentialMutuallyExcitingProcessTest extends TestCase
   public void
          testA()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess uniprocess = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
 
     DiagonalExtendedApproximatePowerlawMututallyExcitingProcess process = ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest.constructLongerProcess();
     process.ε.set(new double[]

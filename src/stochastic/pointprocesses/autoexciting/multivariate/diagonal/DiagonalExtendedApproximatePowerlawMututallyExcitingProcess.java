@@ -43,11 +43,8 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public String
          toString()
   {
-    return format("ExtendedApproximatePowerlawMututallyExcitingProcess[%s,%s,%s,%s]",
-                  τ.toString().trim(),
-                  ε.toString().trim(),
-                  η.toString().trim(),
-                  b.toString().trim());
+    return format("ExtendedApproximatePowerlawMutuallyExcitingProcess%s",
+                  getParamString());
   }
 
   public Vector η;
@@ -75,7 +72,10 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
          getProcess(int m)
   {
     ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
-    process.assignParameters(getParameters(m).toDoubleArray());
+    Vector params = getParameters(m);
+    out.println( "got " + params + " for dim " + m );
+    
+    process.assignParameters(params.toDoubleArray());
     process.T = getTimes(m);
     return process;
 

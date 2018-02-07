@@ -173,8 +173,11 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       double Tmi = T(m, i);
       double Tmi1 = T(m, i - 1);
 
-      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nopen(n, Tmi1), Nopen(n, Tmi) - 1);
-      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A(j, m, n, i - 1));
+      double intersection = sum(k -> exp(-β(j, m, n) * (Tmi - T(n, k))), Nclosed(n, Tmi1), Nopen(n, Tmi) - 1);
+      // val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * (A[i - 1][j][m][n] !=
+      // 0 ? A[i - 1][j][m][n] : A(j, m, n, i - 1)));
+      val = intersection + (exp(-β(j, m, n) * (Tmi - Tmi1)) * A[i - 1][j][m][n]);
+
       A[i][j][m][n] = val;
     }
     return val;
@@ -727,6 +730,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     }
     dis.close();
     fileInputStream.close();
+    assignParameters(params.toDoubleArray());
   }
 
   /**
@@ -1474,8 +1478,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         throw new IllegalArgumentException("Vector field '" + getParameterFields()[i].getName() + "' not found in " + getClass().getSimpleName());
       }
-      int offset = getBoundedParameters()[i].getOrdinal() + (m * getParamCount());
-      params.set(offset, fieldArray.get(m));
+      params.set(i, fieldArray.get(m));
     }
     return params;
   }

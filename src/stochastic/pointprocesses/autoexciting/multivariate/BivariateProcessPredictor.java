@@ -23,7 +23,8 @@ public class BivariateProcessPredictor
          main(String[] args) throws IOException
   {
     File modelFile = new File("/home/stephen/fastmath/SPY.mat.meapl.0.model");
-    UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
+    ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess tradeProcess = new ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess(2);
+    
     tradeProcess.loadParameters(modelFile);
     out.println("Loaded " + tradeProcess + " from " + modelFile.getAbsolutePath());
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix("/home/stephen/fastmath/SPY.mat", "SPY"));

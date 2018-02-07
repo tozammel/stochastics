@@ -19,7 +19,7 @@ import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExte
 
 @SuppressWarnings(
 { "unused" })
-public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
+public class ExtendedApproximatePowerlawSelfExcitingProcessTest extends TestCase
 {
 
   private double phasedt;
@@ -27,7 +27,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
   public void
          testSimulation()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     Vector points = process.simulate(5, 30000);
     out.println("pdiff = " + points.diff().mean());
     ExtendedApproximatePowerlawSelfExcitingProcess inferredProcess = process.copy();
@@ -41,7 +41,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
   public void
          testInvLambdaExpectation()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]
@@ -52,7 +52,7 @@ public class ExtendedExponentialPowerlawSelfExcitingProcessTest extends TestCase
   public void
          testInvLambda()
   {
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     // process.ε = 0.05;
 
     process.T = new Vector(new double[]

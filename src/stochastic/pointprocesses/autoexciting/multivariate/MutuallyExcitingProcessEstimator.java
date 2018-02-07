@@ -59,7 +59,7 @@ public class MutuallyExcitingProcessEstimator
     //Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 2;
+    int trajectoryCount = Runtime.getRuntime().availableProcessors() ;
     if (args.length > 1)
     {
       trajectoryCount = Integer.valueOf(args[1]);
@@ -191,7 +191,7 @@ public class MutuallyExcitingProcessEstimator
     double firstTimestampInInterval = DateUtils.convertTimeUnits(process.T.getLeftmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
     double lastTimestampInInterval = DateUtils.convertTimeUnits(process.T.getRightmostValue(), TimeUnit.MILLISECONDS, TimeUnit.HOURS);
 
-    out.println("Storing estimated parameters in " + modelFile
+    out.println("Storing estimated parameters in " + modelFile.getAbsolutePath()
                 + " covering the range "
                 + firstTimestampInInterval
                 + " to "

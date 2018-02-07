@@ -3,6 +3,7 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
+import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.range;
 import static java.util.stream.IntStream.rangeClosed;
@@ -15,12 +16,13 @@ import fastmath.Vector;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.Type;
+import stochastic.pointprocesses.selfexciting.UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess;
 
 public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess extends ExponentialMutuallyExcitingProcess
 {
 
   @Override
-  public String
+  public final String
          toString()
   {
     return getClass().getSimpleName() + "[" + getParamString() + "]";
@@ -34,6 +36,25 @@ public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess ext
 
   private DoubleColMatrix b;
 
+  /**
+   * 
+   * @param m
+   * @return the m-th univariate process corresponding to the m-th dimension of
+   *         this
+   */
+  public ExtendedApproximatePowerlawSelfExcitingProcess
+         getProcess(int m)
+  {
+    ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
+    Vector params = getParameters(m);
+    out.println("got " + params + " for dim " + m);
+
+    process.assignParameters(params.toDoubleArray());
+    process.T = getTimes(m);
+    return process;
+
+  }
+  
   /**
    * choose m such that m^M=1 minute, in units of milliseconds
    */

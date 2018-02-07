@@ -17,7 +17,7 @@ import fastmath.Vector;
 import junit.framework.TestCase;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
-import stochastic.pointprocesses.selfexciting.ExtendedExponentialPowerlawSelfExcitingProcessTest;
+import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcessTest;
 
 public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTest extends TestCase
 {
@@ -329,7 +329,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
          testAlphaBetaAndGamma()
   {
     DiagonalExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     mprocess.assignParameters(process.getParameters().toDoubleArray());
     for (int j = 0; j < process.M; j++)
     {
@@ -343,7 +343,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
          testinvΛ() throws InterruptedException
   {
     DiagonalExtendedApproximatePowerlawMututallyExcitingProcess mprocess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
-    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedExponentialPowerlawSelfExcitingProcessTest.constructProcess();
+    ExtendedApproximatePowerlawSelfExcitingProcess process = ExtendedApproximatePowerlawSelfExcitingProcessTest.constructProcess();
     process.T = new Vector(3);
     process.T.set(0, 0);
     process.T.set(1, 19);
