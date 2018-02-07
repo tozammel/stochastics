@@ -13,9 +13,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.fusesource.jansi.Ansi.Color;
 
+import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
@@ -73,17 +75,18 @@ public class BivariateProcessPredictor
     out.println("sellTimes=" + sellTimes);
 
     TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
-    /**
-     * TODO: nmultithread
-     */
+
     double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
-    int n = 1000;
+    int n = 100;
     double dt = W / n;
-    out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS));
+    out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " minutes");
+    AtomicInteger calculatedCounter = new AtomicInteger();
     rangeClosed(1, n).parallel().forEach(i -> {
       try
       {
         predictProcess(tradeProcess.T.getLeftmostValue() + dt * i, buyTimes, sellTimes, buyProcess.copy(), sellProcess.copy(), predictions);
+        int finished = calculatedCounter.incrementAndGet();
+        out.println("#" + finished + "/" + n);
       }
       catch (InterruptedException | ExecutionException e)
       {
@@ -97,10 +100,14 @@ public class BivariateProcessPredictor
       }
     });
 
-    out.println();
-    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += dt)
-    {
-    }
+    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 3);
+    AtomicInteger rowCounter = new AtomicInteger();
+    predictions.entrySet().stream().forEachOrdered(entry -> {
+      int row = rowCounter.getAndIncrement();
+      predictedPoints.set(row, 0, entry.getKey());
+      predictedPoints.set(row, 1, entry.getValue().left);
+      predictedPoints.set(row, 2, entry.getValue().right);
+    });
 
     out.println("predictions=" + predictions);
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
@@ -120,6 +127,7 @@ public class BivariateProcessPredictor
   }
 
   public static void
+
          predictProcess(double instant,
                         Vector buyTimes,
                         Vector sellTimes,
@@ -141,13 +149,13 @@ public class BivariateProcessPredictor
 
     ForkJoinPool pool = new ForkJoinPool(2);
 
-
-    double predictedMeanBuyingDuration =  predictProcess(buyProcess.copy());
-    out.println("predictedMeanBuyingDuration@" + instant + "=" + predictedMeanBuyingDuration);
+    double predictedMeanBuyingDuration = predictProcess(buyProcess.copy());
+    out.println(Thread.currentThread().getName() + " predictedMeanBuyingDuration@" + instant + "=" + predictedMeanBuyingDuration);
     double predictedMeanSellingDuration = predictProcess(sellProcess.copy());
-    out.println("predictedMeanSellingDuration@" + instant + "=" + predictedMeanSellingDuration);
+    out.println(Thread.currentThread().getName() + " predictedMeanSellingDuration@" + instant + "=" + predictedMeanSellingDuration);
     double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
-    out.println(ansi().fg(Color.GREEN) + "instant="
+    out.println(ansi().fg(Color.GREEN) + Thread.currentThread().getName()
+                + " instant="
                 + instant
                 + " predictedMeanBuyingDuration="
                 + predictedMeanBuyingDuration
@@ -165,8 +173,8 @@ public class BivariateProcessPredictor
     double lastTBefore = buyProcess.T.getRightmostValue();
     Vector predicted = buyProcess.predict(lastTBefore + DateUtils.convertTimeUnits(30, TimeUnit.MINUTES, TimeUnit.MILLISECONDS));
     double lastTafter = buyProcess.T.getRightmostValue();
-    double simDuration = lastTafter - lastTBefore;
-    out.println("predicted " + predicted.size() + "\nsimLength=" + simDuration);
+    double simDurationInMinutes = DateUtils.convertTimeUnits(lastTafter - lastTBefore, TimeUnit.MILLISECONDS, TimeUnit.MINUTES);
+    out.println(Thread.currentThread().getName() + " predicted " + predicted.size() + " points spanning " + simDurationInMinutes + " minutes");
     double meanPredictedDuration = predicted.diff().mean();
     return meanPredictedDuration;
   }
