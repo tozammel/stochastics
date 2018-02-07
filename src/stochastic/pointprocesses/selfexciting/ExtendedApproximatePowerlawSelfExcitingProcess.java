@@ -1,6 +1,7 @@
 package stochastic.pointprocesses.selfexciting;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -12,6 +13,7 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 
 import fastmath.Vector;
+import fastmath.Vector.Condition;
 import fastmath.matfile.MatFile;
 import junit.framework.TestCase;
 
@@ -91,12 +93,13 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     return M + 1;
   }
 
-//  @Override
-//  public double
-//         Z()
-//  {
-//    return (ε < 1E-14) ? (b * η + M) : ((pow(τ, -ε) * (pow(m, ε) - pow(m, -ε * (M - 1)))) / (pow(m, ε) - 1) + b * η);
-//  }
+  // @Override
+  // public double
+  // Z()
+  // {
+  // return (ε < 1E-14) ? (b * η + M) : ((pow(τ, -ε) * (pow(m, ε) - pow(m, -ε * (M
+  // - 1)))) / (pow(m, ε) - 1) + b * η);
+  // }
 
   @Override
   public double
@@ -130,10 +133,9 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     A = new double[sampleCount][order()];
   }
 
-  
   public Vector
          simulate(int seed,
-                 double stoppingTime )
+                  double stoppingTime)
   {
     int lastRejectedPoint = -1;
     int rejects = 0;
@@ -144,8 +146,8 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     int n = T.size();
     double nextTime = 0;
     double startTime = currentTimeMillis();
-    //setAsize(sampleCount);
-    for (int i = 0;  nextTime < stoppingTime; i++)
+    // setAsize(sampleCount);
+    for (int i = 0; nextTime < stoppingTime; i++)
     {
       double y = expDist.sample();
       trace = false;
@@ -237,6 +239,52 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     // process.printA();
 
     return T;
+  }
+
+  public Vector
+         predict(double stoppingTime)
+  {
+    double nextTime = T.getRightmostValue();
+    int i = 0;
+    double prevdt = Double.MAX_VALUE;
+    int startIndex = T.size();
+    while (nextTime < stoppingTime)
+    {
+      double dt = invΛ(1);
+      assert dt > 0;
+      double dtdt = prevdt - dt;
+      prevdt = dt;
+
+      nextTime = T.getRightmostValue() + dt;
+      appendTime(nextTime);
+      // if (trace)
+      {
+        if (i++ % 200 == 199)
+        {
+           double Tmean = T.diff().mean();
+          out.println("#" + i + " E[nextdt]=" + dt + " dtdt=" + dtdt + " mean(T)=" + Tmean );
+        }
+      }
+
+      if (abs(dtdt) < pow(10, -10))
+      {
+        out.println("dtdt=" + dtdt);
+        break;
+      }
+    }
+    return T.slice(startIndex, T.size());
+  }
+
+  public int
+         N(double instant)
+  {
+    return T.findLast(instant, Condition.LT) + 1;
+  }
+
+  public int
+         Nclosed(double instant)
+  {
+    return T.findLast(instant, Condition.LTE) + 1;
   }
 
 }
