@@ -37,7 +37,7 @@ public class BivariateProcessPredictor
                              InterruptedException,
                              ExecutionException
   {
-    File modelFile = new File("/home/stephen/fm/SPY.mat.urweapl.0.model");
+    File modelFile = new File("/home/stephen/fm/SPY.mat.urwmeapl.0.model");
     UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
 
     tradeProcess.loadParameters(modelFile);
@@ -71,8 +71,8 @@ public class BivariateProcessPredictor
     out.println("buyΛmean=" + buyΛMean + " buyΛvar=" + buyΛVar);
     out.println("sellΛ=" + sellΛMean + " sellΛvar=" + sellΛVar);
 
-    out.println("buyTimes=" + buyTimes);
-    out.println("sellTimes=" + sellTimes);
+//    out.println("buyTimes=" + buyTimes);
+//    out.println("sellTimes=" + sellTimes);
 
     TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
 
