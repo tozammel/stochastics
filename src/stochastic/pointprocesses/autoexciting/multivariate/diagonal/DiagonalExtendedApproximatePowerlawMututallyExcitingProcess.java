@@ -20,7 +20,8 @@ import stochastic.pointprocesses.selfexciting.Type;
 /**
  * a multivariate version of
  * {@link ExtendedApproximatePowerlawSelfExcitingProcess} with null
- * cross-terms.. that is, the branching matrix is a diagonal vector
+ * cross-terms.. that is, the branching matrix is a diagonal vector.. so its a
+ * diagonally covariance process
  */
 public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends DiagonalExponentialMutuallyExcitingProcess
 {
@@ -63,6 +64,22 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   public double base = exp(log(60000) / M);
 
   public Vector[] dT;
+
+  /**
+   * 
+   * @param m
+   * @return the m-th univariate process corresponding to the m-th dimension of
+   *         this
+   */
+  public ExtendedApproximatePowerlawSelfExcitingProcess
+         getProcess(int m)
+  {
+    ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
+    process.assignParameters(getParameters(m).toDoubleArray());
+    process.T = getTimes(m);
+    return process;
+
+  }
 
   @Override
   public BoundedParameter[]

@@ -23,6 +23,7 @@ import static java.util.stream.Stream.concat;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -504,8 +505,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     return x / dim();
   }
 
-
-
   @Override
   public final double
          getMeanSquaredPredictionError(int m)
@@ -628,9 +627,6 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     throw new UnsupportedOperationException("TODO");
   }
 
-
-
-
   /**
    * The mean of 1 minus the Kolmogorov Smirnov statistic averaged over each type
    * 1..dim
@@ -722,7 +718,15 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final void
          loadParameters(File modelFile) throws IOException
   {
-    throw new UnsupportedOperationException("TODO");
+    FileInputStream fileInputStream = new FileInputStream(modelFile);
+    DataInputStream dis = new DataInputStream(fileInputStream);
+    Vector params = new Vector(getParamCount());
+    for (int i = 0; i < getParamCount(); i++)
+    {
+      params.set(i, dis.readDouble());
+    }
+    dis.close();
+    fileInputStream.close();
   }
 
   /**
@@ -738,10 +742,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       Vector λvector = λvector(m).slice(1, N(m) - 1);
 
       Vector lslice = λvector.log();
-      double compsum = sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1), 0, dim() - 1),
-                           0,
-                           N(m) - 1)
-                       / Z(m, m);
+      double compsum =
+                     sum(i -> sum(n -> sum(j -> (α(j, m, n) / β(j, m, n)) * (1 - exp(-β(j, m, n) * (maxT - T(m, i)))), 0, order() - 1) / Z(m, n), 0, dim() - 1),
+                         0,
+                         N(m) - 1);
       // out.println("compsum(m=" + m + ")=" + compsum);
       return lslice.sum() - compsum;
     }, 0, dim() - 1) + (maxT - T.getLeftmostValue());
@@ -1302,7 +1306,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   {
     int tk = getTimes(m).size() - 1;
 
-    return φdt(m, dt, tk );
+    return φdt(m, dt, tk);
   }
 
   public double
@@ -1460,9 +1464,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   @Override
   public Vector
-         getParameters(int m )
+         getParameters(int m)
   {
-    Vector params = new Vector(getParamCount() * dim);
+    Vector params = new Vector(getParamCount());
     for (int i = 0; i < getParamCount(); i++)
     {
       Vector fieldArray = getVectorField(i);
@@ -1470,14 +1474,10 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       {
         throw new IllegalArgumentException("Vector field '" + getParameterFields()[i].getName() + "' not found in " + getClass().getSimpleName());
       }
-      for (int j = 0; j < dim; j++)
-      {
-        int offset = getBoundedParameters()[i].getOrdinal() + (j * getParamCount());
-        params.set(offset, fieldArray.get(j));
-      }
+      int offset = getBoundedParameters()[i].getOrdinal() + (m * getParamCount());
+      params.set(offset, fieldArray.get(m));
     }
-    throw new UnsupportedOperationException( "in progress" );
-    //return params;
+    return params;
   }
 
   public final Vector
