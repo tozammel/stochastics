@@ -257,9 +257,9 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
 
       nextTime = T.getRightmostValue() + dt;
       appendTime(nextTime);
-      // if (trace)
+       if (trace)
       {
-        if (i++ % 200 == 199)
+        if (i++ % 1000 == 999)
         {
            double Tmean = T.diff().mean();
           out.println("#" + i + " E[nextdt]=" + dt + " dtdt=" + dtdt + " mean(T)=" + Tmean );

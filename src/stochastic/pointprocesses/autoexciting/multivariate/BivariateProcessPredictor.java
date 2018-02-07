@@ -58,37 +58,39 @@ public class BivariateProcessPredictor
     out.println("buyΛmean=" + buyΛMean + " buyΛvar=" + buyΛVar);
     out.println("sellΛ=" + sellΛMean + " sellΛvar=" + sellΛVar);
 
-    out.println( "buyTimes=" + buyTimes );
-    out.println( "sellTimes=" + sellTimes );
-    
-    for ( double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += 1000 )
+    out.println("buyTimes=" + buyTimes);
+    out.println("sellTimes=" + sellTimes);
+
+    for (double instant = tradeProcess.T.getLeftmostValue(); instant < tradeProcess.T.getRightmostValue(); instant += 1000)
     {
       buyProcess.T = buyTimes;
       sellProcess.T = sellTimes;
       int nBuys = buyProcess.N(instant);
       int nSells = sellProcess.N(instant);
-      buyProcess.T = buyTimes.slice(0, nBuys );
-      sellProcess.T = sellTimes.slice(0, nSells );
+      buyProcess.T = buyTimes.slice(0, nBuys);
+      sellProcess.T = sellTimes.slice(0, nSells);
 
-      out.println( "instant=" + String.format("%20.20f", instant) + " nBuys=" + nBuys + " nSells=" + nSells);
+      out.println("instant=" + String.format("%20.20f", instant) + " nBuys=" + nBuys + " nSells=" + nSells);
       buyProcess.verbose = true;
       sellProcess.verbose = true;
-      
+
       double predictedMeanBuyingDuration = predictProcess(buyProcess);
       double predictedMeanSellingDuration = predictProcess(sellProcess);
-      double projectedBuyOverSellRatio = 1 / ( predictedMeanBuyingDuration / predictedMeanSellingDuration );
-      out.println( "instant=" + instant + " projectedBuyOverSellRatio=" + projectedBuyOverSellRatio );
+      double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
+      out.println("instant=" + instant + " projectedBuyOverSellRatio=" + projectedBuyOverSellRatio);
     }
-    
 
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
 
-
     double predictedMeanBuyingDuration = predictProcess(buyProcess);
     double predictedMeanSellingDuration = predictProcess(sellProcess);
-    double projectedBuyOverSellRatio = 1 / ( predictedMeanBuyingDuration / predictedMeanSellingDuration );
-    out.println( "projectedBuyOverSellRatio=" + projectedBuyOverSellRatio );
+    double projectedBuyOverSellRatio = 1 / (predictedMeanBuyingDuration / predictedMeanSellingDuration);
+    out.println("predictedMeanBuyingDuration=" + predictedMeanBuyingDuration
+                + " predictedMeanSellingDuration="
+                + predictedMeanSellingDuration
+                + "\nprojectedBuyOverSellRatio="
+                + projectedBuyOverSellRatio);
 
     // XYChart chart = Plotter.chart("invΛ", "a", y -> buyProcess.invΛ(0, y), 0, 10,
     // t -> t);
@@ -112,7 +114,6 @@ public class BivariateProcessPredictor
     double simDuration = lastTafter - lastTBefore;
     out.println("predicted " + predicted.size() + "\nsimLength=" + simDuration);
     double meanPredictedDuration = predicted.diff().mean();
-    out.println("meanPredictedBuyDuration=" + meanPredictedDuration);
     return meanPredictedDuration;
   }
 
