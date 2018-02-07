@@ -250,7 +250,10 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
      * previous entries
      */
     Vector comp = Λ();
-    out.println("comp mean is " + comp.mean() + " and var is " + comp.variance());
+    if (trace)
+    {
+      out.println("comp mean is " + comp.mean() + " and var is " + comp.variance());
+    }
 
     double nextTime = T.getRightmostValue();
     int i = 0;
@@ -276,7 +279,7 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
 
       if (abs(dtdt) < pow(10, -10))
       {
-        //out.println("dtdt=" + dtdt);
+        // out.println("dtdt=" + dtdt);
         break;
       }
     }
