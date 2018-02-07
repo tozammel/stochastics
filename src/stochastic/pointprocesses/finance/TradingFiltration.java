@@ -104,11 +104,15 @@ public class TradingFiltration
       }
       if (side == Side.Buy)
       {
-        buyTimes.set(buyCount++, t);
+        buyTimes.set(buyCount, t);
+        buyPrices.set(buyCount, price);
+        buyCount++;
       }
       else if (side == Side.Sell)
       {
-        sellTimes.set(sellCount++, t);
+        sellTimes.set(sellCount, t);
+        sellPrices.set(sellCount, price);
+        sellCount++;
       }
 
     }

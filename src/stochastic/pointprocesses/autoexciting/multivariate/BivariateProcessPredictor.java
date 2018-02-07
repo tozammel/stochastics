@@ -110,7 +110,7 @@ public class BivariateProcessPredictor
       predictedPoints.set(row, 2, entry.getValue().right);
       predictedPoints.set(row, 3, log(entry.getValue().left / entry.getValue().right));
       predictedPoints.set(row, 4, filtration.buyPrices.get(buyProcess.N(entry.getKey() - 1)));
-      predictedPoints.set(row, 5, filtration.sellPrices.get(buyProcess.N(entry.getKey() - 1)));
+      predictedPoints.set(row, 5, filtration.sellPrices.get(sellProcess.N(entry.getKey() - 1)));
     });
 
     out.println("predictions=" + predictions);
