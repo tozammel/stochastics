@@ -196,7 +196,7 @@ public class MutuallyExcitingProcessEstimator
                 + firstTimestampInInterval
                 + " to "
                 + lastTimestampInInterval
-                + " hours");
+                + " hours of type " + process.getType() + " in " + modelFile.getAbsolutePath() );
 
     process.storeParameters(modelFile);
   }

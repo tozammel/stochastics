@@ -1,7 +1,5 @@
 package stochastic.pointprocesses.finance;
 
-import static java.lang.System.out;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

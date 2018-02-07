@@ -3,7 +3,6 @@ package stochastic.pointprocesses.autoexciting.multivariate.diagonal;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
-import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.util.Arrays.stream;
 import static java.util.stream.IntStream.rangeClosed;
@@ -40,13 +39,6 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
     b = new Vector(dim).setName("b");
   }
 
-  public String
-         toString()
-  {
-    return format("ExtendedApproximatePowerlawMutuallyExcitingProcess%s",
-                  getParamString());
-  }
-
   public Vector η;
 
   public Vector b;
@@ -73,8 +65,8 @@ public class DiagonalExtendedApproximatePowerlawMututallyExcitingProcess extends
   {
     ExtendedApproximatePowerlawSelfExcitingProcess process = new ExtendedApproximatePowerlawSelfExcitingProcess();
     Vector params = getParameters(m);
-    out.println( "got " + params + " for dim " + m );
-    
+    out.println("got " + params + " for dim " + m);
+
     process.assignParameters(params.toDoubleArray());
     process.T = getTimes(m);
     return process;

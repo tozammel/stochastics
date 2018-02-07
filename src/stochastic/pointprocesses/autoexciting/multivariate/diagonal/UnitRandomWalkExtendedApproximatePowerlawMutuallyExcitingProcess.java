@@ -4,7 +4,7 @@ import static java.lang.System.out;
 
 import fastmath.Vector;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
-import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
+import stochastic.pointprocesses.selfexciting.Type;
 import stochastic.pointprocesses.selfexciting.UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess;
 
 /**
@@ -15,6 +15,13 @@ import stochastic.pointprocesses.selfexciting.UnitRandomWalkExtendedApproximateP
  */
 public class UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess extends DiagonalExtendedApproximatePowerlawMututallyExcitingProcess
 {
+
+  @Override
+  public Type
+         getType()
+  {
+    return Type.UnitRandomWalkExtendedApproximatePowerlaw;
+  }
 
   /**
    * 

@@ -1,7 +1,5 @@
 package stochastic.pointprocesses.finance;
 
-import static java.lang.System.out;
-
 import java.util.ArrayList;
 
 import fastmath.DoubleMatrix;

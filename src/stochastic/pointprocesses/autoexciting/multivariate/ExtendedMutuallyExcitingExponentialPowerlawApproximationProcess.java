@@ -16,7 +16,6 @@ import fastmath.Vector;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.Type;
-import stochastic.pointprocesses.selfexciting.UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess;
 
 public class ExtendedMutuallyExcitingExponentialPowerlawApproximationProcess extends ExponentialMutuallyExcitingProcess
 {

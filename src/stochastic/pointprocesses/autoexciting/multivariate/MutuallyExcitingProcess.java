@@ -1,8 +1,9 @@
 package stochastic.pointprocesses.autoexciting.multivariate;
 
+import static java.lang.String.format;
+
 import org.apache.commons.math3.optim.SimpleBounds;
 
-import fastmath.IntVector;
 import fastmath.Vector;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
 
@@ -11,12 +12,11 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
 
   protected int dim;
 
-
   public MutuallyExcitingProcess()
   {
     super();
   }
-  
+
   public SimpleBounds
          getParameterBounds()
   {
@@ -64,10 +64,19 @@ public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingPr
 
   }
 
+  public abstract String
+         getParamString();
+
   public abstract int
          order();
 
   public abstract double
          totalΛ();
+
+  public String
+         toString()
+  {
+    return format("%s%s", getClass().getSimpleName(), getParamString());
+  }
 
 }

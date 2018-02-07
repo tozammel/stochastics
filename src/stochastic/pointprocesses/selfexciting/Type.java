@@ -2,7 +2,7 @@ package stochastic.pointprocesses.selfexciting;
 
 public enum Type
 {
-  ApproximatePowerlaw, ExtendedApproximatePowerlaw, MultivariateDiagonalExtendedApproximatePowerlaw, UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw, MultivariateFullExtendedApproximatePowerlaw;
+  ApproximatePowerlaw, ExtendedApproximatePowerlaw, MultivariateDiagonalExtendedApproximatePowerlaw, UnitRandomWalkExtendedApproximatePowerlaw, UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw, MultivariateFullExtendedApproximatePowerlaw;
 
   public String
          getFilenameExtension()
@@ -13,6 +13,8 @@ public enum Type
       return "apl";
     case ExtendedApproximatePowerlaw:
       return "eapl";
+    case UnitRandomWalkExtendedApproximatePowerlaw:
+      return "urweapl";
     case MultivariateDiagonalExtendedApproximatePowerlaw:
       return "meapl";
     case MultivariateFullExtendedApproximatePowerlaw:
