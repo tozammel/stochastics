@@ -6,6 +6,8 @@ import static java.lang.System.out;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BinaryOperator;
 
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
@@ -14,6 +16,7 @@ import org.apache.commons.math3.random.JDKRandomGenerator;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import junit.framework.TestCase;
+import util.DateUtils;
 
 public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximatePowerlawSelfExcitingProcess implements MultivariateFunction, Serializable
 {
@@ -130,9 +133,10 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     A = new double[sampleCount][order()];
   }
 
+  
   public Vector
          simulate(int seed,
-                  int sampleCount)
+                 double stoppingTime )
   {
     int lastRejectedPoint = -1;
     int rejects = 0;
@@ -143,10 +147,9 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     int n = T.size();
     double nextTime = 0;
     double startTime = currentTimeMillis();
-    setAsize(sampleCount);
-    for (int i = 0; i < sampleCount; i++)
+    //setAsize(sampleCount);
+    for (int i = 0;  nextTime < stoppingTime; i++)
     {
-
       double y = expDist.sample();
       trace = false;
       // TODO: average over Λ and compare against the invariant projection
@@ -232,7 +235,7 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
     MatFile.write(fn, T.setName("T").createMiMatrix());
     out.println("write " + fn);
     double seconds = duration / 1000;
-    double pointsPerSecond = sampleCount / seconds;
+    double pointsPerSecond = T.size() / seconds;
     out.println("simulation rate: " + pointsPerSecond + " points/second");
     // process.printA();
 

@@ -9,6 +9,7 @@ import static util.Console.println;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.optim.PointValuePair;
@@ -20,6 +21,7 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import junit.framework.TestCase;
+import util.DateUtils;
 import util.TerseThreadFactory;
 
 public class ProcessSimulator
@@ -60,6 +62,7 @@ public class ProcessSimulator
 
   }
 
+  
   public static Vector
          simulateProcess(ExtendedApproximatePowerlawSelfExcitingProcess process,
                          int seed)
@@ -73,7 +76,7 @@ public class ProcessSimulator
     int sampleCount = 130000;
     double startTime = currentTimeMillis();
     process.setAsize(sampleCount);
-    for (int i = 0; i < sampleCount; i++)
+    for (int i = 0; nextTime < DateUtils.convertTimeUnits(30, TimeUnit.MINUTES, TimeUnit.MILLISECONDS); i++)
     {
 
       double y = expDist.sample();
@@ -85,6 +88,7 @@ public class ProcessSimulator
         int pointsSinceLastRejection = lastRejectedPoint == -1 ? 0 : (i - lastRejectedPoint);
         lastRejectedPoint = i;
         rejects++;
+        double lastTimeInMinutes = DateUtils.convertTimeUnits(nextTime, TimeUnit.MILLISECONDS, TimeUnit.MINUTES);
         out.println("seed " + seed
                     + ":"
                     + ansi().fgBrightRed()
@@ -96,6 +100,8 @@ public class ProcessSimulator
                     + rejects
                     + " points since last reject="
                     + pointsSinceLastRejection
+                    + " lastTimeInMinutes="
+                    + lastTimeInMinutes
                     + ansi().fgDefault());
         continue;
       }

@@ -23,7 +23,7 @@ public class BivariateProcessPredictor
   {
     File modelFile = new File("/home/stephen/fm/SPY.mat.urweapl.0.model");
     UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess tradeProcess = new UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess(2);
-    
+
     tradeProcess.loadParameters(modelFile);
     out.println("Loaded " + tradeProcess + " from " + modelFile.getAbsolutePath());
     TradingFiltration filtration = new TradingFiltration(MatFile.loadMatrix("/home/stephen/fastmath/SPY.mat", "SPY"));
@@ -34,7 +34,7 @@ public class BivariateProcessPredictor
     tradeProcess.T = firstSlice.times;
     tradeProcess.X = firstSlice.markedPoints;
     double ll = tradeProcess.logLik();
-//    Vector innov = tradeProcess.getInnovationSequence(0);
+    // Vector innov = tradeProcess.getInnovationSequence(0);
     out.println("ll=" + ll);
     Vector buyTimes = tradeProcess.getTimes(Side.Buy.ordinal());
     Vector sellTimes = tradeProcess.getTimes(Side.Sell.ordinal());
@@ -43,16 +43,19 @@ public class BivariateProcessPredictor
 
     ExtendedApproximatePowerlawSelfExcitingProcess buyProcess = tradeProcess.getProcess(Side.Buy.ordinal());
     ExtendedApproximatePowerlawSelfExcitingProcess sellProcess = tradeProcess.getProcess(Side.Sell.ordinal());
+
+    out.println("tradeProcess=" + tradeProcess);
+    out.println("buyProcess=" + buyProcess);
+    out.println("sellProcess=" + sellProcess);
+
+    Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
+    Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
     
-    out.println( "tradeProcess=" + tradeProcess );
-    out.println( "buyProcess=" + buyProcess );
-    out.println( "sellProcess=" + sellProcess );
-    
+
     double mean = tradeProcess.Λ(0).mean();
-    out.println("mean0=" + mean);
+    out.println("mean0=" + mean + " var=" + tradeProcess.Λ(0).variance());
 
-
-  //  MatFile.write("innov.mat", innov.createMiMatrix());
+    MatFile.write("innov.mat", buyInnov.createMiMatrix(), sellInnov.createMiMatrix());
   }
 
   public static ArrayList<TradingFiltration>

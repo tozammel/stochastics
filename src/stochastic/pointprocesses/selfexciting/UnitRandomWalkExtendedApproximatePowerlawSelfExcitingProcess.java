@@ -3,8 +3,12 @@ package stochastic.pointprocesses.selfexciting;
 public class UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess extends ExtendedApproximatePowerlawSelfExcitingProcess
 {
 
- 
-  
+  public UnitRandomWalkExtendedApproximatePowerlawSelfExcitingProcess()
+  {
+    super();
+    this.τ = 1;
+  }
+
   @Override
   public Type
          getType()
