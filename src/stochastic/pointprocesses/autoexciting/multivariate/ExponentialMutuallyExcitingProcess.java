@@ -723,8 +723,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     out.println( modelFile.getAbsolutePath() + " length is " + modelFile.length() + " and paramCount=" + getParamCount() );
     FileInputStream fileInputStream = new FileInputStream(modelFile);
     DataInputStream dis = new DataInputStream(fileInputStream);
-    Vector params = new Vector(getParamCount());
-    for (int i = 0; i < getParamCount(); i++)
+    Vector params = new Vector(getParamCount() * dim);
+    for (int i = 0; i < params.size(); i++)
     {
       params.set(i, dis.readDouble());
     }
