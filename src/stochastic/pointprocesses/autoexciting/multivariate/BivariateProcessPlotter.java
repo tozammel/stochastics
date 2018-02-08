@@ -4,6 +4,7 @@ import static java.lang.Math.log;
 import static java.lang.System.out;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
+import static util.Plotter.display;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +18,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.fusesource.jansi.Ansi.Color;
+import org.knowm.xchart.XYChart;
 
 import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
+import fastmath.Pair;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import stochastic.pointprocesses.autoexciting.multivariate.diagonal.UnitRandomWalkExtendedApproximatePowerlawMutuallyExcitingProcess;
@@ -29,8 +32,9 @@ import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.selfexciting.ExtendedApproximatePowerlawSelfExcitingProcess;
 import util.DateUtils;
 import util.DoublePair;
+import util.Plotter;
 
-public class BivariateProcessPredictor
+public class BivariateProcessPlotter
 {
 
   public static void
@@ -72,49 +76,85 @@ public class BivariateProcessPredictor
     out.println("buyΛmean=" + buyΛMean + " buyΛvar=" + buyΛVar);
     out.println("sellΛ=" + sellΛMean + " sellΛvar=" + sellΛVar);
 
-    // out.println("buyTimes=" + buyTimes);
-    // out.println("sellTimes=" + sellTimes);
+    double leftPoint = tradeProcess.T.getLeftmostValue();
+    double rightPoint = tradeProcess.T.getRightmostValue();
+    int intensitySampleCount = 100;
+    XYChart chart = Plotter.chart("t (minutes)",
+                                  "buyλ",
+                                  t -> buyProcess.λ((t * 1000 * 60) + leftPoint) * 60000,
+                                  0,
+                                  (rightPoint - leftPoint) / 60000,
+                                  intensitySampleCount,
+                                  t -> t);
 
-    TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
+    Pair<double[], double[]> sellIntensity = Plotter.sampleFunction(t -> sellProcess.λ((t * 1000 * 60 + leftPoint)) * 60000,
+                                                                    intensitySampleCount,
+                                                                    0,
+                                                                    (rightPoint - leftPoint) / 60000,
+                                                                    t -> t);
+    chart.addSeries("sellλ", sellIntensity.left, sellIntensity.right);
+    display(chart);
 
-    double W = tradeProcess.T.getRightmostValue() - tradeProcess.T.getLeftmostValue();
-    int n = 5000;
-    double dt = W / n;
-    out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " seconds");
-    AtomicInteger calculatedCounter = new AtomicInteger();
-    rangeClosed(1, n).parallel().forEach(i -> {
-      try
+    XYChart ratioChart = Plotter.chart("t (minutes)", "ln(buyλ/sellλ)", t -> {
+      double y = log( buyProcess.λ((t * 60 * 1000) + leftPoint) / sellProcess.λ((t * 1000 * 60) + leftPoint) );
+      if (!Double.isFinite(y))
       {
-        predictProcess(tradeProcess.T.getLeftmostValue() + dt * i, buyTimes, sellTimes, buyProcess.copy(), sellProcess.copy(), predictions);
-        int finished = calculatedCounter.incrementAndGet();
-        out.println("#" + finished + "/" + n);
+        return 1;
       }
-      catch (InterruptedException | ExecutionException e)
-      {
-        e.printStackTrace(System.err);
-        if (e instanceof RuntimeException)
-        {
-          throw (RuntimeException) e;
-        }
-        throw new RuntimeException(e.getMessage(), e);
+      return y;
+    }, 0, (rightPoint - leftPoint) / 60000, intensitySampleCount, t -> t);
+    display(ratioChart);
 
-      }
-    });
-
-    DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 6).setName("pred");
-    AtomicInteger rowCounter = new AtomicInteger();
-    predictions.entrySet().stream().forEachOrdered(entry -> {
-      int row = rowCounter.getAndIncrement();
-      predictedPoints.set(row, 0, entry.getKey());
-      predictedPoints.set(row, 1, entry.getValue().left);
-      predictedPoints.set(row, 2, entry.getValue().right);
-      predictedPoints.set(row, 3, log(entry.getValue().left / entry.getValue().right));
-      predictedPoints.set(row, 4, filtration.buyPrices.get(buyProcess.N(entry.getKey() - 1)));
-      predictedPoints.set(row, 5, filtration.sellPrices.get(sellProcess.N(entry.getKey() - 1)));
-    });
-
-    out.println("predictions=" + predictions);
-    MatFile.write(new File("pred.mat"), predictedPoints.createMiMatrix());
+    // // out.println("buyTimes=" + buyTimes);
+    // // out.println("sellTimes=" + sellTimes);
+    //
+    // TreeMap<Double, DoublePair> predictions = new TreeMap<Double, DoublePair>();
+    //
+    // double W = tradeProcess.T.getRightmostValue() -
+    // tradeProcess.T.getLeftmostValue();
+    // int n = 5000;
+    // double dt = W / n;
+    // out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS,
+    // TimeUnit.SECONDS) + " seconds");
+    // AtomicInteger calculatedCounter = new AtomicInteger();
+    // rangeClosed(1, n).parallel().forEach(i -> {
+    // try
+    // {
+    // predictProcess(tradeProcess.T.getLeftmostValue() + dt * i, buyTimes,
+    // sellTimes, buyProcess.copy(), sellProcess.copy(), predictions);
+    // int finished = calculatedCounter.incrementAndGet();
+    // out.println("#" + finished + "/" + n);
+    // }
+    // catch (InterruptedException | ExecutionException e)
+    // {
+    // e.printStackTrace(System.err);
+    // if (e instanceof RuntimeException)
+    // {
+    // throw (RuntimeException) e;
+    // }
+    // throw new RuntimeException(e.getMessage(), e);
+    //
+    // }
+    // });
+    //
+    // DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(),
+    // 6).setName("pred");
+    // AtomicInteger rowCounter = new AtomicInteger();
+    // predictions.entrySet().stream().forEachOrdered(entry -> {
+    // int row = rowCounter.getAndIncrement();
+    // predictedPoints.set(row, 0, entry.getKey());
+    // predictedPoints.set(row, 1, entry.getValue().left);
+    // predictedPoints.set(row, 2, entry.getValue().right);
+    // predictedPoints.set(row, 3, log(entry.getValue().left /
+    // entry.getValue().right));
+    // predictedPoints.set(row, 4,
+    // filtration.buyPrices.get(buyProcess.N(entry.getKey() - 1)));
+    // predictedPoints.set(row, 5,
+    // filtration.sellPrices.get(sellProcess.N(entry.getKey() - 1)));
+    // });
+    //
+    // out.println("predictions=" + predictions);
+    // MatFile.write(new File("pred.mat"), predictedPoints.createMiMatrix());
 
     // Vector buyInnov = buyProcess.getInnovationSequence().setName("innovbuy");
     // Vector sellInnov = sellProcess.getInnovationSequence().setName("innovsell");
@@ -123,10 +163,10 @@ public class BivariateProcessPredictor
     // t -> t);
     // display(chart);
     //
-    // while (chart != null)
-    // {
-    // Thread.sleep(1000);
-    // }
+    while (chart != null)
+    {
+      Thread.sleep(1000);
+    }
 
     // MatFile.write("innov.mat", buyInnov.createMiMatrix(),
     // sellInnov.createMiMatrix());
