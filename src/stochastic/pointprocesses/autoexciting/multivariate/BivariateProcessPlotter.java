@@ -78,7 +78,7 @@ public class BivariateProcessPlotter
 
     double leftPoint = tradeProcess.T.getLeftmostValue();
     double rightPoint = tradeProcess.T.getRightmostValue();
-    int intensitySampleCount = 100;
+    int intensitySampleCount = 5000;
     XYChart chart = Plotter.chart("t (minutes)",
                                   "buyλ",
                                   t -> buyProcess.λ((t * 1000 * 60) + leftPoint) * 60000,
