@@ -58,10 +58,12 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   private Date date;
   private ByteBuffer buffer;
 
+  private RandomAccessFile raf;
+
   public TradingProcess(Pair<RandomAccessFile, RandomAccessFile> pair, File mppFile, String symbol) throws IOException
   {
     this.mppFile = mppFile;
-    RandomAccessFile raf = pair.left;
+    raf = pair.left;
     buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length()).order(ByteOrder.nativeOrder());
     indexFile = pair.right;
     points = new Vector(buffer);
@@ -284,6 +286,12 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     File mppFile = new File(mppFilename);
     String symbol = mppFile.getName().split("-")[0];
     return new TradingProcess(mppDataIndexPair, mppFile, symbol);
+  }
+  
+  public void close() throws IOException
+  {
+    this.indexFile.close();
+    raf.close();
   }
 
 }

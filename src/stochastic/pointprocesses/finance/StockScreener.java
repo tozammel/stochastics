@@ -34,7 +34,7 @@ public class StockScreener
                                     });
     BufferedWriter writer = new BufferedWriter(new FileWriter(new File("ranges.txt")));
     //files.forEach(path->out.println(path));
-    files.forEach(path -> {
+    files.parallel().forEach(path -> {
       TradingProcess file;
       String wtf = path.toString();
       try
@@ -56,13 +56,23 @@ public class StockScreener
         throw new RuntimeException(e.getMessage(), e);
       }
       Vector prices = new Vector(file.tradeStream().mapToDouble(tick -> tick.getPrice()));
+      try
+      {
+        file.close();
+      }
+      catch (IOException e1)
+      {
+       e1.printStackTrace(System.err);
+        throw new RuntimeException( e1.getMessage(), e1 );
+        
+      }
       double maxTradePrice = prices.fmax();
       double minTradePrice = prices.fmin();
       double range = ((maxTradePrice - minTradePrice) / (minTradePrice)) * 100;
       out.println(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "%");
       try
       {
-        writer.write(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "%");
+        writer.write(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "%\n");
       }
       catch (IOException e)
       {
