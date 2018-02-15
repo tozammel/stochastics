@@ -392,7 +392,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     };
 
     Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
-      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * 2 + 1, 10, 1E-5);
+      // FIXME: select dimension appropriately
+      ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * dim() * 2 + 1, 10, 1E-5);
       // ExtendedBOBYQAOptimizer optimizer = new
       // ExtendedBOBYQAOptimizer(getParamCount() * ( dim() * dim() ) * 2 + 1, 10,
       // 1E-5);

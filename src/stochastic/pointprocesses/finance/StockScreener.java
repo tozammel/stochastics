@@ -28,19 +28,19 @@ public class StockScreener
                                     20,
                                     (path,
                                      basicFileAttributes) -> {
-                                       //out.println( "wtf " + path.toAbsolutePath() );
+                                      // out.println( "wtf " + path.toAbsolutePath() );
                                       boolean wtf = path.toAbsolutePath().toString().endsWith("mpp");
                                       return wtf || basicFileAttributes.isDirectory();
                                     });
     BufferedWriter writer = new BufferedWriter(new FileWriter(new File("ranges.txt")));
-    //files.forEach(path->out.println(path));
+    // files.forEach(path->out.println(path));
     files.parallel().forEach(path -> {
       TradingProcess file;
       String wtf = path.toString();
       try
       {
-        File fuck = new File( wtf);
-        if ( fuck.isDirectory() )
+        File fuck = new File(wtf);
+        if (fuck.isDirectory())
         {
           return;
         }
@@ -62,27 +62,30 @@ public class StockScreener
       }
       catch (IOException e1)
       {
-       e1.printStackTrace(System.err);
-        throw new RuntimeException( e1.getMessage(), e1 );
-        
+        e1.printStackTrace(System.err);
+        throw new RuntimeException(e1.getMessage(), e1);
+
       }
       double maxTradePrice = prices.fmax();
       double minTradePrice = prices.fmin();
       double range = ((maxTradePrice - minTradePrice) / (minTradePrice)) * 100;
-      out.println(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "%");
-      try
+      if (range > 3 && prices.size() > 35000 )
       {
-        writer.write(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "%\n");
-      }
-      catch (IOException e)
-      {
-        throw new RuntimeException( e.getMessage(), e );
-        
+        out.println(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range);
+        try
+        {
+          writer.write(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "\n");
+        }
+        catch (IOException e)
+        {
+          throw new RuntimeException(e.getMessage(), e);
+
+        }
       }
 
     });
     writer.close();
-    out.println( "wrote " + "ranges.txt");
+    out.println("wrote " + "ranges.txt");
   }
 
 }

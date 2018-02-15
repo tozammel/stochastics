@@ -54,17 +54,17 @@ public class MutuallyExcitingProcessEstimator
          main(String[] args) throws IOException,
                              CloneNotSupportedException
   {
-    Type type = Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw;
+    //Type type = Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw;
     //Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
-    //Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
+    Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
     String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
 
     int trajectoryCount = Runtime.getRuntime().availableProcessors() ;
-    if (args.length > 1)
-    {
-      trajectoryCount = Integer.valueOf(args[1]);
-    }
-    String symbol = "SPY";
+//    if (args.length > 1)
+//    {
+//      trajectoryCount = Integer.valueOf(args[1]);
+//    }
+    String symbol = args.length > 1 ? args[1] : "SPY";
 
     out.println("Estimating parameters for " + filename);
     ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateMutuallyExcitingTradingProcess(type, filename, trajectoryCount, symbol);
