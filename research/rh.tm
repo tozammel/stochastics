@@ -144,7 +144,7 @@
   which is approximated by
 
   <\equation>
-    S<rsub|n>=S<around*|(|y<rsub|n>|)>=<around*|(|n-<frac|3|2>|)>\<pi\>-<around*|(|<wide|\<vartheta\>|~><around*|(|<wide|y|~><rsub|n>|)>+\<Delta\><around*|(||)>|)>=S<around*|(|y<rsub|n>|)>+\<Delta\><around*|(|y<rsub|n>|)>
+    S<rsub|n>=S<around*|(|y<rsub|n>|)>=<around*|(|n-<frac|3|2>|)>\<pi\>-<around*|(|<wide|\<vartheta\>|~><around*|(|<wide|y|~><rsub|n>|)>+\<Delta\><around*|(|y<rsub|n>|)>|)>=S<around*|(|y<rsub|n>|)>+\<Delta\><around*|(|y<rsub|n>|)>
   </equation>
 
   where\ 
@@ -372,9 +372,9 @@
   </definition>
 
   <\definition>
-    A function <with|font-shape|italic|f> that is Fr�chet differentiable for
-    any point of <with|font-shape|italic|U> is said to be C<rsup|1> if the
-    function
+    A function <with|font-shape|italic|f> that is Fr�chet differentiable
+    for any point of <with|font-shape|italic|U> is said to be C<rsup|1> if
+    the function
 
     <\equation>
       \<mathD\>f=U\<rightarrow\>B<around*|(|V,W|)>;x\<mapsto\>\<mathD\>f<around*|(|x|)>
@@ -696,10 +696,11 @@
       <with|font-shape|italic|Riemann's Zeta Function>.<newblock> Academic
       Press & Dover, 1974.<newblock>
 
-      <bibitem*|FL14><label|bib-francca2014theory>Guilherme Fran�a<localize|
-      and >Andr� LeClair.<newblock> A theory for the zeros of riemann zeta
-      and other l-functions.<newblock> <with|font-shape|italic|ArXiv preprint
-      arXiv:1407.4358>, 2014.<newblock>
+      <bibitem*|FL14><label|bib-francca2014theory>Guilherme
+      Fran�a<localize| and >Andr� LeClair.<newblock> A theory for the
+      zeros of riemann zeta and other l-functions.<newblock>
+      <with|font-shape|italic|ArXiv preprint arXiv:1407.4358>,
+      2014.<newblock>
 
       <bibitem*|FL15><label|bib-z0t>Guilherme Fran�a<localize| and >Andr�
       LeClair.<newblock> Transcendental equations satisfied by the individual
@@ -799,61 +800,61 @@
 
 <\references>
   <\collection>
-    <associate|Dt|<tuple|7|2|../attic/stuff/rh.tm>>
-    <associate|N|<tuple|18|3|../attic/stuff/rh.tm>>
-    <associate|S|<tuple|4|2|../attic/stuff/rh.tm>>
-    <associate|Z|<tuple|14|3|../attic/stuff/rh.tm>>
-    <associate|ZNewtonFlow|<tuple|24|4|../attic/stuff/rh.tm>>
-    <associate|Zz|<tuple|15|3|../attic/stuff/rh.tm>>
-    <associate|arz|<tuple|10|2|../attic/stuff/rh.tm>>
-    <associate|auto-1|<tuple|1|1|../attic/stuff/rh.tm>>
-    <associate|auto-10|<tuple|2.2|6|../attic/stuff/rh.tm>>
-    <associate|auto-11|<tuple|3|6|../attic/stuff/rh.tm>>
-    <associate|auto-12|<tuple|3.1|6|../attic/stuff/rh.tm>>
-    <associate|auto-13|<tuple|3.1.1|7|../attic/stuff/rh.tm>>
-    <associate|auto-14|<tuple|3.2|7|../attic/stuff/rh.tm>>
-    <associate|auto-15|<tuple|3.2.1|8|../attic/stuff/rh.tm>>
-    <associate|auto-16|<tuple|3.2.1|8|../attic/stuff/rh.tm>>
-    <associate|auto-2|<tuple|1.1|1|../attic/stuff/rh.tm>>
-    <associate|auto-3|<tuple|1.2|3|../attic/stuff/rh.tm>>
-    <associate|auto-4|<tuple|1.2.1|4|../attic/stuff/rh.tm>>
-    <associate|auto-5|<tuple|1|4|../attic/stuff/rh.tm>>
-    <associate|auto-6|<tuple|1.2.2|4|../attic/stuff/rh.tm>>
-    <associate|auto-7|<tuple|2|5|../attic/stuff/rh.tm>>
-    <associate|auto-8|<tuple|2.1|5|../attic/stuff/rh.tm>>
-    <associate|auto-9|<tuple|2|6|../attic/stuff/rh.tm>>
-    <associate|bib-HardyZ|<tuple|Ivi13|8|../attic/stuff/rh.tm>>
-    <associate|bib-Rudin2006|<tuple|Rud06|8|../attic/stuff/rh.tm>>
-    <associate|bib-SO1|<tuple|LeC16|8|../attic/stuff/rh.tm>>
-    <associate|bib-argyros2014convergence|<tuple|AGMR14|8|../attic/stuff/rh.tm>>
-    <associate|bib-baker1991iterates|<tuple|BKY|8|../attic/stuff/rh.tm>>
-    <associate|bib-bergweiler1993iteration|<tuple|93|8|../attic/stuff/rh.tm>>
-    <associate|bib-borwein2008riemann|<tuple|Bor08|8|../attic/stuff/rh.tm>>
-    <associate|bib-conte1980elementary|<tuple|CB80|8|../attic/stuff/rh.tm>>
-    <associate|bib-dominguez1998dynamics|<tuple|Dom98|8|../attic/stuff/rh.tm>>
-    <associate|bib-ebsd|<tuple|V.02|8|../attic/stuff/rh.tm>>
-    <associate|bib-edwardszeta|<tuple|Edw74|8|../attic/stuff/rh.tm>>
-    <associate|bib-francca2014theory|<tuple|FL14|8|../attic/stuff/rh.tm>>
-    <associate|bib-gill1988compositions|<tuple|Gil88|8|../attic/stuff/rh.tm>>
-    <associate|bib-graves1946theory|<tuple|Gra46|8|../attic/stuff/rh.tm>>
-    <associate|bib-hansen1979global|<tuple|Han79|8|../attic/stuff/rh.tm>>
-    <associate|bib-holomorphiczetaflow|<tuple|Bro04|8|../attic/stuff/rh.tm>>
-    <associate|bib-krcmar2000global|<tuple|KBM00|8|../attic/stuff/rh.tm>>
-    <associate|bib-krh|<tuple|16|8|../attic/stuff/rh.tm>>
-    <associate|bib-lorentzen1990compositions|<tuple|Lor90|8|../attic/stuff/rh.tm>>
-    <associate|bib-maple|<tuple|Map|8|../attic/stuff/rh.tm>>
-    <associate|bib-marca2009mean|<tuple|MBM09|8|../attic/stuff/rh.tm>>
-    <associate|bib-mayer2006immediate|<tuple|MS06|8|../attic/stuff/rh.tm>>
-    <associate|bib-milnor2006dynamics|<tuple|Mil06|8|../attic/stuff/rh.tm>>
-    <associate|bib-polyak2006newton|<tuple|Pol06|8|../attic/stuff/rh.tm>>
-    <associate|bib-wang2000convergence|<tuple|Wan00|9|../attic/stuff/rh.tm>>
-    <associate|bib-wang2003convergence|<tuple|WL03|9|../attic/stuff/rh.tm>>
-    <associate|bib-z0t|<tuple|FL15|8|../attic/stuff/rh.tm>>
-    <associate|fle|<tuple|22|4|../attic/stuff/rh.tm>>
-    <associate|footnote-1|<tuple|1|1|../attic/stuff/rh.tm>>
-    <associate|footnr-1|<tuple|1|1|../attic/stuff/rh.tm>>
-    <associate|mvt|<tuple|21|7|../attic/stuff/rh.tm>>
-    <associate|zzi|<tuple|17|3|../attic/stuff/rh.tm>>
+    <associate|Dt|<tuple|7|2>>
+    <associate|N|<tuple|18|3>>
+    <associate|S|<tuple|4|2>>
+    <associate|Z|<tuple|14|3>>
+    <associate|ZNewtonFlow|<tuple|24|4>>
+    <associate|Zz|<tuple|15|3>>
+    <associate|arz|<tuple|10|2>>
+    <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|2.2|6>>
+    <associate|auto-11|<tuple|3|7>>
+    <associate|auto-12|<tuple|3.1|7>>
+    <associate|auto-13|<tuple|3.1.1|7>>
+    <associate|auto-14|<tuple|3.2|7>>
+    <associate|auto-15|<tuple|3.2.1|8>>
+    <associate|auto-16|<tuple|3.2.1|8>>
+    <associate|auto-2|<tuple|1.1|1>>
+    <associate|auto-3|<tuple|1.2|3>>
+    <associate|auto-4|<tuple|1.2.1|4>>
+    <associate|auto-5|<tuple|1|4>>
+    <associate|auto-6|<tuple|1.2.2|4>>
+    <associate|auto-7|<tuple|2|5>>
+    <associate|auto-8|<tuple|2.1|5>>
+    <associate|auto-9|<tuple|2|6>>
+    <associate|bib-HardyZ|<tuple|Ivi13|8>>
+    <associate|bib-Rudin2006|<tuple|Rud06|9>>
+    <associate|bib-SO1|<tuple|LeC16|8>>
+    <associate|bib-argyros2014convergence|<tuple|AGMR14|8>>
+    <associate|bib-baker1991iterates|<tuple|BKY|8>>
+    <associate|bib-bergweiler1993iteration|<tuple|93|8>>
+    <associate|bib-borwein2008riemann|<tuple|Bor08|8>>
+    <associate|bib-conte1980elementary|<tuple|CB80|8>>
+    <associate|bib-dominguez1998dynamics|<tuple|Dom98|8>>
+    <associate|bib-ebsd|<tuple|V.02|9>>
+    <associate|bib-edwardszeta|<tuple|Edw74|8>>
+    <associate|bib-francca2014theory|<tuple|FL14|8>>
+    <associate|bib-gill1988compositions|<tuple|Gil88|8>>
+    <associate|bib-graves1946theory|<tuple|Gra46|8>>
+    <associate|bib-hansen1979global|<tuple|Han79|8>>
+    <associate|bib-holomorphiczetaflow|<tuple|Bro04|8>>
+    <associate|bib-krcmar2000global|<tuple|KBM00|8>>
+    <associate|bib-krh|<tuple|16|8>>
+    <associate|bib-lorentzen1990compositions|<tuple|Lor90|8>>
+    <associate|bib-maple|<tuple|Map|8>>
+    <associate|bib-marca2009mean|<tuple|MBM09|8>>
+    <associate|bib-mayer2006immediate|<tuple|MS06|9>>
+    <associate|bib-milnor2006dynamics|<tuple|Mil06|9>>
+    <associate|bib-polyak2006newton|<tuple|Pol06|9>>
+    <associate|bib-wang2000convergence|<tuple|Wan00|9>>
+    <associate|bib-wang2003convergence|<tuple|WL03|9>>
+    <associate|bib-z0t|<tuple|FL15|8>>
+    <associate|fle|<tuple|22|4>>
+    <associate|footnote-1|<tuple|1|1>>
+    <associate|footnr-1|<tuple|1|1>>
+    <associate|mvt|<tuple|21|7>>
+    <associate|zzi|<tuple|17|3>>
   </collection>
 </references>
 
@@ -933,11 +934,11 @@
       edwardszeta
     </associate>
     <\associate|figure>
-      <tuple|normal|<with|mode|<quote|math>|S<around*|(|t|)>> and
-      <with|mode|<quote|math>|<around*|{|<around*|(|n-<frac|3|2>|)>\<pi\>-\<vartheta\><around*|(|t|)>:n=1\<ldots\>8|}>>|<pageref|auto-5>>
+      <tuple|normal|<surround|<hidden|<tuple>>||<with|mode|<quote|math>|S<around*|(|t|)>>
+      and <with|mode|<quote|math>|<around*|{|<around*|(|n-<frac|3|2>|)>\<pi\>-\<vartheta\><around*|(|t|)>:n=1\<ldots\>8|}>>>|<pageref|auto-5>>
 
-      <tuple|normal|<with|mode|<quote|math>|<around*|{|M<rsub|Z><around*|(|t|)>:t\<in\>6727\<ldots\>6728|}>>
-      near <with|mode|<quote|math>|t=y<rsup|<around*|(|-|)>><rsub|6400>=6727.861353\<ldots\>>|<pageref|auto-9>>
+      <tuple|normal|<surround|<hidden|<tuple>>||<with|mode|<quote|math>|<around*|{|M<rsub|Z><around*|(|t|)>:t\<in\>6727\<ldots\>6728|}>>
+      near <with|mode|<quote|math>|t=y<rsup|<around*|(|-|)>><rsub|6400>=6727.861353\<ldots\>>>|<pageref|auto-9>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Derivations>
@@ -954,8 +955,9 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|2tab>|1.2.1<space|2spc>The LeClair-Fran�a Formula
-      and Stirling's Approximation of <with|mode|<quote|math>|ln\<Gamma\>>
+      <with|par-left|<quote|2tab>|1.2.1<space|2spc>The LeClair-Fran�a
+      Formula and Stirling's Approximation of
+      <with|mode|<quote|math>|ln\<Gamma\>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 

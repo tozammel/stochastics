@@ -42,7 +42,8 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   private double openTimeMillis = DateUtils.convertTimeUnits(openTime, TimeUnit.HOURS, TimeUnit.MILLISECONDS);
 
   @Override
-  public String toString()
+  public String
+         toString()
   {
     return String.format("MarkedPointProcess[mppFile=%s, eventCount=%s]", mppFile, eventCount);
   }
@@ -76,7 +77,10 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     date = new GregorianCalendar(year, month, day).getTime();
   }
 
-  private ArchivableEvent getNextEvent(String symbol, Vector points, RandomAccessFile indices) throws IOException
+  private ArchivableEvent
+          getNextEvent(String symbol,
+                       Vector points,
+                       RandomAccessFile indices) throws IOException
   {
     i++;
     try
@@ -108,34 +112,41 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     }
   }
 
-  public <E extends ArchivableEvent> Stream<E> eventStream(Class<E> eventClass)
+  public <E extends ArchivableEvent>
+         Stream<E>
+         eventStream(Class<E> eventClass)
   {
     return stream().filter(eventClass::isInstance).map(eventClass::cast);
   }
 
-  public Stream<TradeTick> tradeStream()
+  public Stream<TradeTick>
+         tradeStream()
   {
     return eventStream(TradeTick.class).filter(trade -> trade.getPrice() > 0);
   }
 
-  public Stream<TwoSidedQuote> quoteStream()
+  public Stream<TwoSidedQuote>
+         quoteStream()
   {
     return eventStream(TwoSidedQuote.class);
   }
 
-  public Stream<ArchivableEvent> tradeAndQuoteStream()
+  public Stream<ArchivableEvent>
+         tradeAndQuoteStream()
   {
     return stream().filter(event -> event instanceof TradeTick || event instanceof TwoSidedQuote);
   }
 
   @Override
-  public boolean hasNext()
+  public boolean
+         hasNext()
   {
     return i < eventCount;
   }
 
   @Override
-  public ArchivableEvent next()
+  public ArchivableEvent
+         next()
   {
     try
     {
@@ -148,13 +159,15 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   }
 
   @Override
-  public Iterator<ArchivableEvent> iterator()
+  public Iterator<ArchivableEvent>
+         iterator()
   {
     reset();
     return this;
   }
 
-  public int getAge(TimeUnit timeUnit)
+  public int
+         getAge(TimeUnit timeUnit)
   {
     Date now = new Date();
     long diffInMillies = now.getTime() - date.getTime();
@@ -162,13 +175,16 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   }
 
   @SuppressWarnings("unchecked")
-  public <E extends ArchivableEvent> Stream<E> stream()
+  public <E extends ArchivableEvent>
+         Stream<E>
+         stream()
   {
     reset();
     return (Stream<E>) StreamSupport.stream(spliterator(), false);
   }
 
-  private void reset()
+  private void
+          reset()
   {
     i = 0;
     try
@@ -181,28 +197,33 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     }
   }
 
-  public Date getDate()
+  public Date
+         getDate()
   {
     return date;
   }
 
   @Override
-  public int compareTo(TradingProcess o)
+  public int
+         compareTo(TradingProcess o)
   {
     return date.compareTo(o.getDate());
   }
 
-  public File getMppFile()
+  public File
+         getMppFile()
   {
     return mppFile;
   }
 
-  public void setMppFile(File mppFile)
+  public void
+         setMppFile(File mppFile)
   {
     this.mppFile = mppFile;
   }
 
-  public DoubleRowMatrix getTradeMatrix(TimeUnit timeUnit)
+  public DoubleRowMatrix
+         getTradeMatrix(TimeUnit timeUnit)
   {
     DoubleRowMatrix tradeMatrix = new DoubleRowMatrix(0, TradeTick.FIELDCNT).setName(symbol);
 
@@ -211,25 +232,28 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
       Vector point = new Vector(event.getMarks());
       double fractionalHourOfDay = event.getTimeOfDay();
 
-      
       double t = DateUtils.convertTimeUnits(event.getTimeOfDay(), TimeUnit.HOURS, timeUnit);
       point.set(0, t);
-      
+
       double prevt = lastt.get(0);
-      if (prevt == t) { return; }
+      if (prevt == t)
+      {
+        return;
+      }
 
       if (fractionalHourOfDay >= openTime && fractionalHourOfDay <= closeTime)
       {
         lastt.set(0, t);
         tradeMatrix.appendRow(point);
-       
+
       }
     });
 
     return tradeMatrix;
   }
 
-  public Pair<DoubleRowMatrix, DoubleRowMatrix> getBuySellMatrix(TimeUnit timeUnit)
+  public Pair<DoubleRowMatrix, DoubleRowMatrix>
+         getBuySellMatrix(TimeUnit timeUnit)
   {
     DoubleRowMatrix buyMatrix = new DoubleRowMatrix(0, TradeTick.FIELDCNT).setName(symbol + "_buys");
     DoubleRowMatrix sellMatrix = new DoubleRowMatrix(0, TradeTick.FIELDCNT).setName(symbol + "_sells");
@@ -277,8 +301,9 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     return new Pair<DoubleRowMatrix, DoubleRowMatrix>(buyMatrix, sellMatrix);
   }
 
-
-  public static TradingProcess loadMppFile(String mppFilename) throws FileNotFoundException, IOException
+  public static TradingProcess
+         loadMppFile(String mppFilename) throws FileNotFoundException,
+                                         IOException
   {
     Pair<RandomAccessFile, RandomAccessFile> mppDataIndexPair = new Pair<>(new RandomAccessFile(mppFilename, "r"),
                                                                            new RandomAccessFile(mppFilename + ".idx", "r"));
@@ -287,11 +312,18 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     String symbol = mppFile.getName().split("-")[0];
     return new TradingProcess(mppDataIndexPair, mppFile, symbol);
   }
-  
-  public void close() throws IOException
+
+  public void
+         close() throws IOException
   {
     this.indexFile.close();
     raf.close();
   }
 
+  public TradingFiltration
+         getTradingFiltration()
+  {
+    TradingFiltration filtration = new TradingFiltration(getTradeMatrix(TimeUnit.MILLISECONDS));
+    return filtration;
+  }
 }

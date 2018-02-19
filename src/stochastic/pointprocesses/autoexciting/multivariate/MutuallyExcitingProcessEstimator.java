@@ -54,49 +54,31 @@ public class MutuallyExcitingProcessEstimator
          main(String[] args) throws IOException,
                              CloneNotSupportedException
   {
-    //Type type = Type.UnitRandomWalkMultivariateDiagonalExtendedApproximatePowerlaw;
-    //Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
-    Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
-    String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
+    // Type type = Type.MultivariateFullExtendedApproximatePowerlaw;
+    Type type = Type.MultivariateDiagonalExtendedApproximatePowerlaw;
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors() ;
-//    if (args.length > 1)
-//    {
-//      trajectoryCount = Integer.valueOf(args[1]);
-//    }
-    String symbol = args.length > 1 ? args[1] : "SPY";
+    String filename = args[0];
+
+    TradingProcess mpp = TradingProcess.loadMppFile(filename);
+
+    int trajectoryCount = Runtime.getRuntime().availableProcessors();
+
+    String symbol = args[1];
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateMutuallyExcitingTradingProcess(type, filename, trajectoryCount, symbol);
+    ArrayList<ExponentialMutuallyExcitingProcess> processes = estimateMutuallyExcitingTradingProcess(type, mpp, filename, trajectoryCount, symbol);
 
-  }
-
-  /**
-   * estimate the parameters of an autoexciting process model
-   * 
-   * @param type
-   * @param filename
-   * @param symbol
-   * @return
-   * @throws IOException
-   */
-  public static ArrayList<ExponentialMutuallyExcitingProcess>
-         estimateSelfExcitingProcess(Type type,
-                                     String filename,
-                                     String symbol) throws IOException
-
-  {
-    return estimateMutuallyExcitingTradingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
   }
 
   public static ArrayList<ExponentialMutuallyExcitingProcess>
          estimateMutuallyExcitingTradingProcess(Type type,
+                                                TradingProcess tradingProcess,
                                                 String filename,
                                                 int trajectoryCount,
                                                 String symbol) throws IOException
   {
     assert type != null;
-    return estimateMutuallyExcitingTradingProcesses(type, trajectoryCount, new TradingFiltration(MatFile.loadMatrix(filename, symbol)), filename);
+    return estimateMutuallyExcitingTradingProcesses(type, trajectoryCount, tradingProcess.getTradingFiltration(), filename);
   }
 
   /**
@@ -116,9 +98,9 @@ public class MutuallyExcitingProcessEstimator
    */
   public static ArrayList<ExponentialMutuallyExcitingProcess>
          estimateMutuallyExcitingTradingProcesses(Type type,
-                                                   int trajectoryCount,
-                                                   TradingFiltration tradingProcess,
-                                                   String filename) throws IOException
+                                                  int trajectoryCount,
+                                                  TradingFiltration tradingProcess,
+                                                  String filename) throws IOException
   {
     assert type != null;
     Vector times = tradingProcess.times;
@@ -139,7 +121,7 @@ public class MutuallyExcitingProcessEstimator
 
       ExponentialMutuallyExcitingProcess process = ExponentialMutuallyExcitingProcess.spawnNewProcess(type, tradingProcess);
       process.verbose = true;
-      
+
       MutuallyExcitingProcessEstimator estimator = new MutuallyExcitingProcessEstimator(process);
       estimator.setTrajectoryCount(trajectoryCount);
       estimator.estimate(markedPointSlice, typeSlice, filename, section);
@@ -196,7 +178,10 @@ public class MutuallyExcitingProcessEstimator
                 + firstTimestampInInterval
                 + " to "
                 + lastTimestampInInterval
-                + " hours of type " + process.getType() + " in " + modelFile.getAbsolutePath() );
+                + " hours of type "
+                + process.getType()
+                + " in "
+                + modelFile.getAbsolutePath());
 
     process.storeParameters(modelFile);
   }
