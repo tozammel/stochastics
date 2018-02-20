@@ -15,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 
 import fastmath.Vector;
+import util.AutoHashMap;
 
 public class StockScreener
 {
@@ -33,6 +34,21 @@ public class StockScreener
                                       return wtf || basicFileAttributes.isDirectory();
                                     });
     BufferedWriter writer = new BufferedWriter(new FileWriter(new File("ranges.txt")));
+    // BufferedWriter writer = new BufferedWriter(new FileWriter(new
+    // File("ranges.txt")));
+    AutoHashMap<String, BufferedWriter> symbolWriters = new AutoHashMap<>(symbol -> {
+      try
+      {
+        File filename = new File("ranges-" + symbol + ".csv");
+        out.println("Creating " + filename);
+        out.println("filename=" + filename.getAbsolutePath());
+        return new BufferedWriter(new FileWriter(filename));
+      }
+      catch (IOException e2)
+      {
+        throw new RuntimeException(e2.getMessage(), e2);
+      }
+    });
     // files.forEach(path->out.println(path));
     files.parallel().forEach(path -> {
       TradingProcess file;
@@ -69,12 +85,16 @@ public class StockScreener
       double maxTradePrice = prices.fmax();
       double minTradePrice = prices.fmin();
       double range = ((maxTradePrice - minTradePrice) / (minTradePrice)) * 100;
-      if (range > 3 && prices.size() > 35000 )
+      if (range > 3 && prices.size() > 35000)
       {
-        out.println(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range);
+        out.println(wtf + "," + minTradePrice + "," + maxTradePrice + "," + prices.size() + "," + range);
+        String line = wtf + "," + minTradePrice + "," + maxTradePrice + "," + prices.size() + "," + range + "\n";
         try
         {
-          writer.write(wtf + "," + minTradePrice + "," + maxTradePrice + "," + range + "\n");
+          writer.write(line);
+          BufferedWriter handle = symbolWriters.getOrCreate(file.symbol);
+          handle.write(line);
+          handle.flush();
         }
         catch (IOException e)
         {
@@ -85,6 +105,17 @@ public class StockScreener
 
     });
     writer.close();
+    symbolWriters.values().forEach(handle -> {
+      try
+      {
+        handle.close();
+      }
+      catch (IOException e)
+      {
+
+        throw new RuntimeException(e.getMessage(), e);
+      }
+    });
     out.println("wrote " + "ranges.txt");
   }
 

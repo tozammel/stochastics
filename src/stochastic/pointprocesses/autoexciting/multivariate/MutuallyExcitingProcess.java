@@ -10,7 +10,7 @@ import stochastic.pointprocesses.selfexciting.BoundedParameter;
 public abstract class MutuallyExcitingProcess extends AbstractMutuallyExcitingProcess
 {
 
-  protected int dim;
+  public int dim;
 
   public MutuallyExcitingProcess()
   {

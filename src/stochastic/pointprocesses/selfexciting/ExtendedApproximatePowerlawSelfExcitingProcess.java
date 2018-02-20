@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.out;
+import static java.util.stream.IntStream.range;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.Serializable;
@@ -296,6 +297,12 @@ public class ExtendedApproximatePowerlawSelfExcitingProcess extends ApproximateP
          Nclosed(double instant)
   {
     return T.findLast(instant, Condition.LTE) + 1;
+  }
+
+  public void
+         prime()
+  {
+    range(0, T.size()).forEach(tk -> range(0, order()).forEach(j -> A(j, tk)));
   }
 
 }

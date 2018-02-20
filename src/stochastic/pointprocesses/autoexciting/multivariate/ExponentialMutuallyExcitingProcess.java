@@ -138,7 +138,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
 
   protected Pair<Vector[], TreeMap<Double, Integer>[]> cachedSubTimes;
 
-  protected boolean trace = false;
+  public boolean trace = false;
 
   public int M = 15;
 

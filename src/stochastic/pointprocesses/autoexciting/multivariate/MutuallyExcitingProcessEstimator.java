@@ -61,7 +61,7 @@ public class MutuallyExcitingProcessEstimator
 
     TradingProcess mpp = TradingProcess.loadMppFile(filename);
 
-    int trajectoryCount = Runtime.getRuntime().availableProcessors();
+    int trajectoryCount = Runtime.getRuntime().availableProcessors() * 2 ;
 
     String symbol = args[1];
 
