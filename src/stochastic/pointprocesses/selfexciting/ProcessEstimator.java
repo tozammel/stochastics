@@ -18,6 +18,7 @@ import fastmath.DoubleColMatrix;
 import fastmath.IntVector;
 import fastmath.Vector;
 import fastmath.matfile.MatFile;
+import fastmath.matfile.MiMatrix;
 import fastmath.optim.ParallelMultistartMultivariateOptimizer;
 import stochastic.annotations.Units;
 import stochastic.pointprocesses.autoexciting.multivariate.AbstractMutuallyExcitingProcess;
@@ -51,18 +52,16 @@ public class ProcessEstimator
   {
 
     Type type = Type.ExtendedApproximatePowerlaw;
-    String filename = args.length > 0 ? args[0] : "/home/stephen/git/fastmath/SPY.mat";
+    String filename = args[0];
     int cpuMultiplier = 2;
 
     int trajectoryCount = Runtime.getRuntime().availableProcessors() * cpuMultiplier;
-    if (args.length > 1)
-    {
-      trajectoryCount = Integer.valueOf(args[1]);
-    }
-    String symbol = "SPY";
+    String symbol = args[1];
 
     out.println("Estimating parameters for " + filename);
-    ArrayList<AbstractSelfExcitingProcess> processes = estimateSelfExcitingProcess(type, filename, trajectoryCount, symbol);
+    TradingProcess mpp = TradingProcess.loadMppFile(filename);
+
+    ArrayList<AbstractSelfExcitingProcess> processes = estimateSelfExcitingProcess(type, mpp, filename, trajectoryCount, symbol);
 
     // TODO: use multivar estimator and compare results
 
@@ -73,6 +72,7 @@ public class ProcessEstimator
    * 
    * @param type
    * @param filename
+   * @param i 
    * @param symbol
    * @return
    * @throws IOException
@@ -80,21 +80,21 @@ public class ProcessEstimator
   public static ArrayList<AbstractSelfExcitingProcess>
          estimateSelfExcitingProcess(Type type,
                                      String filename,
-                                     String symbol) throws IOException
+                                     int i, String symbol) throws IOException
 
   {
-    return estimateSelfExcitingProcess(type, filename, Runtime.getRuntime().availableProcessors(), symbol);
+    return estimateSelfExcitingProcess(type, filename, i, symbol);
   }
 
   public static ArrayList<AbstractSelfExcitingProcess>
          estimateSelfExcitingProcess(Type type,
-                                     String filename,
+                                     TradingProcess mpp, String filename,
                                      int trajectoryCount,
                                      String symbol) throws IOException
   {
-    Vector data = loadTimes(filename, symbol);
+    //Vector data = loadTimes(filename, symbol);
 
-    return estimateSelfExcitingProcesses(type, trajectoryCount, data, filename);
+    return estimateSelfExcitingProcesses(type, trajectoryCount, mpp.getTradeMatrix(TimeUnit.MILLISECONDS).col(0), filename);
   }
 
   /**
@@ -129,7 +129,7 @@ public class ProcessEstimator
     int indexes[] = TradingStrategy.getIndices(times);
 
     range(0, n).forEachOrdered(section -> {
-      Vector slice = times.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]);
+      Vector slice = times.slice(section == 0 ? 0 : indexes[section - 1], indexes[section]).setName("slice" + section );
       double sliceEdt = slice.diff().mean();
 
       out.println("E_" + section + "[dt]=" + sliceEdt);
@@ -158,14 +158,14 @@ public class ProcessEstimator
     estimator.setTrajectoryCount(trajectoryCount);
     estimator.estimate(slice);
 
-    AbstractMutuallyExcitingProcess multivarProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
-    multivarProcess.T = slice;
-    multivarProcess.K = new IntVector(slice.size());
-    out.println("estimating multivar ");
-    ParallelMultistartMultivariateOptimizer opt = multivarProcess.estimateParameters(10, ev -> {
-    }, filename, section);
-    multivarProcess.printResults(opt);
-    out.println("estimated " + multivarProcess);
+//    AbstractMutuallyExcitingProcess multivarProcess = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(1);
+//    multivarProcess.T = slice;
+//    multivarProcess.K = new IntVector(slice.size());
+//    out.println("estimating multivar ");
+//    ParallelMultistartMultivariateOptimizer opt = multivarProcess.estimateParameters(10, ev -> {
+//    }, filename, section);
+//    multivarProcess.printResults(opt);
+//    out.println("estimated " + multivarProcess);
 
     return process;
   }
@@ -184,7 +184,11 @@ public class ProcessEstimator
     try
     {
       process.storeParameters(modelFile);
-      MatFile.write(testFile, data.createMiMatrix(), compensator.createMiMatrix(), intensity.createMiMatrix(), innovation.createMiMatrix());
+      MiMatrix dataMatrix = data.createMiMatrix();
+      MiMatrix compensatorMatrix = compensator.createMiMatrix();
+      MiMatrix intensityMatrix = intensity.createMiMatrix();
+      MiMatrix innovationMatrix = innovation.createMiMatrix();
+      MatFile.write(testFile, dataMatrix, compensatorMatrix, intensityMatrix, innovationMatrix);
     }
     catch (IOException e)
     {
