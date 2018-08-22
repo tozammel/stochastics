@@ -47,6 +47,7 @@ import fastmath.Vector;
 import fastmath.matfile.MatFile;
 import stochastic.pointprocesses.autoexciting.multivariate.ExponentialMutuallyExcitingProcess;
 import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
+import stochastic.pointprocesses.autoexciting.multivariate.diagonal.DiagonalExtendedApproximatePowerlawMututallyExcitingProcess;
 import stochastic.pointprocesses.finance.TradingProcess;
 import stochastic.pointprocesses.finance.TradingStrategy;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
@@ -228,7 +229,7 @@ public class ProcessModeller
     topLeftPanel.add(buttonPanel);
     topPanel.add(topLeftPanel, BorderLayout.WEST);
 
-    process = (ExponentialMutuallyExcitingProcess) Type.values()[0].instantiate();
+    process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(10); //.,) Type.values()[0].instantiate();
 
     coeffecientModel = new DefaultTableModel(process != null ? process.order() : 0, tableColumnNames.length);
     coeffecientModel.setColumnIdentifiers(tableColumnNames);
@@ -418,7 +419,9 @@ public class ProcessModeller
     {
       out.println("Switched kernel to " + type);
       ExponentialMutuallyExcitingProcess prevProcess = process;
-      process = (ExponentialMutuallyExcitingProcess) type.instantiate();
+      process = new DiagonalExtendedApproximatePowerlawMututallyExcitingProcess(10); //.,) Type.values()[0].instantiate();
+
+      //process = (ExponentialMutuallyExcitingProcess) type.instantiate();
       if (prevProcess != null)
       {
         process.T = prevProcess.T;

@@ -22,6 +22,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 
+import fastmath.Vector;
 import stochastic.pointprocesses.autoexciting.multivariate.MutuallyExcitingProcess;
 import stochastic.pointprocesses.selfexciting.AbstractSelfExcitingProcess;
 import stochastic.pointprocesses.selfexciting.BoundedParameter;
@@ -140,6 +141,7 @@ public class ParameterPanel extends JPanel
       if (sliderHandlerEnabled)
       {
         Field field = process.getField(paramName);
+
         try
         {
           if (value < minValue)
@@ -158,9 +160,19 @@ public class ParameterPanel extends JPanel
           {
             field.setInt(process, (int) value);
           }
+          else if (field.getType().equals(fastmath.Vector.class))
+          {
+            Vector values = (Vector) field.get(process);
+            field.setDouble(process, values.get(0));
+          }
           else
           {
-            throw new UnsupportedOperationException("unhandled field type " + field.getType() + " in " + this.getClass().getSimpleName());
+            throw new UnsupportedOperationException("unhandled field type " + field.getType()
+                                                    + " in "
+                                                    + this.getClass().getSimpleName()
+                                                    + " value=' "
+                                                    + value
+                                                    + "'");
           }
         }
         catch (IllegalArgumentException | IllegalAccessException e)
