@@ -34,7 +34,7 @@ import stochastic.pointprocesses.selfexciting.Type;
 public abstract class AbstractMutuallyExcitingProcess implements MultivariateFunction
 {
 
-  protected static int llcnt = 0;
+  protected int llcnt = 0;
 
   public Vector T;
 

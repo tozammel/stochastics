@@ -46,6 +46,13 @@ public class ProcessEstimator
     this.process = (AbstractSelfExcitingProcess) process;
   }
 
+  /**
+   * 
+   * @param args first param is path to .mpp file
+   * 
+   * @throws IOException
+   * @throws CloneNotSupportedException
+   */
   public static void
          main(String[] args) throws IOException,
                              CloneNotSupportedException

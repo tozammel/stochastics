@@ -2,7 +2,6 @@ package stochastic.pointprocesses.autoexciting.multivariate;
 
 import static java.lang.Math.log;
 import static java.lang.System.out;
-import static java.util.stream.IntStream.rangeClosed;
 import static org.fusesource.jansi.Ansi.ansi;
 import static util.Plotter.display;
 
@@ -10,17 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.fusesource.jansi.Ansi.Color;
 import org.knowm.xchart.XYChart;
 
-import fastmath.DoubleColMatrix;
 import fastmath.DoubleMatrix;
 import fastmath.Pair;
 import fastmath.Vector;

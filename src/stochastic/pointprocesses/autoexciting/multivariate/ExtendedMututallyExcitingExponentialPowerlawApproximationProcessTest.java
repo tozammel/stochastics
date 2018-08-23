@@ -157,7 +157,7 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensity, pow(10, -9)));
     assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1, pow(10, -9)));
-    assertTrue("should equal " + trueIntensity0, trueIntensity0.equals(intensityFast, pow(10, -9)));
+    assertTrue("should equal " + trueIntensity0 + " but got " + intensityFast, trueIntensity0.equals(intensityFast, pow(10, -9)));
     assertTrue("should equal " + trueIntensity1, trueIntensity1.equals(intensity1Fast, pow(10, -9)));
 
     // XYChart chart = chart("t (ms)", "λ0", t -> process.λ(0, t), 0, 300, t -> t);
@@ -262,7 +262,8 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     // SimpsonIntegrator integrator = new SimpsonIntegrator();
     // out.println("integrating total compensator");
-    double total = sum(m -> {
+    double total = sum(m ->
+    {
       // Vector mtimes = process.getTimes(m);
       return process.Λ(m).sum();
       // return integrator.integrate(10000000, t -> process.λ(m, t),
@@ -393,6 +394,10 @@ public class ExtendedMututallyExcitingExponentialPowerlawApproximationProcessTes
 
     double yay = process.φδ(27, 1.7);
     double woop = mprocess.φδ(0, 27, 1.7);
+
+    out.println("process=" + process);
+    out.println("mprocess=" + mprocess);
+
     assertEquals(yay, woop);
     out.println("yay=" + yay + " should equal woop=" + woop);
 

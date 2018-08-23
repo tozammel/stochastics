@@ -82,7 +82,8 @@ public class BivariateProcessPredictor
     double dt = W / n;
     out.println("dt=" + DateUtils.convertTimeUnits(dt, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + " seconds");
     AtomicInteger calculatedCounter = new AtomicInteger();
-    rangeClosed(1, n).parallel().forEach(i -> {
+    rangeClosed(1, n).parallel().forEach(i ->
+    {
       try
       {
         predictProcess(tradeProcess.T.getLeftmostValue() + dt * i, buyTimes, sellTimes, buyProcess.copy(), sellProcess.copy(), predictions);
@@ -103,7 +104,8 @@ public class BivariateProcessPredictor
 
     DoubleColMatrix predictedPoints = new DoubleColMatrix(predictions.size(), 6).setName("pred");
     AtomicInteger rowCounter = new AtomicInteger();
-    predictions.entrySet().stream().forEachOrdered(entry -> {
+    predictions.entrySet().stream().forEachOrdered(entry ->
+    {
       int row = rowCounter.getAndIncrement();
       predictedPoints.set(row, 0, entry.getKey());
       predictedPoints.set(row, 1, entry.getValue().left);
@@ -133,7 +135,6 @@ public class BivariateProcessPredictor
   }
 
   public static void
-
          predictProcess(double instant,
                         Vector buyTimes,
                         Vector sellTimes,

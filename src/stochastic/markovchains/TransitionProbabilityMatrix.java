@@ -12,15 +12,18 @@ public class TransitionProbabilityMatrix extends SquareDoubleColMatrix
 {
 
   @Override
-  public double add( int i, int j, double x )
+  public double
+         add(int i,
+             int j,
+             double x)
   {
-    int r = Math.max( i, j );
+    int r = Math.max(i, j);
     int prevr = numRows;
-    if ( r >= prevr )
+    if (r >= prevr)
     {
-      resize( r + 1, r + 1 );
+      resize(r + 1, r + 1);
     }
-    return super.add( i, j, x );
+    return super.add(i, j, x);
   }
 
   public TransitionProbabilityMatrix()
@@ -29,55 +32,56 @@ public class TransitionProbabilityMatrix extends SquareDoubleColMatrix
 
   public TransitionProbabilityMatrix(AbstractMatrix x)
   {
-    super( x );
+    super(x);
   }
 
   public TransitionProbabilityMatrix(ByteBuffer buffer, int baseOffset, int dim)
   {
-    super( buffer, baseOffset, dim );
+    super(buffer, baseOffset, dim);
   }
 
   public TransitionProbabilityMatrix(ByteBuffer buffer, int dim)
   {
-    super( buffer, dim );
+    super(buffer, dim);
   }
 
   public TransitionProbabilityMatrix(double[][] arr)
   {
-    super( arr );
+    super(arr);
   }
 
   public TransitionProbabilityMatrix(String name)
   {
-    super( 0, name );
+    super(0, name);
 
   }
 
   public TransitionProbabilityMatrix(int dim, String name)
   {
-    super( dim, name );
+    super(dim, name);
 
   }
 
   public TransitionProbabilityMatrix(int dim)
   {
-    super( dim );
+    super(dim);
   }
 
   public TransitionProbabilityMatrix(List<Pair<Double, Double>> twoColMatrix)
   {
-    super( twoColMatrix );
+    super(twoColMatrix);
   }
 
   public TransitionProbabilityMatrix(ByteBuffer buffer, int baseOffset, int numRows, int numCols)
   {
-    super( buffer, baseOffset, numRows, numCols );
+    super(buffer, baseOffset, numRows, numCols);
   }
 
   @Override
-  public TransitionProbabilityMatrix copy( boolean reuseBuffer )
+  public TransitionProbabilityMatrix
+         copy(boolean reuseBuffer)
   {
-    return reuseBuffer ? new TransitionProbabilityMatrix( buffer, getBaseOffset(), numRows, numCols ) : new TransitionProbabilityMatrix( this );
+    return reuseBuffer ? new TransitionProbabilityMatrix(buffer, getBaseOffset(), numRows, numCols) : new TransitionProbabilityMatrix(this);
   }
 
   /**
@@ -86,18 +90,20 @@ public class TransitionProbabilityMatrix extends SquareDoubleColMatrix
    * 
    * @return this
    */
-  public Vector normalize()
+  public Vector
+         normalize()
   {
-    Vector rowSums = new Vector( getRowCount() );
-    
-    rows().forEach( row -> {
+    Vector rowSums = new Vector(getRowCount());
+
+    rows().forEach(row ->
+    {
       double measure = row.sum();
-      rowSums.set( row.getIndex(), measure );
-      if ( measure > 0 )
+      rowSums.set(row.getIndex(), measure);
+      if (measure > 0)
       {
-        row.divide( measure );
+        row.divide(measure);
       }
-    } );
+    });
     return rowSums;
   }
 

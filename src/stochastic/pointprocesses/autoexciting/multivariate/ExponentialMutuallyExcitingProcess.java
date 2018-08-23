@@ -350,7 +350,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
     SimpleBounds simpleBounds = getParameterBounds();
     AtomicInteger solutionCounter = new AtomicInteger();
 
-    SolutionValidator validator = point -> {
+    SolutionValidator validator = point ->
+    {
       ExponentialMutuallyExcitingProcess process = newProcess(point.getPoint());
       // out.println(Thread.currentThread().getName() + " validating " + process + "
       // which has a LL score of " + process.logLik());
@@ -391,7 +392,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
       return true;
     };
 
-    Supplier<MultivariateOptimizer> optimizerSupplier = () -> {
+    Supplier<MultivariateOptimizer> optimizerSupplier = () ->
+    {
       // FIXME: select dimension appropriately
       ExtendedBOBYQAOptimizer optimizer = new ExtendedBOBYQAOptimizer(getParamCount() * dim() * dim() * 2 + 1, 10, 1E-5);
       // ExtendedBOBYQAOptimizer optimizer = new
@@ -406,7 +408,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
                                                                                                    getRandomVectorGenerator(simpleBounds));
 
     PointValuePairComparator momentMatchingAutocorrelationComparator = (a,
-                                                                        b) -> {
+                                                                        b) ->
+    {
       try
       {
         ExponentialMutuallyExcitingProcess processA = newProcess(a.getPoint());
@@ -603,7 +606,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   protected final RandomVectorGenerator
             getRandomVectorGenerator(SimpleBounds bounds)
   {
-    return () -> {
+    return () ->
+    {
       try
       {
         double[] point = rangeClosed(0,
@@ -637,7 +641,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final double
          getΛKolmogorovSmirnovStatistic()
   {
-    return sum(m -> {
+    return sum(m ->
+    {
       Vector sortedCompensator = new Vector(Λ(m).doubleStream().sorted()).reverse();
       KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
       double ksStatistic = ksTest.kolmogorovSmirnovStatistic(new ExponentialDistribution(1), sortedCompensator.toDoubleArray());
@@ -721,7 +726,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final void
          loadParameters(File modelFile) throws IOException
   {
-    out.println( modelFile.getAbsolutePath() + " length is " + modelFile.length() + " and paramCount=" + getParamCount() );
+    out.println(modelFile.getAbsolutePath() + " length is " + modelFile.length() + " and paramCount=" + getParamCount());
     FileInputStream fileInputStream = new FileInputStream(modelFile);
     DataInputStream dis = new DataInputStream(fileInputStream);
     Vector params = new Vector(getParamCount() * dim);
@@ -743,7 +748,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          logLik()
   {
     double maxT = T.getRightmostValue();
-    double ll = sum(m -> {
+    double ll = sum(m ->
+    {
       Vector λvector = λvector(m).slice(1, N(m) - 1);
 
       Vector lslice = λvector.log();
@@ -770,7 +776,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   public final double
          logLikSlower()
   {
-    double ll = sum(m -> {
+    double ll = sum(m ->
+    {
       Vector λvector = λvector(m).slice(1, N(m) - 1);
 
       Vector lslice = λvector.log();
@@ -995,7 +1002,8 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
          Z(int m,
            int n)
   {
-    double c = sum(j -> {
+    double c = sum(j ->
+    {
       double a = α(j, m, n);
       double b = β(j, m, n);
       return a / b;
@@ -1015,9 +1023,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    *         k-th type
    */
   public abstract double
-            α(int j,
-              int m,
-              int n);
+         α(int j,
+           int m,
+           int n);
 
   /**
    * 
@@ -1031,9 +1039,9 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
    *         k-th type
    */
   public abstract double
-            β(int j,
-              int m,
-              int n);
+         β(int j,
+           int m,
+           int n);
 
   public double
          γ(int k,
@@ -1087,7 +1095,7 @@ public abstract class ExponentialMutuallyExcitingProcess extends MutuallyExcitin
   }
 
   public Vector
-  Λ(int m)
+         Λ(int m)
   {
     Pair<Vector[], TreeMap<Double, Integer>[]> timesSubPair = getTimeSubsets();
     final Vector[] timesSub = timesSubPair.left;

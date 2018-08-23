@@ -163,7 +163,7 @@ public class ParameterPanel extends JPanel
           else if (field.getType().equals(fastmath.Vector.class))
           {
             Vector values = (Vector) field.get(process);
-            field.setDouble(process, values.get(0));
+            field.set(process, values);
           }
           else
           {
