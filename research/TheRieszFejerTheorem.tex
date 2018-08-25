@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{geometry,amsmath,amssymb,bbm}
+\geometry{letterpaper}
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\mathd}{\mathrm{d}}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\tmtextit}[1]{{\itshape{#1}}}
+%%%%%%%%%% End TeXmacs macros
+
+\begin{document}
+
+The Riesz-Fejer Theorem. {\cite[G.3p54]{li1}}
+
+If $F (x) \geqslant 0 \forall x \in \mathbbm{R}$ is an entire exponential
+function with
+\begin{equation}
+  \int_{- \infty}^{\infty} \frac{\log^+ (F (x))}{1 + x^2} \mathd x < \infty
+\end{equation}
+then there also exists an entire exponential function $f (x)$ without zeros in
+the upper half-plane $\mathfrak{I} (x) > 0$ ($\mathfrak{I} \cong
+\tmop{Im},$imaginary part) such that
+\begin{equation}
+  \text{} F (x) = f (x) \cdot \overline{f (x)} = | f (x) |^2 \forall x \in
+  \mathbbm{R}
+\end{equation}
+\begin{thebibliography}{1}
+  \bibitem[1]{li1}Paul Koosis.{\newblock} \tmtextit{The logarithmic integral
+  I}.{\newblock} Cambridge University Press, 1988.{\newblock}
+\end{thebibliography}
+
+\
+
+\end{document}

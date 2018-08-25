@@ -1,0 +1,137 @@
+\documentclass{article}
+\usepackage{geometry,amssymb}
+\usepackage[american]{babel}
+\geometry{letterpaper}
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\mathd}{\mathrm{d}}
+\newcommand{\tmem}[1]{{\em #1\/}}
+%%%%%%%%%% End TeXmacs macros
+
+\begin{document}
+
+\section{Stuff:The Theory of Point Processes}
+
+\subsection{Terminology and Whatnot}
+
+Consider a (simple) $K$-dimensional {\tmem{multivariate point process}}
+\begin{equation}
+  F_t = \bigcup_{k = 1}^K F^k_t
+\end{equation}
+where $t_0^k < t_1^k < t_2^k < \ldots < t_i^k < \ldots$ and
+\begin{equation}
+  F^k_n = \bigcup_{n = 1}^{N^k_t} t^k_n
+\end{equation}
+and where $N^k_t$ denotes the {\tmem{counting process}} associated with the
+$k$-th point process which is simply the number of events of P which have
+occurred by time $t$. At time $t$, the most recent arrival time will be
+denoted $t_{N^k_t}^k$. A process is said to be {\tmem{simple}} if no points
+occur at the same time, that is, there are no zero-length durations. The
+right-continuous(cadlag) counting
+process{\cite[4.1.1.2]{hautsch2011econometrics}} can be represented as a sum
+of Heaviside step functions $\theta ( t) = \left\{ \begin{array}{ll}
+  0 & t < 0\\
+  1 & t \geqslant 0
+\end{array} \right.$
+\begin{equation}
+  N^k_t = \sum_{t_i^k \leqslant t}^{} \theta ( t - t_i^k)
+\end{equation}
+The counting function(process) jumps at the occurrence of each point and its
+value is the number of points occurring up to the point in time of the jump,
+inclusively. The left-continuous counting function does not include the time
+of the most recent jump, it counts the number of events occurring
+{\tmem{before}} t and is denoted by
+\begin{equation}
+  \breve{N}^k_t = \sum_{t_i^k < t} \theta ( t - t_i^k) = N_t^k - 1
+\end{equation}
+when $N$ is a simple counting process, that is, there are no events occuring
+at the same time.
+
+\subsection{The (Conditional) Intensity Function $\lambda^k ( t | F^{}_t)$}
+
+The {\tmem{conditional intensity function}} gives the conditional probability
+per unit time that an event of type $k$ occurs in the next instant given the
+filtration $F_t = \bigcup_{k = 1}^K \{ t^k_i \}$ which is the set of all event
+times, regardless of type/dimension, in the process preceeding the current
+time $t$
+\begin{equation}
+  \lambda^k ( t | F^{}_t) = \lim_{\Delta t \rightarrow 0} \frac{\Pr ( N^k_{t +
+  \Delta t} - N^k_t > 0 | F_t)}{\Delta t}
+\end{equation}
+For small values of $\Delta t$ we have
+\begin{equation}
+  \lambda^k ( t | F^{}_t) \Delta t = E ( N_{t + \Delta t}^k - N^k_t | F_t) + o
+  ( \Delta t)
+\end{equation}
+such that the expectation
+\begin{equation}
+  E ( ( N^k_{t + \Delta t} - N^k_t) - \lambda^k ( t | F_t) \Delta t) = o (
+  \Delta t)  \label{E}
+\end{equation}
+becomes uncorrelated with respect to the past of $F_t$ as $\Delta t
+\rightarrow 0$. That is
+\begin{equation}
+  \begin{array}{l}
+    E \left( \lim_{\Delta t \rightarrow 0} \left[ \sum_{j = 1}^{\frac{( u -
+    s_{})}{\Delta t}} ( N^k_{u + j \Delta t} - N_{s + ( j - 1) \Delta t}^k) -
+    \lambda^k ( s + j \Delta t | F_t) \Delta t \right] \right)\\
+    = E \left( ( N_u^k - N^k_{s_{}}) - \lim_{\Delta t \rightarrow 0} \left[
+    \sum_{j = 1}^{\frac{ ( u - s)}{\Delta t}} \lambda^k ( j \Delta t | F_t)
+    \Delta t \right] \right)\\
+    = E \left( ( N^k_u - N^k_{s_{}}) - \int_{s_{}}^u \lambda^k ( t | F_t)
+    \mathd t \right)\\
+    = E ( ( N^k_u - N^k_{s_{}}) - ( N^k_u - N^k_{s_{}}))\\
+    = 0
+  \end{array}
+\end{equation}
+since
+\begin{equation}
+  E \left( \int_s^u \lambda^k ( t | F_t) \mathd t \right) = N^k_u - N^k_s
+\end{equation}
+
+\subsection{The Compensator(aka Dual Predictble Projection) of a Point
+Process}
+
+The integrated intensity function is known as the {\tmem{compensator}}, or
+more precisely, the {\tmem{$F_t$-compensator}} and will be denoted by
+\begin{equation}
+  \Lambda^k ( s_0, s_1) = \int_{s_0}^{s_1} \lambda^k ( t | F_t) \mathd t
+  \label{compensator}
+\end{equation}
+
+
+Let $x_k = t_i^k - t_{i - 1}^k$ denote the time interval, or duration, between
+the $i$-th and $( i - 1)$-th arrival times. The $F_t$-{\tmem{conditional
+survivor function}} for the $k$-th process is given by
+\begin{equation}
+  S_k ( x_i^k) = P_k ( t_i^k > x_i^k | F_{t_{i - 1} + \tau})
+\end{equation}
+Let
+\[ \tilde{\mathcal{E}}_i^k = \int_{t_{i - 1}}^{t_i} \lambda^k ( t | F_t)
+   \mathd t = \Lambda^k ( t_{i - 1}, t_i)_{} \label{gr} \]
+then provided the survivor function is absolutely continuous with respect to
+Lebesgue measure(which is an assumption that needs to be verified, usually by
+graphical tests) we have
+\begin{equation}
+  S^k ( x_i^k) = e^{- \int_{t_{i - 1}}^{t_i} \lambda^k ( t | F_t) \mathd t} =
+  e^{- \tilde{\mathcal{E}}_i^k} \label{S}
+\end{equation}
+and $\tilde{\mathcal{E}}_{N ( t)}$ is an i.i.d. exponential random variable
+with unit mean and variance. Since $E ( \tilde{\mathcal{E}}_{N ( t)}) = 1$ the
+random variable
+\begin{equation}
+  \mathcal{E}_{N ( t)}^k = 1 - \tilde{\mathcal{E}}_{N ( t)}
+\end{equation}
+has zero mean and \ unit variance. Positive values of $\mathcal{E}_{N ( t)}$
+indicate that the path of conditional intensity function $\lambda^k ( t |
+F_t)$ under-predicted the number of events in the time interval and negative
+values of $\mathcal{E}_{N ( t)}$ indicate that $\lambda^k ( t | F_t)$
+over-predicted the number of events in the interval. \ In this way, (\ref{gr})
+can be interpreted as a generalized residual. The {\tmem{backwards recurrence
+time}} given by
+\begin{equation}
+  U_t^k = t - t_{N_t^k}
+\end{equation}
+increases linearly with jumps back to 0 at each new point.
+
+\end{document}

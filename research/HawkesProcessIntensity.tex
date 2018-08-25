@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage[american]{babel}
+\geometry{letterpaper}
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\mathd}{\mathrm{d}}
+%%%%%%%%%% End TeXmacs macros
+
+\begin{document}
+
+$\begin{array}{ll}
+  \lambda ( t) & = \lambda_0 ( t) \kappa + \int_0^t \sum_{j = 1}^P \alpha_j
+  e^{- \beta_j ( t - s)} \mathd N_s\\
+  & = \lambda_0 ( t) \kappa + \sum_{k = 0}^{N_t - 1} \sum_{j = 1}^P \alpha_j
+  e^{- \beta_j ( t - t_k)}\\
+  & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \sum_{k = 0}^{N_t - 1} \alpha_j
+  e^{- \beta_j ( t - t_k)}\\
+  & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \alpha_j \sum_{k = 0}^{N_t - 1}
+  e^{- \beta_j ( t - t_k)}\\
+  & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \alpha_j B_j ( N_t)
+\end{array}$
+
+\end{document}

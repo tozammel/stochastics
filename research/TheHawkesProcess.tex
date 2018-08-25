@@ -1,0 +1,1390 @@
+\documentclass{amsart}
+\usepackage{amsmath,amssymb,bbm}
+\usepackage[american]{babel}
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\mathd}{\mathrm{d}}
+\newcommand{\nin}{\not\in}
+\newcommand{\noplus}{}
+\newcommand{\tmem}[1]{{\em #1\/}}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\tmscript}[1]{\text{\scriptsize{$#1$}}}
+%%%%%%%%%% End TeXmacs macros
+
+\begin{document}
+
+{\tmem{}}
+
+\title{Some Notes on The Hawkes Process.}
+\author{}
+\maketitle
+
+The Hawkes process is studied as a model of point processes. Point processes
+are also called jump processes or 'pure jump' processes sometimes. Closed-form
+log-likelihood expressions are given for the (exponential) uni-variate and
+multivariate Hawkes process of finite order $P$ such that there are $2 P$
+variables $\{ \alpha_1, \ldots, \alpha_P, \beta_1 ., \ldots, \beta_p \}$
+specifying the kernel of the process. When $P = 1$ (at least) there is a
+closed-form expression predicting the expected time until next occurrence of a
+point of a Hawkes process, specified as an infinite integral over a function
+of the history of the process, its parameters, the present time, and the
+Lambert W function, or more aptly, a generalized Wright $\omega ( z) = W (
+e^z)$ function.
+
+{\tableofcontents}
+
+\section{Stuff:The Theory of Point Processes}
+
+\subsection{Terminology and Whatnot}
+
+Consider a (simple) $K$-dimensional {\tmem{multivariate point process}}
+\begin{equation}
+  F_t = \bigcup_{k = 1}^K F^k_t
+\end{equation}
+where $t_0^k < t_1^k < t_2^k < \ldots < t_i^k < \ldots$ and
+\begin{equation}
+  F^k_n = \bigcup_{n = 1}^{N^k_t} t^k_n
+\end{equation}
+and where $N^k_t$ denotes the {\tmem{counting process}} associated with the
+$k$-th point process which is simply the number of events of P which have
+occurred by time $t$. At time $t$, the most recent arrival time will be
+denoted $t_{N^k_t}^k$. A process is said to be {\tmem{simple}} if no points
+occur at the same time, that is, there are no zero-length durations. The
+right-continuous(cadlag) counting
+process{\cite[4.1.1.2]{hautsch2011econometrics}} can be represented as a sum
+of Heaviside step functions $\theta ( t) = \left\{ \begin{array}{ll}
+  0 & t < 0\\
+  1 & t \geqslant 0
+\end{array} \right.$
+\begin{equation}
+  N^k_t = \sum_{t_i^k \leqslant t}^{} \theta ( t - t_i^k)
+\end{equation}
+The counting function(process) jumps at the occurrence of each point and its
+value is the number of points occurring up to the point in time of the jump,
+inclusively. The left-continuous counting function does not include the time
+of the most recent jump, it counts the number of events occurring
+{\tmem{before}} t and is denoted by
+\begin{equation}
+  \breve{N}^k_t = \sum_{t_i^k < t} \theta ( t - t_i^k) = N_t^k - 1
+\end{equation}
+when $N$ is a simple counting process, that is, there are no events occuring
+at the same time.
+
+\subsection{The (Conditional) Intensity Function $\lambda^k ( t | F^{}_t)$}
+
+The {\tmem{conditional intensity function}} gives the conditional probability
+per unit time that an event of type $k$ occurs in the next instant given the
+filtration $F_t = \bigcup_{k = 1}^K \{ t^k_i \}$ which is the set of all event
+times, regardless of type/dimension, in the process preceeding the current
+time $t$
+\begin{equation}
+  \lambda^k ( t | F^{}_t) = \lim_{\Delta t \rightarrow 0} \frac{\Pr ( N^k_{t +
+  \Delta t} - N^k_t > 0 | F_t)}{\Delta t}
+\end{equation}
+For small values of $\Delta t$ we have
+\begin{equation}
+  \lambda^k ( t | F^{}_t) \Delta t = E ( N_{t + \Delta t}^k - N^k_t | F_t) + o
+  ( \Delta t)
+\end{equation}
+such that the expectation
+\begin{equation}
+  E ( ( N^k_{t + \Delta t} - N^k_t) - \lambda^k ( t | F_t) \Delta t) = o (
+  \Delta t)  \label{E}
+\end{equation}
+becomes uncorrelated with respect to the past of $F_t$ as $\Delta t
+\rightarrow 0$. That is
+\begin{equation}
+  \begin{array}{l}
+    E \left( \lim_{\Delta t \rightarrow 0} \left[ \sum_{j = 1}^{\frac{( u -
+    s_{})}{\Delta t}} ( N^k_{u + j \Delta t} - N_{s + ( j - 1) \Delta t}^k) -
+    \lambda^k ( s + j \Delta t | F_t) \Delta t \right] \right)\\
+    = E \left( ( N_u^k - N^k_{s_{}}) - \lim_{\Delta t \rightarrow 0} \left[
+    \sum_{j = 1}^{\frac{ ( u - s)}{\Delta t}} \lambda^k ( j \Delta t | F_t)
+    \Delta t \right] \right)\\
+    = E \left( ( N^k_u - N^k_{s_{}}) - \int_{s_{}}^u \lambda^k ( t | F_t)
+    \mathd t \right)\\
+    = E ( ( N^k_u - N^k_{s_{}}) - ( N^k_u - N^k_{s_{}}))\\
+    = 0
+  \end{array}
+\end{equation}
+since
+\begin{equation}
+  E \left( \int_s^u \lambda^k ( t | F_t) \mathd t \right) = N^k_u - N^k_s
+\end{equation}
+
+\subsection{The Compensator(aka Dual Predictble Projection) of a Point
+Process}
+
+The integrated intensity function is known as the {\tmem{compensator}}, or
+more precisely, the {\tmem{$F_t$-compensator}} and will be denoted by
+\begin{equation}
+  \Lambda^k ( s_0, s_1) = \int_{s_0}^{s_1} \lambda^k ( t | F_t) \mathd t
+  \label{compensator}
+\end{equation}
+
+
+Let $x_k = t_i^k - t_{i - 1}^k$ denote the time interval, or duration, between
+the $i$-th and $( i - 1)$-th arrival times. The $F_t$-{\tmem{conditional
+survivor function}} for the $k$-th process is given by
+\begin{equation}
+  S_k ( x_i^k) = P_k ( t_i^k > x_i^k | F_{t_{i - 1} + \tau})
+\end{equation}
+Let
+\[ \tilde{\mathcal{E}}_i^k = \int_{t_{i - 1}}^{t_i} \lambda^k ( t | F_t)
+   \mathd t = \Lambda^k ( t_{i - 1}, t_i)_{} \label{gr} \]
+then provided the survivor function is absolutely continuous with respect to
+Lebesgue measure(which is an assumption that needs to be verified, usually by
+graphical tests) we have
+\begin{equation}
+  S^k ( x_i^k) = e^{- \int_{t_{i - 1}}^{t_i} \lambda^k ( t | F_t) \mathd t} =
+  e^{- \tilde{\mathcal{E}}_i^k} \label{S}
+\end{equation}
+and $\tilde{\mathcal{E}}_{N ( t)}$ is an i.i.d. exponential random variable
+with unit mean and variance. Since $E ( \tilde{\mathcal{E}}_{N ( t)}) = 1$ the
+random variable
+\begin{equation}
+  \mathcal{E}_{N ( t)}^k = 1 - \tilde{\mathcal{E}}_{N ( t)}
+\end{equation}
+has zero mean and \ unit variance. Positive values of $\mathcal{E}_{N ( t)}$
+indicate that the path of conditional intensity function $\lambda^k ( t |
+F_t)$ under-predicted the number of events in the time interval and negative
+values of $\mathcal{E}_{N ( t)}$ indicate that $\lambda^k ( t | F_t)$
+over-predicted the number of events in the interval. \ In this way, (\ref{gr})
+can be interpreted as a generalized residual. The {\tmem{backwards recurrence
+time}} given by
+\begin{equation}
+  U_t^k = t - t_{N_t^k}
+\end{equation}
+increases linearly with jumps back to 0 at each new point. In the context of
+cosmological models these concepts are analogoes to proper time and lookback
+time where $t = 0$ is the Big Bang singularity at the beginning of time 15
+something billion years ago.
+
+\subsubsection{Stochastic Integrals}
+
+The {\tmem{stochastic Stieltjes
+integral}}{\cite[2.1]{bowsher2007modelling}}{\cite[2.2]{karr}} of a measurable
+process, having either locally bounded or non-negative sample paths, $X ( t)$
+with respect to $N^k$ exists and for each $t$ we have
+\begin{equation}
+  \int_{( 0, t]} X ( s) \mathd N^k_s = \sum_{i \geqslant 1} \theta ( t -
+  t_i^k) X ( t_i^k)
+\end{equation}
+
+\subsection{Palm Distributions}
+
+{\cite[1.7]{karr}}
+
+\subsection{Random Integral Equations}
+
+{\cite{RandomIntegralEquations}}
+
+\subsection{Reproducing Kernel Hilbert Spaces}
+
+See {\cite{Paiva08reproducingkernel}}. `Point processes are stochastic random
+processes, yet a realization consists of a set
+
+of randomly distributed event locations. Hence, the peculiar nature of point
+process
+
+has made the application of conventional signal processing methods to their
+realizations
+
+difficult and imprecise to apply from first principles. Statistical
+descriptors have been
+
+extensively studied in the point process literature, and thus provide accurate
+and well
+
+founded methodologies to point process analysis by estimating the
+distributions necessary
+
+to characterize the process. But such methodologies face serious shortcomings
+when the
+
+interactions among multiples point processes need to be considered
+simultaneously, since
+
+they are only practical using an assumption of independence. Nevertheless,
+processing
+
+of multiple point processes is very important for practical applications, such
+as neural
+
+activity analysis, with the widespread use of multielectrode array techniques.
+
+This dissertation presents a general framework based on reproducing kernel
+Hilbert
+
+spaces (RKHS) to mathematically describe and manipulate point processes. The
+main
+
+idea is the definition of inner products (or point process kernels) to allow
+signal processing
+
+with point process from basic principles while incorporating their statistical
+description.
+
+Moreover, because many inner products can be formulated, a particular
+definition can be
+
+crafted to best fit an application. These ideas are illustrated by the
+definition of a number
+
+of inner products for point processes. To further elicit the advantages of the
+RKHS
+
+framework, a family of these inner products, called the cross-intensity (CI)
+kernels, is
+
+further analyzed in detail. This particular inner product family encapsulates
+the statistical
+
+description from conditional intensity functions of spike trains, therefore
+bridging the
+
+gap between statistical methodologies and the need for operators for signal
+processing.
+
+It is shown that these inner products establish a solid foundation with the
+necessary
+
+mathematical structure for signal processing with point processes. The
+simplest point
+
+process kernel in this family provides an interesting perspective to other
+works presented
+
+in the literature, since the kernel is closely related to cross-correlation.
+These theoretical developments also have important practical implications,
+with several examples shown here. The RKHS framework is of high relevance to
+the practitioner since it allows the development of point process analysis
+tools, with the emphasis given here to spike train analysis. The relation
+between the simplest of the CI kernels and cross-correlation exposes the
+limitations of current methodologies, but also brings forth the possibility of
+using the more general CI kernels to cope with general point process models.
+From a signal processing perspective, since the RKHS is a vector space with an
+inner product, all the conventional signal processing algorithms that involve
+inner product computations can be immediately implemented in the RKHS. This is
+illustrated here for clustering and PCA, but many other applications are
+possible such as filtering.'
+
+\section{Hawkes Processes}
+
+\subsection{The (Standard) Exponential Hawkes Process of Arbitrary Order}
+
+A uni-variate linear self-exciting counting process $N_t$ is one that can be
+expressed as
+\begin{equation}
+  \begin{array}{ll}
+    \lambda ( t) & = \lambda_0 ( t) \kappa + \int_{- \infty}^t \nu ( t - s)
+    \mathd N_s\\
+    & = \lambda_0 ( t) \kappa + \sum_{t_k < t} \nu ( t - t_k)
+  \end{array} \label{HawkesIntensity}
+\end{equation}
+where $\lambda_0 ( t)$ is a deterministic base intensity, see (\ref{lambda0}).
+{\cite{hawkes-finance}}{\cite{hawkes1971spectra}}{\cite{shek2010modeling}}{\cite{chavez2012high}}{\cite[11.3]{hautsch2011econometrics}}
+Here, \ $\nu : \mathbbm{R}_+ \rightarrow \mathbbm{R}_+$ is a kernel function
+which expresses the positive influence of past events $t_i$ on the current
+value of the intensity process, and $\kappa$ is a scaling factor for the
+baseline intensity $\lambda_0 ( t)$. For comparison with the multivariate case
+see Equation (\ref{mhi}). The astute observer might notice that Equation
+(\ref{HawkesIntensity}) is strikingly similar to a nonlinear Volterra integral
+of the second kind. {\cite{nvs}}
+\begin{equation}
+  \lambda ( t) = \int_0^t f ( t - s) g ( u ( s)) \mathd s
+\end{equation}
+The Hawkes process of order $P$ is a defined by the exponential kernel
+\begin{equation}
+  \nu ( t) = \sum_{j = 1}^P \alpha_j e^{- \beta_j t} \label{exp}
+\end{equation}
+The intensity of the exponential Hawkes process is written as
+\begin{equation}
+  \begin{array}{ll}
+    \lambda ( t) & = \lambda_0 ( t) \kappa + \int_0^t \sum_{j = 1}^P \alpha_j
+    e^{- \beta_j ( t - s)} \mathd N_s\\
+    & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \sum_{k = 0}^{\breve{N}_t}
+    \alpha_j e^{- \beta_j ( t - t_k)}\\
+    & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \alpha_j \sum_{k =
+    0}^{\breve{N}_t} e^{- \beta_j ( t - t_k)}\\
+    & = \lambda_0 ( t) \kappa + \sum_{j = 1}^P \alpha_j B_j ( N_t)
+  \end{array}
+\end{equation}
+where $B_j ( i)$ is given recursively by
+\begin{equation}
+  \begin{array}{ll}
+    B_j ( i) & = \sum_{k = 1}^{i - 1} e^{- \beta_j ( t_i - t_k)}\\
+    & = e^{- \beta_j ( t_i - t_{i - 1})}_{} \sum_{k = 1}^{i - 1} e^{- \beta_j
+    ( t_{i - 1} - t_k)}\\
+    & = e^{- \beta_j ( t_i - t_{i - 1})}_{}  \left( 1 + \sum_{k = 1}^{i - 2}
+    e^{- \beta_j ( t_{i - 1} - t_k)} \right)\\
+    & = e^{- \beta_j ( t - t_{i - 1})} ( 1 + B_j ( i - 1))
+  \end{array} \label{Bj}
+\end{equation}
+since $e^{- \beta_j ( t_{i - 1} - t_{i - 1})} = e^{- \beta_j 0} = e^{- 0} =
+1$. A uni-variate Hawkes process is stationary if the branching ratio is less
+than one.
+\begin{equation}
+  \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} < 1 \label{hs}
+\end{equation}
+If a Hawkes process is stationary then the unconditional mean is
+\begin{equation}
+  \begin{array}{ll}
+    \mu = E [ \lambda ( t)] & = \frac{\lambda_0}{1 - \int_0^{\infty} \nu ( t)
+    \mathd t}\\
+    & = \frac{\lambda_0}{1 - \int_0^{\infty} \sum_{j = 1}^P \alpha_j e^{-
+    \beta_j t} \mathd t}\\
+    & = \frac{\lambda_0}{1 - \sum_{j = 1}^P \frac{\alpha_j}{\beta_j}}
+  \end{array} \label{hm}
+\end{equation}
+For consecutive events, we have the compensator (\ref{compensator})
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = \int_{t_{i - 1}}^{t_i} \lambda ( t) \mathd
+    t\\
+    & = \int_{t_{i - 1}}^{t_i} \left( \lambda_0 ( t) + \sum_{j = 1}^P
+    \alpha_j B_j ( N_t) \right) \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \int_{t_{i -
+    1}^{}}^{t_i} \sum_{j = 1}^P \alpha_j \sum_{k = 0}^{i - 1} e^{- \beta_j ( t
+    - t_k)} \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j = 1}^P
+    \alpha_j \sum_{k = 0}^{i - 1}  \int_{t_{i - 1}^{}}^{t_i} e^{- \beta_j ( t
+    - t_k)} \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{k = 0}^{i -
+    1} \int_{t_{i - 1}}^{t_i} \nu ( t - t_k) \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{k = 0}^{i -
+    1} \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( e^{- \beta_j ( t_{i - 1} -
+    t_k)} - e^{- \beta_j ( t_i - t_k)})\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array} \label{hc}
+\end{equation}
+compared with the multivariate compensator in Equation (\ref{lhm})where there
+is the recursion
+\begin{equation}
+  \begin{array}{ll}
+    A_j ( i) & = \sum_{t_k \leqslant t_i} e^{- \beta_j ( t_i - t_k)}\\
+    & = \sum_{k = 0}^{i - 1} e^{- \beta_j ( t_i - t_k)}\\
+    & = 1 + e^{- \beta_j ( t_i - t_{i - 1})} A_j ( i - 1)
+  \end{array} \label{A}
+\end{equation}
+with $A_j ( 0) = 0$ since the integral of the exponential kernel (\ref{exp})
+is
+\begin{equation}
+  \begin{array}{ll}
+    \int_{t_{i - 1}}^{t_i} \nu ( t) \mathd t & = \int_{t_{i - 1}^{}}^{t_i}
+    \sum_{j = 1}^P \alpha_j e^{- \beta_j  ( t - t_k)} \mathd t\\
+    & = \sum_{j = 1}^P \frac{\alpha_j}{\beta_j}  ( e^{- \beta_j t_i} - e^{-
+    \beta_j t_{i - 1}})
+  \end{array}
+\end{equation}
+If $\lambda_0 ( t)$ does not vary with time, that is, $\lambda_0 ( t) =
+\lambda_0$ then (\ref{hc}) simplifies to
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{k =
+    0}^{i - 1} \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( e^{- \beta_j ( t_{i -
+    1} - t_k)} - e^{- \beta_j ( t_i - t_k)})\\
+    & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{k = 0}^{i - 1} \int_{t_{i -
+    1} - t_k}^{t_i - t_k} \nu ( t) \mathd t\\
+    & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array}
+\end{equation}
+Similarly, another parametrization is given by
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = \int_{t_{i - 1}^{}}^{t_i} \kappa \lambda_0 (
+    s) \mathd s + \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j (
+    t_i - t_{i - 1})}) A_j ( i - 1)\\
+    & = \kappa \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j =
+    1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j
+    ( i - 1)\\
+    & = \kappa \Lambda_0 ( t_{i - 1}, t_i) + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array} \label{kappa}
+\end{equation}
+where $\kappa$ scales the predetermined baseline intensity $\lambda_0 ( s)$.
+In this parametrization the intensity is also scaled by $\kappa$
+\begin{equation}
+  \begin{array}{ll}
+    \lambda ( t) & = \kappa \lambda_0 ( t) + \sum_{j = 1}^P \alpha_j B_j (
+    N_t)
+  \end{array}
+\end{equation}
+this allows to precompute the deterministic part of the compensator $\Lambda_0
+( t_{i - 1}, t_i) = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s$.
+
+\subsubsection{Maximum Likelihood Estimation}
+
+The log-likelihood of a simple point process is written as
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L} ( N ( t)_{t \in [ 0, T]}) & = \int_0^T ( 1 -
+    \lambda ( s)) \mathd s + \int_0^T \ln \lambda ( s) \mathd N_s\\
+    & = T - \int_0^T \lambda ( s) \mathd s + \int_0^T \ln \lambda ( s) \mathd
+    N_s
+  \end{array}
+\end{equation}
+which in the case of the Hawkes model of order $P$ can be explicitly written
+{\cite{ozaki1979maximum}} as
+\begin{equation}
+  \begin{array}{ll}
+    \ln \mathcal{L} ( \{ t_i \}_{i = 1 \ldots n}) & =_{} T - \Lambda ( 0, T) +
+    \sum_{i = 1}^n \ln \lambda ( t_i)\\
+    & = T + \sum_{i = 1}^n ( \ln \lambda ( t_i) - \Lambda ( t_{i - 1},
+    t_i))\\
+    & = T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \lambda ( t_i)\\
+    & =_{} T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 (
+    t_i) + \sum_{j = 1}^P \sum_{k = 1}^{i - 1} \alpha_j e^{- \beta_j ( t_i -
+    t_k)} \right)\\
+    & =_{} T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 (
+    t_i) + \sum_{j = 1}^P \alpha_j R_j ( i) \right)\\
+    & = T - \int_0^{_T} \kappa \lambda_0 ( s) \mathd s - \sum_{i = 1}^n
+    \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_n -
+    t_i)})\\
+    & + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 ( t_i) + \sum_{j = 1}^P
+    \alpha_j R_j ( i) \right)
+  \end{array}
+\end{equation}
+where $T = t_n$ and we have the recursion{\cite{ogata1981lewis}}
+\begin{equation}
+  \begin{array}{ll}
+    R_j ( i) & = \sum_{k = 1}^{i - 1} e^{- \beta_j ( t_i - t_k)} = e^{-
+    \beta_j ( t_i - t_{i - 1})} ( 1 + R_j ( i - 1))\\
+    & 
+  \end{array}
+\end{equation}
+If we have constant baseline intensity $\lambda_0 ( t) = 1$ then the
+log-likelihood can be written
+\begin{equation}
+  \begin{array}{ll}
+    \ln \mathcal{L} ( \{ t_1, \ldots, t_n \}_{}) & = T - \kappa T - \sum_{i =
+    1}^n \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( T -
+    t_i)})\\
+    & + \sum_{i = 1}^n \ln \left( \kappa + \sum_{j = 1}^P \alpha_j R_j ( i)
+    \right)
+  \end{array} \text{} \label{hawkesll}
+\end{equation}
+Note that it was necessary to shift each $t_i$ by $t_1$ so that $t_1 = 0$ and
+$T = t_n$. Also note that $T$ is just an additive constant which does not vary
+with the parameters so for the purposes of estimation can be removed from the
+equation. This fact probably can be proven rigorously by means of the modular
+group and corresponding functional equations.
+
+\subsection{Prediction of the Next Occurrence Time}\label{univarPred}
+
+The next occurrence time of a point process, given the most recent time of
+occurrence of a point of a process, can be predicted by solving for the
+unknown time $t_{n + 1}$ when $\{ t_n \}$ is a sequence of event times.
+Likewise, the most recently occurrence
+\begin{equation}
+  \begin{array}{c}
+    \Lambda_{\tmop{prev}} ( t_n, \delta) = \{ t_{n - 1} : \Lambda ( t_{n - 1},
+    t_n) = \delta \}\\
+    \Lambda_{\tmop{next}} ( t_n, \delta) = \{ t_{n + 1} : \Lambda ( t_n, t_{n
+    + 1}) = \delta \}
+  \end{array} \label{up}
+\end{equation}
+where
+\begin{equation}
+  \Lambda ( t_n, t_{n + 1}) = \int_{t_n}^{t_{n + 1}} \lambda ( s ;
+  \mathfrak{F}_s) \mathd s
+\end{equation}
+where $\mathfrak{F}_s$ is the $\sigma$-algebra filtration up to and including
+time $s$ and the parameters of $\lambda$ are fixed. The multivariate case is
+covered in Section (\ref{multivarPred}). The idea is to integrate over the
+solution of Equation (\ref{up}) with all possible values of $\varepsilon$,
+distributed according to the unit exponential distribution. The reason for the
+plural form, time(s), rather than the singular form, time, is that Equation
+(\ref{up}) actually has a single real solution and $N$ number of complex
+solutions, where $N$ is the number of points that have occurred in the process
+up until the time of prediction. This set of complex expected future event
+arrival times is the {\tmem{constellation}} of the process, which changes with
+the arrival of each event(the increasing $\sigma$-algebra filtration), and has
+somewhat of a multiverse interpretation if thought about from a physical
+context.
+
+\subsubsection{The case when P=1 and the Lambert W Function}
+
+The Hawkes process of order $1$ is a defined by the exponential kernel
+\begin{equation}
+  \nu ( t) =^{} \alpha_{} e^{- \beta_{} t} \label{exp}
+\end{equation}
+The intensity of the exponential Hawkes process is written as
+\begin{equation}
+  \begin{array}{ll}
+    \lambda ( t) & = \lambda_0 ( t) \kappa + \int_0^t \alpha_{} e^{- \beta_{}
+    ( t - s)} \mathd N_s\\
+    & = \lambda_0 ( t) \kappa + \sum_{k = 0}^{N_t - 1} \alpha_{} e^{-
+    \beta_{} ( t - t_k)}\\
+    & = \lambda_0 ( t) \kappa + \sum_{k = 0}^{N_t - 1} \alpha_{} e^{-
+    \beta_{} ( t - t_k)}\\
+    & = \lambda_0 ( t) \kappa + \alpha_{} \sum_{k = 0}^{N_t - 1} e^{-
+    \beta_{} ( t - t_k)}\\
+    & = \lambda_0 ( t) \kappa + \alpha_{} B_{} ( N_t)
+  \end{array}
+\end{equation}
+where $B_{} ( i) = B ( N_{t \{ i \}})$ is given recursively by
+\begin{equation}
+  \begin{array}{ll}
+    B ( i) & = \sum_{k = 1}^{i - 1} e^{- \beta ( t_i - t_k)}\\
+    & = e^{- \beta_j ( t_i - t_{i - 1})}_{} \left( \sum_{k = 1}^{i - 1} e^{-
+    \beta_j ( t_{i - 1} - t_k)} \right)\\
+    & = e^{- \beta_j ( t_i - t_{i - 1})}_{}  \left( 1 + \sum_{k = 1}^{i - 2}
+    e^{- \beta_j ( t_{i - 1} - t_k)} \right)\\
+    & = e^{- \beta_j ( t - t_{i - 1})} ( 1 + B_j ( i - 1))
+  \end{array} \label{Bj}
+\end{equation}
+since $e^{- \beta_j ( t_{i - 1} - t_{i - 1})} = e^{- \beta_j 0} = e^{- 0} =
+1$. A uni-variate Hawkes process is stationary if the branching ratio is less
+than one.
+\begin{equation}
+  \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} < 1 \label{hs}
+\end{equation}
+If a Hawkes process is stationary then the unconditional mean is
+\begin{equation}
+  \begin{array}{ll}
+    \mu = E [ \lambda ( t)] & = \frac{\lambda_0}{1 - \int_0^{\infty} \nu ( t)
+    \mathd t}\\
+    & = \frac{\lambda_0}{1 - \int_0^{\infty} \sum_{j = 1}^P \alpha_j e^{-
+    \beta_j t} \mathd t}\\
+    & = \frac{\lambda_0}{1 - \sum_{j = 1}^P \frac{\alpha_j}{\beta_j}}
+  \end{array} \label{hm}
+\end{equation}
+For consecutive events, we have the compensator (\ref{compensator})
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = \int_{t_{i - 1}}^{t_i} \lambda ( t) \mathd
+    t\\
+    & = \int_{t_{i - 1}}^{t_i} \left( \lambda_0 ( t) + \sum_{j = 1}^P
+    \alpha_j B_j ( N_t) \right) \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \int_{t_{i -
+    1}^{}}^{t_i} \sum_{j = 1}^P \alpha_j \sum_{k = 0}^{i - 1} e^{- \beta_j ( t
+    - t_k)} \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j = 1}^P
+    \alpha_j \sum_{k = 0}^{i - 1}  \int_{t_{i - 1}^{}}^{t_i} e^{- \beta_j ( t
+    - t_k)} \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{k = 0}^{i -
+    1} \int_{t_{i - 1}}^{t_i} \nu ( t - t_k) \mathd t\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{k = 0}^{i -
+    1} \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( e^{- \beta_j ( t_{i - 1} -
+    t_k)} - e^{- \beta_j ( t_i - t_k)})\\
+    & = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array} \label{hc}
+\end{equation}
+compared with the multivariate compensator in Equation (\ref{lhm})where there
+is the recursion
+\begin{equation}
+  \begin{array}{ll}
+    A_j ( i) & = \sum_{t_k \leqslant t_i} e^{- \beta_j ( t_i - t_k)}\\
+    & = \sum_{k = 0}^{i - 1} e^{- \beta_j ( t_i - t_k)}\\
+    & = 1 + e^{- \beta_j ( t_i - t_{i - 1})} A_j ( i - 1)
+  \end{array} \label{A}
+\end{equation}
+with $A_j ( 0) = 0$ since the integral of the exponential kernel (\ref{exp})
+is
+\begin{equation}
+  \begin{array}{ll}
+    \int_{t_{i - 1}}^{t_i} \nu ( t) \mathd t & = \int_{t_{i - 1}^{}}^{t_i}
+    \sum_{j = 1}^P \alpha_j e^{- \beta_j  ( t - t_k)} \mathd t\\
+    & = \sum_{j = 1}^P \frac{\alpha_j}{\beta_j}  ( e^{- \beta_j t_i} - e^{-
+    \beta_j t_{i - 1}})
+  \end{array}
+\end{equation}
+If $\lambda_0 ( t)$ does not vary with time, that is, $\lambda_0 ( t) =
+\lambda_0$ then (\ref{hc}) simplifies to
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{k =
+    0}^{i - 1} \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( e^{- \beta_j ( t_{i -
+    1} - t_k)} - e^{- \beta_j ( t_i - t_k)})\\
+    & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{k = 0}^{i - 1} \int_{t_{i -
+    1} - t_k}^{t_i - t_k} \nu ( t) \mathd t\\
+    & = ( t_i - t_{i - 1})^{} \lambda_0 + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array}
+\end{equation}
+Similarly, another parametrization is given by
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda ( t_{i - 1}, t_i) & = \int_{t_{i - 1}^{}}^{t_i} \kappa \lambda_0 (
+    s) \mathd s + \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j (
+    t_i - t_{i - 1})}) A_j ( i - 1)\\
+    & = \kappa \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s + \sum_{j =
+    1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j
+    ( i - 1)\\
+    & = \kappa \Lambda_0 ( t_{i - 1}, t_i) + \sum_{j = 1}^P
+    \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_i - t_{i - 1})}) A_j ( i -
+    1)
+  \end{array} \label{kappa}
+\end{equation}
+where $\kappa$ scales the predetermined baseline intensity $\lambda_0 ( s)$.
+In this parametrization the intensity is also scaled by $\kappa$
+\begin{equation}
+  \begin{array}{ll}
+    \lambda ( t) & = \kappa \lambda_0 ( t) + \sum_{j = 1}^P \alpha_j B_j (
+    N_t)
+  \end{array}
+\end{equation}
+this allows to precompute the deterministic part of the compensator $\Lambda_0
+( t_{i - 1}, t_i) = \int_{t_{i - 1}^{}}^{t_i} \lambda_0 ( s) \mathd s$.
+
+\subsubsection{Maximum Likelihood Estimation}
+
+The log-likelihood of a simple point process is written as
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L} ( N ( t)_{t \in [ 0, T]}) & = \int_0^T ( 1 -
+    \lambda ( s)) \mathd s + \int_0^T \ln \lambda ( s) \mathd N_s\\
+    & = T - \int_0^T \lambda ( s) \mathd s + \int_0^T \ln \lambda ( s) \mathd
+    N_s
+  \end{array}
+\end{equation}
+which in the case of the Hawkes model of order $P$ can be explicitly written
+{\cite{ozaki1979maximum}} as
+\begin{equation}
+  \begin{array}{ll}
+    \ln \mathcal{L} ( \{ t_i \}_{i = 1 \ldots n}) & =_{} T - \Lambda ( 0, T) +
+    \sum_{i = 1}^n \ln \lambda ( t_i)\\
+    & = T + \sum_{i = 1}^n ( \ln \lambda ( t_i) - \Lambda ( t_{i - 1},
+    t_i))\\
+    & = T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \lambda ( t_i)\\
+    & =_{} T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 (
+    t_i) + \sum_{j = 1}^P \sum_{k = 1}^{i - 1} \alpha_j e^{- \beta_j ( t_i -
+    t_k)} \right)\\
+    & =_{} T - \Lambda ( 0, T) + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 (
+    t_i) + \sum_{j = 1}^P \alpha_j R_j ( i) \right)\\
+    & = T - \int_0^{_T} \kappa \lambda_0 ( s) \mathd s - \sum_{i = 1}^n
+    \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j ( t_n -
+    t_i)})\\
+    & + \sum_{i = 1}^n \ln \left( \kappa \lambda_0 ( t_i) + \sum_{j = 1}^P
+    \alpha_j R_j ( i) \right)
+  \end{array}
+\end{equation}
+where $T = t_n$ and we have the recursion{\cite{ogata1981lewis}}
+\begin{equation}
+  \begin{array}{ll}
+    R_j ( i) & = \sum_{k = 1}^{i - 1} e^{- \beta_j ( t_i - t_k)} = e^{-
+    \beta_j ( t_i - t_{i - 1})} ( 1 + R_j ( i - 1))\\
+    & 
+  \end{array}
+\end{equation}
+If we have constant baseline intensity $\lambda_0 ( t) = 1$ then the
+log-likelihood can be written
+\begin{equation}
+  \begin{array}{ll}
+    \ln \mathcal{L} ( \{ t_1, \ldots, t_n \}_{}) & = T - \kappa T - \sum_{i =
+    1}^{n = N_t} \sum_{j = 1}^P \frac{\alpha_j}{\beta_j} ( 1 - e^{- \beta_j (
+    T - t_i)})\\
+    & + \sum_{i = 1}^n \ln \left( \kappa + \sum_{j = 1}^P \alpha_j R_j ( i)
+    \right)
+  \end{array} \text{} \label{hawkesll}
+\end{equation}
+Note that it was necessary to shift each $t_i$ by $t_1$ so that $t_1 = 0$ and
+$T = t_n$. Also note that $T$ is just an additive constant which does not vary
+with the parameters so for the purposes of estimation can be removed from the
+equation. This fact probably can be proven rigorously by means of the modular
+group and corresponding functional equations.
+
+
+
+The simplest case occurs when the baseline intensity $\lambda_0 ( t) = 1$ is
+constant unity and $P = 1$ where we have
+\begin{equation}
+  \lambda ( \{ t_i \}) = \kappa + \sum_{t_i < t} \sum_{j = 1}^1 \alpha_j e^{-
+  \beta_j  ( t - t_i)} = \kappa + \sum_{t_i < t} \alpha_{} e^{- \beta_{}  ( t
+  - t_i)} \label{Hawkes1}
+\end{equation}
+where
+\begin{equation}
+  E [ \lambda ( t)] = \frac{\kappa}{1 - \frac{\alpha}{\beta}}
+\end{equation}
+is the expected value of the unconditional mean intensity.
+
+
+\begin{equation}
+  a_n = \sum_{k = 0}^n e^{\beta_1 t_k}
+\end{equation}
+\begin{equation}
+  b_n = \sum_{k = 0}^n e^{\beta_1 ( t_k - t_n)}
+\end{equation}
+\begin{equation}
+  c_n = \sum_{k = 0}^n \sum_{l = 0}^n e^{\beta_1 ( t_k + t_l - t_n)}
+\end{equation}
+then we have
+\begin{equation}
+  \Lambda^{- 1} ( \varepsilon ; \alpha_1, \beta_1, t_0 \ldots t_n) =
+  \begin{array}{l}
+    \frac{\begin{array}{l}
+      a_n t_n e^{- \beta_1 t_n}
+    \end{array}}{b_n} +\\
+    \frac{a_n e^{- \beta_1 t_n} W \left( \frac{\alpha_1 b_n e^{\frac{\alpha_1
+    b_n - \beta_1 \varepsilon}{\kappa}}}{\kappa} \right)}{\beta_1 b_n} +\\
+    \frac{e^{- \beta_1 t_n}}{\kappa b_n} \left( a_n \varepsilon -
+    \frac{\alpha_1 c_n}{\beta_1} \right)
+  \end{array} \label{P1pred}
+\end{equation}
+where $\kappa$ is the baseline constant in $\lambda ( t) = \kappa + \sum_{t_i
+< t} \alpha e^{- \beta ( t - t_i)}$ from Formula (\ref{Hawkes1}). We have the
+following recursions with initial conditions $\hat{b} ( 0) = 1$ and $\hat{d} (
+0) = e^{\beta_1 t_0}$
+\begin{equation}
+  \hat{b} ( n) = \hat{b} ( n - 1) e^{\beta_1 ( t_{n - 1} - t_n)} + 1
+\end{equation}
+\begin{equation}
+  \begin{array}{ll}
+    \hat{d} ( n) & = \hat{d} ( n - 1) e^{\beta_1 ( t_{n - 1} - t_n)} +
+    e^{\beta_1 t_n} + 2 \sum_{k = 0}^{n - 1} e^{\beta_1 t_k}\\
+    & = \hat{d} ( n - 1) e^{\beta_1 ( t_{n - 1} - t_n)} + e^{\beta_1 t_n} + 2
+    \hat{a} ( n - 1)
+  \end{array}
+\end{equation}
+It would be nice to have expressions like this involving the Lambert W
+function for $P > 1$ but neither Maple nor Mathematica were able to find any
+solutions in terms of ``known'' functions for $P > 1$. It is noted that
+Equation (\ref{P1inverse}) has the form
+\begin{equation}
+  \begin{array}{l}
+    \int_0^{\infty} ( p + q W ( r e^{- s x + t}) + u x) e^{- x} \mathd x
+    \label{lambertW6}
+  \end{array}
+\end{equation}
+which is a function of 6 variables, $\{ p, q, r, s, t, u \}$, for which it
+would be a very nice thing to have a closed form expression, in order to avoid
+a recourse to numerical or Monte Carlo integration. It seems that such an
+expression is very likely to exist because if we drop the variable $s$ from
+Equation (\ref{lambertW6}) we get a closed-form expression of the form
+
+\begin{equation}
+  \int_0^{\infty} ( p + q W ( r e^{- x + t}) + u x) e^{- x} \mathd x = q W ( r
+  e^t) + \frac{q}{W ( r e^t)} - q + u + p - \frac{q}{r e^t} 
+\end{equation}
+
+We can break this problem down into a more manageable one by calculating some
+more integrals to see if we can find a pattern. Let us begin with the integral
+\begin{equation}
+  \int_0^{\infty} W ( e^{- s x}) e^{- x} \mathd x = W ( 1) \noplus + \left( -
+  \frac{1}{s} \right)^{- \frac{1}{s}}  \left( \Gamma \left( \frac{1}{s}
+  \right) - s \Gamma \left( 1 + \frac{1}{s}, - \frac{W ( 1)}{s} \right)
+  \right)
+\end{equation}
+whose closed-form expression was found by Vladimir Reshetnikov. {\cite{vr-W}}
+
+\subsubsection{The Case of Any Order $P = n$}
+
+For general values of the order $P$, the equation whose root is to be sought
+is given by the expression
+\begin{equation}
+  \varphi_P ( x ( \varepsilon)) = \begin{array}{l}
+    \left( \prod_{k = 1}^P \beta_k \right) ( \kappa x - ( \varepsilon + \kappa
+    T)) e^{\sum_{k = 1}^P \beta_k ( x + T)} + \ldots\\
+    \ldots + \sum_{m = 1}^P \left( \prod_{k = 1}^{ P} \left\{
+    \begin{array}{ll}
+      \alpha_k & m = k\\
+      \beta_k & m \neq k
+    \end{array} \right. \right) \sum_{k = 0}^n e^{\tmscript{\sum_{j = 1}^P
+    \beta_j \left( x + \left\{ \begin{array}{ll}
+      T & j \neq m\\
+      t_k & j = m
+    \end{array} \right. \right)}} - e^{\tmscript{\sum_{j = 1}^P \beta_j \left(
+    T + \left\{ \begin{array}{ll}
+      x & j \neq m\\
+      t_k & j = m
+    \end{array} \right. \right)}}
+  \end{array} \label{prediction}
+\end{equation}
+where $T = t_n$ is arrival time of the most recent point and it is noted that
+the product of piece-wise functions can be written as
+\begin{equation}
+  \begin{array}{ll}
+    \prod_{k = 1}^{ P} \left\{ \begin{array}{ll}
+      \alpha_k & m = k\\
+      \beta_k & m \neq k
+    \end{array} \right. & = \alpha_m \left( \prod_{k = 1}^{m - 1} \beta_k
+    \right) \left( \prod_{k = m + 1}^P \beta_k \right)\\
+    & = \alpha_m \underset{k \neq m}{\prod_{k = 1}^P} \beta_k
+  \end{array}
+\end{equation}
+and the sums likewise
+\begin{equation}
+  \begin{array}{ll}
+    \sum_{j = 1}^P \beta_j \left( x + \left\{ \begin{array}{ll}
+      T & j \neq m\\
+      t_k & j = m
+    \end{array} \right. \right) & = \beta_m ( x + t_k)_{} + \sum_{j = 1}^{m -
+    1} \beta_j ( x + T) + \sum_{j = m + 1}^P \beta_j ( x + T)\\
+    & = \beta_m ( x + t_k)_{} + \underset{j \neq m}{\sum_{j = 1}^P} \beta_j (
+    x + T)\\
+    & = \sigma_{m, k} ( x, x)
+  \end{array}
+\end{equation}
+and
+\begin{equation}
+  \begin{array}{ll}
+    \sum_{j = 1}^P \beta_j \left( T + \left\{ \begin{array}{ll}
+      x & j \neq m\\
+      t_k & j = m
+    \end{array} \right. \right) & = \beta_m ( T + t_k) + \sum_{j = 1}^{m - 1}
+    \beta_j ( x + T) + \sum_{j = m + 1}^P \beta_j ( x + T)\\
+    & = \beta_m ( T + t_k) + \underset{j \neq m}{\sum_{j = 1}^P} \beta_j (
+    x_{} + T)\\
+    & = \sigma_{m, k} ( x, T)
+  \end{array}
+\end{equation}
+so that (\ref{prediction}) can be rewritten as
+\begin{equation}
+  \varphi_P ( x ( \varepsilon)) = \begin{array}{l}
+    \tau ( x, \varepsilon) + \sum_{j = 1}^P \phi_j  \sum_{k = 0}^{N_T} (
+    \sigma_{j, k} ( x, x) - \sigma_{j, k} ( x, T))^{}
+  \end{array} \label{uc}
+\end{equation}
+to be compared with the multivariate case in Equation (\ref{mc}), where
+\begin{equation}
+  \sigma_{m, k} ( x, a) = e^{( a + t_k) \beta_m + ( x + T) \underset{j \neq
+  m}{\sum_{j = 1}^P} \beta_j}
+\end{equation}
+\begin{equation}
+  \phi_m = \alpha_m \underset{k \neq m}{\prod_{k = 1}^P} \beta_k = \prod_{k =
+  1}^P \left\{ \begin{array}{ll}
+    \alpha_k & k = m\\
+    \beta_k & k \neq m
+  \end{array} \right.
+\end{equation}
+\begin{equation}
+  \tau ( x, \varepsilon) = ( ( x - T) \kappa - \varepsilon) \upsilon \eta ( x)
+\end{equation}
+\begin{equation}
+  \eta ( x) = e^{( x + T) \sum_{k = 1}^P \beta_k}
+\end{equation}
+\begin{equation}
+  \upsilon = \prod_{k = 1}^P \beta_k
+\end{equation}
+The derivative given by
+\begin{equation}
+  \begin{array}{l}
+    \varphi'_P ( x ( \varepsilon)) = \upsilon ( \kappa \eta ( x)  + \tau ( x,
+    \varepsilon)) + \sum_{m = 1}^P \phi_m  \sum_{k = 0}^n ( \mu \sigma_{m, k}
+    ( x) - \mu_m \sigma_{m, k} ( T))
+  \end{array} \begin{array}{l}
+    \\
+    
+  \end{array}
+\end{equation}
+where
+\begin{equation}
+  \mu = \sum_{k = 1}^P \beta_k
+\end{equation}
+\begin{equation}
+  \mu_m = \underset{j \neq m}{\sum_{j = 1}^P} \beta_j
+\end{equation}
+is needed so that the Newton sequence can be expressed as
+\begin{equation}
+  \begin{array}{ll}
+    x_{i + 1} & = x_i - \frac{\varphi_2 ( x_i)}{\varphi_2' ( x_i)}\\
+    & = x_i - \frac{\tau ( x_i, \varepsilon) + \sum_{m = 1}^P \phi_m  \sum_{k
+    = 0}^n ( \sigma_{m, k} ( x_i, x_i) - \sigma_{m, k} ( x_i, T))}{\upsilon (
+    \kappa \eta ( x_i) + \tau ( x_i, \varepsilon)) + \sum_{m = 1}^P \phi_m 
+    \sum_{k = 0}^n ( \mu \sigma_{m, k} ( x_i) - \mu_m \sigma_{m, k} ( T))}
+  \end{array}
+\end{equation}
+and simplified a bit(at least notationally) if we let
+\begin{equation}
+  \rho ( x, d) = \begin{array}{l}
+    \sum_{m = 1}^P \phi_m \sum_{k = 0}^n \left( \sigma_{m, k} ( x) \left\{
+    \begin{array}{ll}
+      1 & d = 0\\
+      \mu & d = 1
+    \end{array} \right. - \sigma_{m, k} ( T) \left\{ \begin{array}{ll}
+      1 & d = 0\\
+      \mu_m & d = 1
+    \end{array} \right. \right)
+  \end{array}
+\end{equation}
+then
+\begin{equation}
+  \begin{array}{ll}
+    x_{i + 1} ( \varepsilon) & = x_i ( \varepsilon) - \frac{\varphi_P ( x_i (
+    \varepsilon))}{\varphi_P' ( x_i ( \varepsilon))}\\
+    & = x_i - \frac{\tau ( x_i ( \varepsilon), \varepsilon) + \rho ( x_i (
+    \varepsilon), 0)}{\upsilon ( \kappa \eta ( x_i ( \varepsilon)) + \tau (
+    x_i ( \varepsilon), \varepsilon)) + \rho ( x_i ( \varepsilon), 1)}
+  \end{array}
+\end{equation}
+so that
+\begin{equation}
+  \Lambda_P^{- 1} ( \varepsilon ; t_0 \ldots T) = \lim_{m \rightarrow \infty}
+  x_m ( \varepsilon)
+\end{equation}
+which leads to the expression for the expected arrival time of the next point
+\begin{equation}
+  \int_0^{\infty} \Lambda_P^{- 1} ( \varepsilon ; t_0 \ldots T) e^{-
+  \varepsilon} \mathd \varepsilon = \int_0^{\infty} \lim_{m \rightarrow
+  \infty} x_m ( \varepsilon) e^{- \varepsilon} \mathd \varepsilon \label{Etn1}
+\end{equation}
+Fatou's lemma can probably be invoked so that the order of the limit and the
+integral in Equation (\ref{Etn1}) can be exchanged, with perhaps the
+introduction of another function, which of course would greatly reduce the
+computational complexity of the equation. The sequence of functions is known
+as a Newton sequence {\cite[3.3p118]{RandomIntegralEquations}} There is also
+the limit
+\begin{equation}
+  \begin{array}{ll}
+    \lim_{x \rightarrow \infty} \frac{\varphi_P ( x_i (
+    \varepsilon))}{\varphi_P' ( x_i ( \varepsilon))} & = \lim_{x \rightarrow
+    \infty} \frac{\tau ( x_i ( \varepsilon), \varepsilon) + \rho ( x_i (
+    \varepsilon), 0)}{\upsilon ( \kappa \eta ( x_i ( \varepsilon)) + \tau (
+    x_i ( \varepsilon), \varepsilon)) + \rho ( x_i ( \varepsilon), 1)}\\
+    & = \frac{1}{\mu}
+  \end{array}
+\end{equation}
+
+\subsection{Multivariate Hawkes Models}
+
+Let $M \in \mathbbm{N}^{\ast}$ and $\{ ( t_i^m) \}_{m = 1, \ldots, M}$ be an
+$M$-dimensional point process. The associated counting process will be denoted
+$N_t = ( N_t^1, \ldots, N_t^M)$. A multivariate Hawkes
+process{\cite{hawkes1971spectra}}{\cite{embrechts2011multivariate}}{\cite{liniger2009multivariate}},
+compared with the uni-variate case in Equation (\ref{HawkesIntensity}), is
+defined with intensities $\lambda^m ( t), m = 1 \ldots M$ given by
+\begin{equation}
+  \begin{array}{ll}
+    \lambda^m ( t) & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \int_0^t
+    \sum_{j = 1}^P \alpha_j^{m, n} e^{- \beta_j^{m, n} ( t - s)} \mathd
+    N_s^n\\
+    & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P
+    \sum^{}_{t_k^n < t} \alpha_j^{m, n} e^{- \beta_j^{m, n} ( t - t_k^n)}\\
+    & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P
+    \alpha_j^{m, n} \sum_{t_k^n < t} e^{- \beta_j^{m, n} ( t - t_k^n)}_{}\\
+    & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P
+    \alpha_j^{m, n} \sum_{t_k^n < t} e^{- \beta_j^{m, n} ( t - t_k^n)}_{}\\
+    & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P
+    \alpha_j^{m, n} \sum_{k = 0}^{N_t^n - 1} e^{- \beta_j^{m, n} ( t -
+    t_k^n)}\\
+    & = \lambda_0^m ( t) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P
+    \alpha_j^{m, n} B_j^{m, n} ( N_t^n)
+  \end{array} \label{mhi}
+\end{equation}
+where in this parametrization $\kappa$ is a vector which scales the baseline
+intensities, in this case, specified by piece-wise polynomial splines
+(\ref{lambda0}). We can write $B_j^{m, n} ( i)$ recursively
+\begin{equation}
+  \begin{array}{ll}
+    B_j^{m, n} ( i) & = \begin{array}{l}
+      \sum^{i - 1}_{k = 0} e^{- \beta_j^{m, n} ( t - t_k^n)}\\
+      = ( 1 + B^{m, n}_j ( i - 1)) e^{- \beta^{m, n}_j ( t - t^n_i)}
+    \end{array}
+  \end{array}
+\end{equation}
+In the simplest version with $P = 1$ and $\lambda_0^m ( t) = 1$ constant we
+have
+\begin{equation}
+  \begin{array}{ll}
+    \lambda^m ( t) & = \kappa^m + \sum_{n = 1}^M \int_0^t \alpha^{m, n} e^{-
+    \beta^{m, n} ( t - s)} \mathd N_s^n \\
+    & = \kappa^m + \sum_{n = 1}^M \sum^{N_t^n - 1}_{k = 0} \alpha^{m, n} e^{-
+    \beta^{m, n} ( t - t_k^n)}\\
+    & = \kappa^m + \sum_{n = 1}^M \alpha^{m, n} \sum^{N_t^n - 1}_{k = 0} e^{-
+    \beta^{m, n} ( t - t_k^n)}\\
+    & = \kappa^m + \sum_{n = 1}^M \alpha^{m, n} B_1^{m, n} ( N^n_t)
+  \end{array} \label{mhp1}
+\end{equation}
+Rewriting (\ref{mhp1}) in vectorial notion, we have
+\begin{equation}
+  \lambda ( t) = \kappa + \int_0^t G ( t - s) \mathd N_s
+\end{equation}
+where
+\begin{equation}
+  G ( t) = (\alpha^{m, n} e^{- \beta^{m, n} ( t - s)})_{m, n = 1 \ldots M}
+\end{equation}
+Assuming stationarity gives $E [ \lambda ( t)] = \mu$ a constant vector and
+thus
+\begin{equation}
+  \begin{array}{ll}
+    \mu & = \frac{\kappa}{I - \int_0^{\infty} G ( u) \mathd u}\\
+    & = \frac{\kappa}{I - ( \frac{\alpha^{m, n}}{\beta^{m, n}})}\\
+    & = \frac{\kappa}{I - \Gamma}
+  \end{array}
+\end{equation}
+A sufficient condition for a multivariate Hawkes process to be stationary is
+that the spectral radius of the branching matrix
+\begin{equation}
+  \Gamma = \int_0^{\infty} G ( s) \mathd s = \frac{\alpha^{m, n}}{\beta^{m,
+  n}}
+\end{equation}
+be strictly less than 1. The spectral radius of the matrix $G$ is defined as
+\begin{equation}
+  \rho ( G) = \max_{a \in \mathcal{S} ( G)} | a |
+\end{equation}
+where $\mathcal{S} ( G)$ denotes the set of eigenvalues of $G$.
+
+\subsubsection{The Compensator}
+
+The compensator of the $m$-th coordinate of a multivariate Hawkes process
+between two consecutive events $t_{i - 1}^m$ and $t_i^m$ of type $m$, compared
+with the uni-variate case in Equation (\ref{hc}), is given by
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda^m ( t_{i - 1}^m, t_i^m) & = \int_{t_{i - 1}^m}^{t_i^m} \lambda^m (
+    s) \mathd s + \int_{t_{i - 1}^m}^{t_i^m} \sum_{n = 1}^M \sum_{t_k^n <
+    t_i^m} \sum_{j = 1}^P \alpha_j^{m, n} e^{- \beta_j^{m, n} ( s - t^n_k)}
+    \mathd s\\
+    & = \int_{t_{i - 1}^m}^{t_i^m} \lambda^m ( s) \mathd s + \int_{t_{i -
+    1}^m}^{t_i^m} \sum_{n = 1}^M \sum_{k = 0}^{\breve{N}^n_{t^m_i}} \sum_{j =
+    1}^P \alpha_j^{m, n} e^{- \beta_j^{m, n} ( s - t^n_k)} \mathd s\\
+    & = \int_{t_{i - 1}^m}^{t_i^m} \lambda^m ( s) \mathd s\\
+    & + \sum_{n = 1}^M \sum_{t_k^n < t_{i - 1}^m} \sum_{j = 1}^P
+    \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} [e^{- \beta_j^{m, n} ( t_{i - 1}^m
+    - t_k^n)} - e^{- \beta_j^{m, n} ( t_i^m - t_k^n)}]\\
+    & + \sum_{n = 1}^M \sum_{t_{i - 1}^m \leqslant t_k^n < t_i^m} \sum_{j =
+    1}^P \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} [1 - e^{- \beta_j^{m, n} (
+    t_i^m - t_k^n)}]\\
+    & = \int_{t_{i - 1}^m}^{t_i^m} \lambda^m ( s) \mathd s\\
+    & + \sum_{n = 1}^M \sum_{k = 0}^{\breve{N}^{}_{n, t_{m, i - 1}^{}} - 1}
+    \sum_{j = 1}^P \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} [e^{- \beta_j^{m, n}
+    ( t_{i - 1}^m - t_k^n)} - e^{- \beta_j^{m, n} ( t_i^m - t_k^n)}]\\
+    & + \sum_{n = 1}^M \sum^{\breve{N}^n_{t_i^m} - 1}_{k = \breve{N}^n_{t_{i
+    - 1}^m}} \sum_{j = 1}^P \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} [1 - e^{-
+    \beta_j^{m, n} ( t_i^m - t_k^n)}]
+  \end{array} \label{lhm}
+\end{equation}
+To save a considerable amount of computational complexity, note that we have
+the recursion
+\begin{equation}
+  \begin{array}{ll}
+    A_j^{m, n} ( i) & = \sum_{t_k^n < t_i^m} e^{- \beta_j^{m, n} ( t_i^m -
+    t_k^n)}\\
+    & = e^{- \beta_j^{m, n} ( t_i^m - t_{i - 1}^m)} A_j^{m, n} ( i - 1) +
+    \sum_{t_{i - 1}^m \leqslant t_k^n < t_i^m} e^{- \beta_j^{m, n} ( t_i^m -
+    t_k^n)}
+  \end{array}
+\end{equation}
+and rewrite (\ref{lhm}) as
+\begin{equation}
+  \begin{array}{ll}
+    \Lambda^m ( t_{i - 1}^m, t_i^m) & = \kappa^m \int_{t_{i - 1}^m}^{t_i^m}
+    \lambda_0^m ( s) \mathd s + \int_{t_{i - 1}^m}^{t_i^m} \sum_{n = 1}^M
+    \sum_{j = 1}^P \sum_{t_k^n < s} \alpha_j^{m, n} e^{- \beta_j^{m, n} ( s -
+    t_k^n)} \mathd s\\
+    & = \kappa^m \int_{t_{i - 1}^m}^{t_i^m} \lambda_0^m ( s) \mathd s\\
+    & + \sum_{n = 1}^M \sum_{j = 1}^P \frac{\alpha_j^{m, n}}{\beta_j^{m, n}}
+    \left[ (1 - e^{- \beta_j^{m, n} ( t_i^m - t_{i - 1}^m)}) \times A_j^{m, n}
+    ( i - 1) + \sum_{ t_{i - 1}^m \leqslant t_k^n < t_i^m} (1 - e^{-
+    \beta_j^{m, n} ( t_i^m - t_k^n)}) \right]\\
+    & = \kappa^m \int_{t_{i - 1}^m}^{t_i^m} \lambda_0^m ( s) \mathd s\\
+    & + \sum_{n = 1}^M \sum_{j = 1}^P \frac{\alpha_j^{m, n}}{\beta_j^{m, n}}
+    \left[ (1 - e^{- \beta_j^{m, n} ( t_i^m - t_{i - 1}^m)}) \times \left(
+    \sum_{t_k^n < t_{i - 1}^m} e^{- \beta_j^{m, n} ( t_{i - 1}^m - t_k^n)}
+    \right) + \sum_{ t_{i - 1}^m \leqslant t_k^n < t_i^m} (1 - e^{-
+    \beta_j^{m, n} ( t_i^m - t_k^n)}) \right]
+  \end{array} \label{mhl}
+\end{equation}
+where we have the initial conditions $A_j^{m, n} ( 0) = 0$.
+
+\subsubsection{Log-Likelihood}
+
+The log-likelihood of the multivariate Hawkes process can be computed as the
+sum of the log-likelihoods for each coordinate. Let
+\begin{equation}
+  \ln \mathcal{L} ( \{ t_i \}_{i = 1, \ldots, N^{}_T}) = \sum_{m = 1}^M \ln
+  \mathcal{L}^m ( \{ t_i \})
+\end{equation}
+where each term is defined by
+\begin{equation}
+  \text{} \ln \mathcal{L}^m ( \{ t_i \}) = \int_0^T ( 1 - \lambda^m ( s))
+  \mathd s + \int_0^T \ln \lambda^m ( s) \mathd N^m_s
+\end{equation}
+which in this case can be written as
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L}^m ( \{ t_i \}) & = T - \Lambda^m ( 0, T) + \sum_{i
+    = 1}^{N_T^{}} z_i^m \ln \left( \lambda_0^m ( t_i) \kappa^m + \sum_{n =
+    1}^M \sum_{j = 1}^P \sum_{t_k^n < t_i} \alpha_j^{m, n} e^{- \beta_j^{m, n}
+    ( t_i - t_k^n)} \right) \label{llmvh}\\
+    & = T - \Lambda^m ( 0, T) + \sum_{i = 1}^{N_T^m} \ln \left( \lambda_0^m (
+    t_i^m) \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P \sum_{t_k^n < t^m_i}
+    \alpha_j^{m, n} e^{- \beta_j^{m, n} ( t_i^m - t_k^n)} \right)
+  \end{array}
+\end{equation}
+where again $t_{N_T^{}} = T$ and
+\begin{equation}
+  z_i^m = \left\{ \begin{array}{ll}
+    1 & \tmop{event} t_i \tmop{of} \tmop{type} m\\
+    0 & \tmop{otherwise}
+  \end{array} \right.
+\end{equation}
+and
+\begin{equation}
+  \Lambda^m ( 0, T) = \int_0^T \lambda_{}^m ( t) \mathd t = \sum_{i =
+  1}^{N_T^m} \Lambda^m ( t_{i - 1}^m, t_i^m)
+\end{equation}
+where $\Lambda^m ( t_{i - 1}^m, t_i^m)$ is given by (\ref{mhl}). Similar to to
+the one-dimensional case, we have the recursion
+\begin{equation}
+  \begin{array}{ll}
+    R_j^{m, n} ( i) & = \sum_{t_k^n < t_j^m} e^{- \beta_j^{m, n} ( t_i^m -
+    t_k^n)}\\
+    & = \left\{ \begin{array}{ll}
+      e^{- \beta_j^{m, n} ( t_i^m - t_{i - 1}^m)} R_j^{m, n} ( i - 1) +
+      \sum_{t_{i - 1}^m \leqslant t_k^n < t_i^m} e^{- \beta_j^{m, n} ( t_i^m -
+      t_k^n)} & \tmop{if} m \neq n\\
+      e^{- \beta_j^{m, n} ( t_i^m - t_{i - 1}^m)}  ( 1 + R_j^{m, n} ( i - 1))
+      & \tmop{if} m = n
+    \end{array} \right.
+  \end{array}
+\end{equation}
+so that (\ref{llmvh}) can be rewritten as
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L}^m ( \{ t_i \}) & = T - \kappa_m \int_0^T
+    \lambda_{m, 0}^{} ( t) \mathd t - \ldots\\
+    & \ldots - \sum_{i = 1}^{N^m_T} \sum_{n = 1}^M \sum_{j = 1}^P
+    \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} \left[ (1 - e^{- \beta_j^{m, n} (
+    t_i^m - t_{i - 1}^m)}) \times A_j^{m, n} ( i - 1) + \sum_{ t_{m, i - 1}^{}
+    \leqslant t_{n, k}^{} <_{} t_{m, i}^{}} (1 - e^{- \beta_j^{m, n} ( t_{m,
+    i} - t_{n, k}^{})}) \right] + \ldots\\
+    & \ldots + \sum_{^{i = 1}}^{N_{m, T}} \ln \left( \lambda_{m, 0} ( t_{m,
+    i}^{}) \kappa_m + \sum_{n = 1}^M \sum_{j = 1}^P \alpha_j^{m, n} R_j^{m, n}
+    ( i) \right)
+  \end{array} \label{llmvh2}
+\end{equation}
+with initial conditions $R_j^{m, n} ( 0) = 0$ and $A_j^{m, n} ( 0) = 0$ where
+$T = t_N$ where $N$ is the number of observations, $M$ is the number of
+dimensions, and $P$ is the order of the model. Again, $T$ can be dropped from
+the equation for the purposes of optimization. Actually, Krzysztof Herman
+pointed out, via personal correspondence, that $\tmop{Formula}$(\ref{llmvh2})
+can be simplified to
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L}^m ( \{ t_i \}) & = T - \kappa_m \int_0^T
+    \lambda_{m, 0} ( t) \mathd t - \sum_{n = 1}^M \sum_{i = 1}^{N^{}_T}
+    \frac{\alpha_j^{m, n}}{\beta_j^{m, n}} [ (1 - e^{- \beta_j^{m, n} ( T -
+    t_i)})] +\\
+    & \ldots + \sum_{^{i = 1}}^{N^m_T} \ln \left( \lambda_{m, 0} ( t_i^m)
+    \kappa^m + \sum_{n = 1}^M \sum_{j = 1}^P \alpha_j^{m, n} R_j^{m, n} ( i)
+    \right)
+  \end{array} \label{llmvh3}
+\end{equation}
+since the integrated intensity function has the feature that
+\begin{equation}
+  \Lambda ( 0, t_N) = \sum_{i = 1}^N \Lambda ( t_{i - 1}, t_i)
+\end{equation}
+In the case of constant baseline intensity $\lambda_{m, 0} ( t) = 1$ , Formula
+(\ref{llmvh3}) simplifies to
+\begin{equation}
+  \begin{array}{ll}
+    \text{} \ln \mathcal{L}^m ( \{ t_i \}) & = T - \kappa_m T - \sum_{n = 1}^M
+    \sum_{j = 1}^P \sum_{i = 1}^{N_{m, T}} \frac{\alpha_j^{m, n}}{\beta_j^{m,
+    n}} [ (1 - e^{- \beta_j^{m, n} ( T - t_i)})] +\\
+    & \ldots + \sum_{^{i = 1}}^{N_{m, T}^{}} \ln \left( \kappa^m + \sum_{n =
+    1}^M \sum_{j = 1}^P \alpha_j^{m, n} R_j^{m, n} ( i) \right)
+  \end{array}
+\end{equation}
+\subsubsection{Prediction}\label{multivarPred}
+
+The next event arrival time of the $m$-th dimension of a multivariate Hawkes
+process having the usual exponential kernel can be predicted in the same way
+as the uni-variate process in Section (\ref{univarPred}), by solving for the
+unknown $t_{n + 1}$ in the equation
+\begin{equation}
+  \left\{ t_{n + 1}^m : \varepsilon = \Lambda^m ( t_n^m, t_{n + 1}^m) =
+  \int_{t^m_n}^{t^m_{n + 1}} \lambda^m ( s ; \mathfrak{F}_s) \mathd s
+  \label{mp} \right\}
+\end{equation}
+where $\Lambda^m ( t_n^m, t_{n + 1}^m)$ is the compensator from Equation
+(\ref{lhm}) and $\mathfrak{F}_s$ is the filtration up to time $s$ and the
+parameters of $\lambda^m$ are fixed. As is the case for the uni-variate Hawkes
+process, the idea is to average over all possible realizations of
+$\varepsilon$ (of which there are an uncountable infinity) weighted according
+to an exponential unit distribution. Another idea for more accurate prediction
+is to model the deviation of the generalized residuals from a true exponential
+distribution and then include the predicted error when calculating this
+expectation.
+
+Let the most recent arrival time of the pooled and $m$-th processes
+respectively be given by
+\begin{equation}
+  T = \max ( T_m : m = 1 \ldots M)
+\end{equation}
+\begin{equation}
+  T^{}_m = \max ( t^m_n : n = 0 \ldots N^m - 1) = t^m_{N^m - 1}
+\end{equation}
+and
+\begin{equation}
+  \breve{N}^n_{T_m}^{} = \sum_{k = 0}^{\breve{N}^n} \left\{ \begin{array}{ll}
+    1 & t^n_k < T_m\\
+    0 & 
+  \end{array} \right.
+\end{equation}
+count the number of points occurring in the $n$-th dimension before the most
+recent point of the $m$-th dimension and
+\begin{equation}
+  \breve{N} ( t_j^m < t_k^n)
+\end{equation}
+then the next arrival time for a given value of the exponential random
+variable $\varepsilon$ of the $m$-th dimension of a multivariate Hawkes
+process having the standard exponential kernel is found by solving for the
+real root of
+\begin{equation}
+  \varphi_m ( x ( \varepsilon) ; \mathcal{F}_T) = \tau_m ( x, \varepsilon) +
+  \sum_{l = 1}^P \sum_{i = 1}^M \phi_{m, i, l}  \sum_{k =
+  0}^{\breve{N}_{T_m}^i} ( \sigma_{m, i, l, k} ( x, x) - \sigma_{m, i, l, k} (
+  x, T_m)) \label{mc}
+\end{equation}
+which is similar to the uni-variate case
+\begin{equation}
+  \varphi_P ( x ( \varepsilon)) = \begin{array}{l}
+    \tau ( x, \varepsilon) + \sum_{j = 1}^P \phi_j  \sum_{k = 0}^{\breve{N}_T}
+    ( \sigma_{j, k} ( x, x) - \sigma_{j, k} ( x, T))^{}
+  \end{array}
+\end{equation}
+where
+\begin{equation}
+  \mathcal{F}_T = \{ \kappa_{\ldots}, \alpha_{\ldots}, \beta_{\ldots}, t^1_0
+  \ldots t^1_{N^1} \leqslant T, \ldots, t^m_0 \ldots t^m_{N^m} \leqslant T,
+  \ldots, t^M_0 \ldots t^M_{N^M} \leqslant T \}
+\end{equation}
+is the filtration up to time $T$, to be interpreted as the set of available
+information, here denoting fitted parameters and observed arrival times of all
+dimensions, and where
+\begin{equation}
+  \tau_m ( x, \varepsilon) = ( ( x - T_m) \kappa_m - \varepsilon) \upsilon_m
+  \eta_m ( x)
+\end{equation}
+\begin{equation}
+  \eta_m ( x) = e^{( x + T_m) \sum_{j = 1}^P \sum_{n = 1}^M \beta_{m, n, j}}
+\end{equation}
+can be seen to be similar to the uni-variate equations $\tau ( x, \varepsilon)
+= ( ( x - T) \kappa - \varepsilon) \upsilon \eta ( x)$ and $\eta ( x) = e^{( x
++ T) \sum_{k = 1}^P \beta_k}$ and
+\begin{equation}
+  \upsilon_m = \prod_{j = 1}^P \prod_{n = 1}^M \beta_{m, n, j}
+\end{equation}
+\begin{equation}
+  \phi_{m, p, k} = \prod_{j = 1}^P \prod_{n = 1}^M \left\{ \begin{array}{ll}
+    \alpha_{m, n, j} & n = p \tmop{and} j = k\\
+    \beta_{m, n, j} & n \neq p \tmop{or} j \neq k
+  \end{array} \right.
+\end{equation}
+\begin{equation}
+  \sigma_{m, i, l, k} ( x, a) = e^{\tmscript{\sum_{j = 1}^P \sum_{n = 1}^M
+  \beta_{m, n, j} \left\{ \begin{array}{ll}
+    a + t^n_k & n = i \tmop{and} j = l\\
+    x + T_n & n \neq i \tmop{orj} \neq l
+  \end{array} \right.}}
+\end{equation}
+For comparison, the uni-variate case is Equation (\ref{uc}) where
+\begin{equation}
+  \sigma_{m, k} ( x, a) = e^{( a + t_k) \beta_m + ( x + T) \underset{j \neq
+  m}{\sum_{j = 1}^P} \beta_j} = e^{\tmscript{\sum_{j = 1}^P \beta_j \left\{
+  \begin{array}{ll}
+    a + t_k & j = m\\
+    x + T & j \neq m
+  \end{array} \right.}}
+\end{equation}
+
+\section{TODO}
+
+\subsection{Links To Monstrous Moonshine (aka The Friendly Giant)}
+
+\subsubsection{Jacobian Variety}
+
+TODO: Jacobian Variety {\cite[2.1.4p123]{MonsterMoonshine}}
+
+\subsection{Motivic Cohomology}
+
+\subsubsection{Numerical Motives}
+
+TODO: {\cite{NumericalMotives92}} Motives, numerical equivalence, and
+semi-simplicity.
+
+\bibliographystyle{tm-plain}\bibliography{references.bib}
+
+\section{Appendix}
+
+\subsection{The Lambert W Function $W (k, x)$}\label{lambertW}
+
+The Lambert W function {\cite{lambertw}}{\cite{lambertwss}} is the inverse of
+$x e^x$ given by
+\begin{equation}
+  \begin{array}{ll}
+    W (z) & =\{x : x e^x = z\}\\
+    & = W (0, z)\\
+    & = 1 + (\ln (z) - 1) \exp \left( \frac{i}{2 \pi} \int_0^{\infty}
+    \frac{1}{x + 1} \ln \left( \frac{x - i \pi - \ln (x) + \ln (z)}{x + i \pi
+    - \ln (x) + \ln (z)} \right) \hspace{-0.25em} \mathd x \right)\\
+    & = \sum_{k = 1}^{\infty} \frac{(- k)^{k - 1} z^k}{k!}
+  \end{array}  \label{linv}
+\end{equation}
+where $W (a, z) \forall a \in \mathbbm{Z}, z \nin \{0, - e^{- 1} \}$ is
+\begin{equation}
+  \begin{array}{ll}
+    W (a, z) & = 1 + (2 i \pi a + \ln (  z) - 1) \exp \left( \frac{i}{2 \pi}
+    \int_0^{\infty} \frac{1}{x + 1} \ln \left( \frac{x + \left( 2
+    \hspace{0.25em} a - 1 \right) i \pi - \ln ( x) + \ln ( z)}{x + \left( 2
+    \hspace{0.25em} a + 1 \right) i \pi - \ln ( x) + \ln ( z)} \right)
+    \hspace{-0.25em} \mathd x \right)
+  \end{array} \label{lambertw}
+\end{equation}
+A generaliztion of (\ref{linv}) is solved by
+\begin{equation}
+  \begin{array}{ll}
+    \{x : x b^x = z\} & = \frac{W (\ln (b) z)}{\ln (b)}
+  \end{array}
+\end{equation}
+The W function satisifes several identities
+\begin{equation}
+  \begin{array}{lll}
+    W (z) e^{W (z)} & = z & \\
+    W (z \ln (z)) & = \ln (z) & \forall z < 1\\
+    |W (z) | & = W (|z|) & \\
+    e^{n W (z)} & = z^n W (z)^{- n}  & \\
+    \ln (W (n, z)) & = \ln (z) - W (n, z) + 2 i \pi n & \\
+    W \left( - \frac{\ln (z)}{z} \right) & = - \ln (z) & \forall z \in [0,
+    e]\\
+    \frac{W (- \ln (z))}{- \ln (z)} & = z^{z^{z^{z^{.^{.^.}}}}} & 
+  \end{array}
+\end{equation}
+where $n \in \mathbbm{Z}$. Some special values are
+\begin{equation}
+  \begin{array}{lll}
+    W ( - 1, - e^{- 1}) & = - 1 & \\
+    W (- e^{- 1}) & = - 1 & \\
+    W (e) & = 1 & \\
+    W (0) & = 0 & \\
+    W (\infty) & = \infty & \\
+    W (- \infty) & = \infty + i \pi & \\
+    W \left( - \frac{\pi}{2} \right) & = \frac{i \pi}{2} & \\
+    W \left( - \ln ( \sqrt{2}) \right) & = - \ln (2) & \\
+    W \left( - 1, - \ln ( \sqrt{2}) \right) & = - 2 \ln (2) & 
+  \end{array}
+\end{equation}
+We also have the limit
+\begin{equation}
+  \begin{array}{ll}
+    \lim_{a \rightarrow \pm \infty} \frac{W (a, x)}{a} & = 2 \pi i
+  \end{array}
+\end{equation}
+and differential
+\begin{equation}
+  \begin{array}{lll}
+    \frac{\mathd}{\mathd z} W (a, f (z)) &  & = \frac{W (a, f (z))
+    \frac{\mathd}{\mathd z} f (z)}{f (z) (1 + W (a, f (z)))}
+  \end{array}
+\end{equation}
+as well as the obvious integral
+\begin{equation}
+  \begin{array}{ll}
+    \int_0^1 W \left( - \frac{\ln (x)}{x} \right) \mathd x & = \int_0^1 - \ln
+    (x) \mathd x = 1
+  \end{array}
+\end{equation}
+
+
+\end{document}

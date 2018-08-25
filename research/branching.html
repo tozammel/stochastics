@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:x="http://www.texmacs.org/2002/extensions" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <head>
+    <title>No title</title>
+    <meta content="TeXmacs 1.99.2" name="generator"></meta>
+    <link href="http://www.texmacs.org/css/mmxdoc.css" type="text/css" rel="stylesheet"></link>
+    <script src="http://www.texmacs.org/javascript/texmacs_functions.js" language="javascript"></script>
+  </head>
+  <body>
+    <div class="tmdoc-body">
+      <table class="title-block">
+        <tr>
+          <td><table class="title-block">
+            <tr>
+              <td><font size="+3"><b>Branching ratio approximation for the
+              self-exciting Hawkes process</b></font></td>
+            </tr>
+          </table><p style="margin-top: 1em; margin-bottom: 1em">
+            <div class="compact-block">
+              <table class="title-block">
+                <tr>
+                  <td><p>
+                    <font size="-1"><p>
+                      <span style="margin-left: 0em"></span>
+                      <span style="margin-left: 1em"></span>
+                      <p>
+                        <span style="margin-left: 0pt"></span>
+                        <table style="display: inline; vertical-align: -0.55em">
+                          <tbody><tr>
+                            <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-bottom: 0.75em; padding-top: 0.75em; width: 100%"><center>
+                              <p style="margin-top: 0.5em; margin-bottom: 0.5em">
+                                <span style="margin-left: 0pt"></span>
+                                <table style="display: inline; vertical-align: -0.55em">
+                                  <tbody><tr>
+                                    <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-bottom: 0em; padding-top: 0em; width: 100%"><center>
+                                      <p>
+                                        <class style="font-variant: small-caps">Stephen J.
+                                        Hardiman</class>
+                                      </p>
+                                    </center></td>
+                                  </tr></tbody>
+                                </table>
+                              </p>
+                            </center></td>
+                          </tr></tbody>
+                        </table>
+                      </p>
+                      <span style="margin-left: 1em"></span>
+                      <span style="margin-left: 1em"></span>
+                      <p>
+                        <span style="margin-left: 0pt"></span>
+                        <table style="display: inline; vertical-align: -0.55em">
+                          <tbody><tr>
+                            <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-bottom: 0.75em; padding-top: 0.75em; width: 100%"><center>
+                              <p style="margin-top: 0.5em; margin-bottom: 0.5em">
+                                <span style="margin-left: 0pt"></span>
+                                <table style="display: inline; vertical-align: -0.55em">
+                                  <tbody><tr>
+                                    <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-bottom: 0em; padding-top: 0em; width: 100%"><center>
+                                      <p>
+                                        <class style="font-variant: small-caps">Jean-Philippe
+                                        Bouchaud</class>
+                                      </p>
+                                    </center></td>
+                                  </tr></tbody>
+                                </table>
+                              </p>
+                            </center></td>
+                          </tr></tbody>
+                        </table>
+                      </p>
+                      <span style="margin-left: 1em"></span>
+                    </p></font>
+                  </p></td>
+                </tr>
+              </table>
+            </div>
+          </p><table class="title-block">
+            <tr>
+              <td><i></i></td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+      <div style="margin-left: 60px">
+        <div style="margin-right: 60px">
+          <p>
+            <font size="-1"><table style="width: 100%">
+              <tbody><tr>
+                <td style="width: 100%; padding-left: 0pt; padding-right: 0pt; border-top: 1px solid; border-bottom: 1px solid"><p>
+                  We introduce a model-independent approximation for the
+                  branching ratio of Hawkes self-exciting point processes. Our
+                  estimator requires knowing only the mean and variance of the
+                  event count in a sufficiently large time window, statistics
+                  that are readily obtained from empirical data. The method we
+                  propose greatly simplifies the estimation of the Hawkes
+                  branching ratio, recently proposed as a proxy for market
+                  endogeneity and formerly estimated using numerical
+                  likelihood maximisation. We employ our new method to support
+                  recent theoretical and experimental results indicating that
+                  the best fitting Hawkes model to describe S&amp;P futures
+                  price changes is in fact critical (now and in the recent
+                  past) in light of the long memory of financial market
+                  activity.
+                </p></td>
+              </tr></tbody>
+            </table></font>
+          </p>
+        </div>
+      </div>
+      <h2>Table of contents</h2>
+      <div style="text-indent: 0em">
+        <div class="compact-block">
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>1.<span style="margin-left: 1em"></span>The self-exciting Hawkes Process</b>
+            <span style="margin-left: 5mm"></span> <a href="#auto-1">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>2.<span style="margin-left: 1em"></span>Maximum likelihood estimation</b> <span
+            style="margin-left: 5mm"></span> <a href="#auto-2">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>3.<span style="margin-left: 1em"></span>A mean-variance estimator for the
+            branching ratio <img src="branching-1.png" style="vertical-align: -0.384px"></img></b> <span style="margin-left: 5mm"></span>
+            <a href="#auto-3">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>4.<span style="margin-left: 1em"></span>Numerical simulations &amp;
+            Implementation notes</b> <span style="margin-left: 5mm"></span> <a href="#auto-4">?</a>
+          </p>
+          <p>
+            4.1.<span style="margin-left: 1em"></span>Choice of window size W <span style="margin-left: 5mm"></span>
+            <a href="#auto-6">?</a>
+          </p>
+          <p>
+            4.2.<span style="margin-left: 1em"></span>Power-law kernel <span style="margin-left: 5mm"></span> <a
+            href="#auto-8">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>5.<span style="margin-left: 1em"></span>Empirical applications</b> <span style="margin-left: 5mm"></span>
+            <a href="#auto-10">?</a>
+          </p>
+          <p>
+            5.1.<span style="margin-left: 1em"></span>Flash-crash revisited <span style="margin-left: 5mm"></span>
+            <a href="#auto-11">?</a>
+          </p>
+          <p>
+            5.2.<span style="margin-left: 1em"></span>Reflexivity : 1998 - 2013 <span style="margin-left: 5mm"></span>
+            <a href="#auto-14">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>6.<span style="margin-left: 1em"></span>Summary</b> <span style="margin-left: 5mm"></span> <a href="#auto-17">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>Acknowledgements</b> <span style="margin-left: 5mm"></span> <a href="#auto-18">?</a>
+          </p>
+          <p style="margin-top: 1em; margin-bottom: 0.5em">
+            <b>Bibliography</b> <span style="margin-left: 5mm"></span> <a href="#auto-19">?</a>
+          </p>
+        </div>
+      </div>
+      <h2 id="auto-1">1.<span style="margin-left: 1em"></span>The self-exciting Hawkes Process</h2>
+      <p>
+        The Hawkes model [<a href="#bib-hawkes">1</a>, <a href="#bib-hawkes2">2</a>] is a simple and
+        powerful framework for simulating or modelling the arrival of events
+        which cluster in time (e.g. earthquake shocks and aftershocks, neural
+        spike trains and transactions on financial markets). In one dimension,
+        the model is a counting process <img src="branching-2.png" style="vertical-align: -4.48px"></img> with an
+        intensity <img src="branching-3.png" style="vertical-align: -4.48px"></img> (the expected number of events per
+        unit time) given by a constant term <img src="branching-4.png" style="vertical-align: -3.968px"></img> and a
+        &lsquo;self-exciting' term which is a function of the event history.
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-5.png" style="vertical-align: -15.503px" id="eq:hawkes"></img></td>
+          <td align="right">(1)</td>
+        </tr>
+      </table>
+      <p>
+        This self-exciting term gives rise to event clustering through an
+        endogenous feedback: past events contribute to the rate of future
+        events. <img src="branching-6.png" style="vertical-align: -4.48px"></img> is the &ldquo;influence kernel&rdquo;
+        which decides the weight to attribute to events which occurred at a
+        lag <img src="branching-7.png" style="vertical-align: -0.512px"></img> in the past. The base intensity <img src="branching-4.png"
+        style="vertical-align: -3.968px"></img> and the kernel shape <img src="branching-8.png" style="vertical-align: -4.48px"></img> are
+        parameters to be varied. A popular choice for the kernel is the
+        exponential function <img src="branching-9.png" style="vertical-align: -4.48px"></img> [<a href="#bib-filimonov">3</a>, <a href="#bib-ozaki">4</a>]
+        but in general the kernel to be used should depend on the application
+        or the dynamics of the data to be modelled. Note that for <img src="branching-10.png"
+        style="vertical-align: -4.48px"></img> the model reduces to a Poisson process with constant
+        intensity <img src="branching-4.png" style="vertical-align: -3.968px"></img>.
+      </p>
+      <p>
+        By taking the expectation of both sides of Eq. (<a href="#eq:hawkes">1</a>) and
+        assuming stationarity (i.e. a finite average event rate <img src="branching-11.png"
+        style="vertical-align: -4.48px"></img>), we can express the average event rate of the process
+        as <img src="branching-12.png" style="vertical-align: -4.48px"></img> where <img src="branching-13.png" style="vertical-align: -5.875px"></img>. One can
+        create a direct mapping between the Hawkes process and the well known
+        branching process [<a href="#bib-harris">5</a>] in which exogenous
+        &ldquo;mother&rdquo; events occur with an intensity <img src="branching-4.png" style="vertical-align: -3.968px"></img>
+        and may give rise to <img src="branching-14.png" style="vertical-align: -0.384px"></img> additional endogenous
+        &ldquo;daughter&rdquo; events, where <img src="branching-14.png" style="vertical-align: -0.384px"></img> is drawn
+        from a Poisson distribution with mean <img src="branching-1.png" style="vertical-align: -0.384px"></img>. These
+        in turn may themselves give birth to more &ldquo;daughter&rdquo;
+        events, etc.
+      </p>
+      <p>
+        The value <img src="branching-1.png" style="vertical-align: -0.384px"></img>, which corresponds with the integral
+        of the Hawkes kernel is the branching ratio, determines the behaviour
+        of the model. If <img src="branching-15.png" style="vertical-align: -0.896px"></img>, meaning that each event
+        typically triggers at least one extra event, then the process is
+        non-stationary and may explode in finite time [<a href="#bib-commodityreflexivity">6</a>].
+        However, for <img src="branching-16.png" style="vertical-align: -0.896px"></img>, the process is stationary and
+        has proven useful in modelling the clustered arrival of events in a
+        wide variety of applications including neurobiology [<a href="#bib-neurobiology">7</a>],
+        social dynamics [<a href="#bib-social">8</a>, <a href="#bib-crime">9</a>] and geophysics [<a
+        href="#bib-earthquakes1">10</a>, <a href="#bib-earthquakes2">11</a>]. The Hawkes model has also seen many
+        recent applications to finance [<a href="#bib-bauwens">13</a>, <a href="#bib-hawkesvolatility">14</a>, <a
+        href="#bib-bormetti">12</a>], especially as a means of modelling the very
+        high-frequency events affecting the limit-order book of financial
+        exchanges [<a href="#bib-bacry">15</a>, <a href="#bib-hawkesmicrostructure">19</a>, <a href="#bib-bacrypricetrades">16</a>, <a href="#bib-toke">17</a>,
+        <a href="#bib-dafonseca">18</a>].
+      </p>
+      <p>
+        One novel application of the Hawkes framework to finance is as a means
+        of measuring market endogeneity or &lsquo;reflexivity' in financial
+        markets [<a href="#bib-filimonov">3</a>, <a href="#bib-commodityreflexivity">6</a>]. In [<a href="#bib-filimonov">3</a>], the
+        authors consider mid-price changes in the E-mini S&amp;P Futures
+        contract between 1998 and 2010 and observe that the branching ratio
+        <img src="branching-1.png" style="vertical-align: -0.384px"></img> of the best-fitting exponential kernel model
+        has been increasing steadily over this period, from <img src="branching-17.png" style="vertical-align: -0.768px"></img>
+        in 1998 to <img src="branching-18.png" style="vertical-align: -0.768px"></img> in 2010 (see our Fig. 6 below).
+        They argue that this observation implies that the market has become
+        more reflexive in recent years with the rise of high frequency and
+        algorithmic trading and is therefore more prone to market instability
+        and so-called &ldquo;flash crashes&rdquo;.
+      </p>
+      <p>
+        In [<a href="#bib-criticalreflexivity">20</a>], however, we have argued that due to the presence
+        of long-range dependence in the event rate of mid-price changes
+        (detectable in both 1998 and 2011) as one extends the window of
+        observation, the best fitting stationary Hawkes model must in fact be
+        critical, i.e. have a branching ratio <img src="branching-19.png" style="vertical-align: -0.384px"></img>. This is
+        backed up by theoretical arguments and empirical measurements on
+        market data.
+      </p>
+      <p>
+        Let us however insist that this conclusion only holds if one believes
+        that Hawkes processes provide an exact representation of the reality
+        of markets. It is very plausible that the dynamics of markets is more
+        complicated (and involves, for example, non-linearities absent from
+        the Hawkes process defined by Eq. (<a href="#eq:hawkes">1</a>)), but that the best
+        way to represent this dynamics within the framework of Hawkes
+        processes is to choose <img src="branching-19.png" style="vertical-align: -0.384px"></img> with a long-ranged
+        influence kernel.
+      </p>
+      <p>
+        In this article we introduce a simple approximation for the branching
+        ratio of the Hawkes process which allows us to faithfully reproduce
+        the results of [<a href="#bib-filimonov">3</a>] which proposes the statistic as a
+        measure of market instability and as a crash prediction metric. The
+        interest of our approximation lies in its great simplicity: one need
+        only estimate the mean and variance of the event count in a
+        sufficiently large time window. The approximation also avoids a number
+        of pitfalls [<a href="#bib-apparentcriticality">21</a>] inherent to the significantly more
+        complex approach [<a href="#bib-ozaki">4</a>] employed in [<a href="#bib-filimonov">3</a>].
+      </p>
+      <p>
+        The estimator accepts one parameter, a time window size, <img src="branching-20.png"
+        style="vertical-align: -0.64px"></img>, during which we measure the mean and variance of the
+        event count. We note that when we employ our estimator to mid-price
+        changes in the S&amp;P electronic futures market with a fixed window
+        size <img src="branching-20.png" style="vertical-align: -0.64px"></img> then the branching ratio estimate
+        obtained increases over time as reported in [<a href="#bib-filimonov">3</a>]. If,
+        however, we allow the window size to scale appropriately (halving in
+        size every 18 months) to adapt to the decreasing latency of
+        interactions on the market we recover a constant branching ratio
+        estimate as proposed in [<a href="#bib-criticalreflexivity">20</a>]. This result reiterates the
+        need for a scale-invariant, or at least scale-sensitive means of
+        measuring the &lsquo;reflexivity' of financial market events.
+      </p>
+      <h2 id="auto-2">2.<span style="margin-left: 1em"></span>Maximum likelihood estimation</h2>
+      <p>
+        Given observed events (e.g. mid-price changes) at times <img src="branching-21.png"
+        style="vertical-align: -3.456px"></img> in an interval <img src="branching-22.png" style="vertical-align: -4.48px"></img> one can fit the
+        Hawkes model by maximising the log-likelihood [<a href="#bib-rubin">22</a>, <a
+        href="#bib-ozaki">4</a>] over the set of parameters <img src="branching-23.png" style="vertical-align: -0.384px"></img>.
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-24.png" style="vertical-align: -15.631px" id="eq:loglikelihood"></img></td>
+          <td align="right">(2)</td>
+        </tr>
+      </table>
+      <p>
+        In the case of the exponential kernel
+        <img src="branching-25.png" style="vertical-align: -4.48px"></img>
+        . In practice, the model parameters
+        <img src="branching-26.png" style="vertical-align: -4.48px"></img>
+        which maximise this log-likelihood are obtained with numerical
+        techniques due to the lack of a closed form solution
+        <p>
+          <font size="-1"><div align="justify">
+            <div style="margin-left: 0px">
+              <div style="margin-right: 0px">
+                <class style="font-style: normal"><p>
+                  1. Note that the method above is not the only method
+                  proposed to fit the parameters of the Hawkes process for
+                  financial applications, indeed a recent publication [<a
+                  href="#bib-dafonseca">18</a>] proposes a fast albeit still parametric method
+                  for fitting the multivariate exponential Hawkes process.
+                </p></class>
+              </div>
+            </div>
+          </div></font>
+        </p>
+        <span style="margin-left: 0em"></span>
+        <a id="footnr-1"></a>
+        <sup><class style="font-style: normal"><a href="#footnote-1">1</a></class></sup>
+        . The branching ratio estimate is then
+        <img src="branching-27.png" style="vertical-align: -4.48px"></img>
+        .
+      </p>
+      <p>
+        However, there are a number of pitfalls to using this procedure as a
+        means of estimating the Hawkes branching ratio <img src="branching-28.png" style="vertical-align: -5.875px"></img>
+        [<a href="#bib-apparentcriticality">21</a>]. Arguably the most important of which is that any
+        estimate of <img src="branching-1.png" style="vertical-align: -0.384px"></img> made in this manner will be
+        heavily dependent on the choice of kernel model (e.g. exponential,
+        power-law, etc.) It may be that the chosen model cannot satisfactorily
+        describe the observed events, hence the meaning of the branching ratio
+        extracted from the maximum likelihood method is questionable.
+      </p>
+      <p>
+        Care must also be taken when employing this method in the presence of
+        imperfect event data as illustrated in [<a href="#bib-apparentcriticality">21</a>]. In one of
+        their figures, the authors present a (negative) log-likelihood surface
+        which features two minima (one local, and one global). The global
+        log-likelihood minimum does in fact little more than describe packet
+        clustering inside the millisecond which arises from the manner in
+        which events arriving at the exchange at different times are bundled
+        and recorded with the same timestamp. Subsequent randomisation of the
+        timestamps inside a short time interval (in this case, one
+        millisecond) creates a spurious high frequency correlation, that makes
+        the global minimum irrelevant. The local log-likelihood minimum, which
+        is in fact a better fit to the &lsquo;true' lower frequency dynamics,
+        does a poor job at explaining the spurious high frequency clustering
+        and is punished with a lower log-likelihood. Indeed, when the authors
+        of [<a href="#bib-apparentcriticality">21</a>] choose to fit this local minimum they corroborate
+        results presented in [<a href="#bib-criticalreflexivity">20</a>].
+      </p>
+      <p>
+        We believe it is therefore essential to have additional checks (such
+        as non-parametric methods [<a href="#bib-bacry">15</a>]) at one's disposal to
+        support results obtained from likelihood maximisation. To address the
+        pitfalls in branching ratio estimation that arise from the model
+        choice we propose a simple model-independent tool for branching ratio
+        approximation, in the next section, which accurately reproduces
+        previous results of [<a href="#bib-filimonov">3</a>] and also indicates the
+        criticality of the relevant Hawkes process which describes the market.
+      </p>
+      <h2 id="auto-3">3.<span style="margin-left: 1em"></span>A mean-variance estimator for the
+      branching ratio <img src="branching-1.png" style="vertical-align: -0.384px"></img></h2>
+      <p>
+        We begin with a general expression relating the Fourier transform of
+        the kernel function to the Fourier transform of the auto-covariance 
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-29.png" style="vertical-align: -11.7305px"></img></td>
+          <td align="right">(3)</td>
+        </tr>
+      </table>
+      <p>
+        of the event rate. (see [<a href="#bib-hawkes">1</a>, <a href="#bib-bacry">15</a>] for a
+        derivation).
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-30.png" style="vertical-align: -21.644px"></img></td>
+          <td align="right">(4)</td>
+        </tr>
+      </table>
+      <p>
+        Setting <img src="branching-31.png" style="vertical-align: -0.64px"></img> we obtain a relation between the
+        branching ratio, the average event rate and the integral of the
+        auto-covariance (in the stationary case <img src="branching-32.png" style="vertical-align: -2.56px"></img>)
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-33.png" style="vertical-align: -20.1695px" id="basic"></img></td>
+          <td align="right">(5)</td>
+        </tr>
+      </table>
+      <p>
+        Therefore, to deduce the branching ratio of the stationary Hawkes
+        process, we need only find the value of <img src="branching-34.png" style="vertical-align: -0.256px"></img> and
+        <img src="branching-35.png" style="vertical-align: -7.2455px"></img>. Estimating <img src="branching-34.png" style="vertical-align: -0.256px"></img> is
+        trivial, it is given by the empirical average number of events per
+        unit time. To estimate <img src="branching-35.png" style="vertical-align: -7.2455px"></img>, we consider the
+        variance of the total event count <img src="branching-36.png" style="vertical-align: -2.9605px"></img> in a window
+        of length <img src="branching-20.png" style="vertical-align: -0.64px"></img>. Theoretically, this is given by:
+      </p>
+      <center>
+        <img src="branching-37.png" style="vertical-align: -103.2345px" id="eq:bounded"></img>
+      </center>
+      <p>
+        We then note that provided:
+      </p>
+      <ol>
+        <li>
+          <p>
+            <img src="branching-38.png" style="vertical-align: -4.48px"></img> for <img src="branching-39.png" style="vertical-align: -4.48px"></img>
+          </p>
+        </li>
+        <li>
+          <p>
+            <img src="branching-40.png" style="vertical-align: -1.408px"></img> such that <img src="branching-41.png" style="vertical-align: -4.48px"></img> for all
+            <img src="branching-42.png" style="vertical-align: -4.48px"></img>
+          </p>
+        </li>
+      </ol>
+      <p>
+        then
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-43.png" style="vertical-align: -15.503px" id="eq:covariance"></img></td>
+          <td align="right">(7)</td>
+        </tr>
+      </table>
+      <p>
+        and we find, using Eq. (<a href="#basic">5</a>):
+      </p>
+      <center>
+        <img src="branching-44.png" style="vertical-align: -16.9355px" id="eq:simple"></img>
+      </center>
+      <p>
+        where <img src="branching-45.png" style="vertical-align: -3.968px"></img> is the average number of events falling
+        in a window of size <img src="branching-20.png" style="vertical-align: -0.64px"></img>. The above expression has
+        a very intuitive interpretation. When the variance is equal to the
+        event rate, the process is obeying Poisson statistics and <img src="branching-46.png"
+        style="vertical-align: -0.64px"></img>. Any increase in the variance above the event rate
+        indicates some positive correlations and, within a Hawkes framework, a
+        positive branching ratio.
+      </p>
+      <p>
+        Note from Eq. (<a href="#eq:bounded">6</a>) that <img src="branching-47.png" style="vertical-align: -4.48px"></img> is a
+        biased estimator for <img src="branching-48.png" style="vertical-align: -7.2455px"></img> and for a general <img
+        src="branching-20.png" style="vertical-align: -0.64px"></img> will fall short of its theoretical value. This
+        means that Eq. (<a href="#eq:simple">8</a>) will generally under-estimate the
+        branching ratio and only become exact in the limit <img src="branching-49.png" style="vertical-align: -0.64px"></img>.
+      </p>
+      <p>
+        In practice, to estimate the branching ratio of an empirical sample of
+        total length <img src="branching-50.png" style="vertical-align: -0.64px"></img> we substitute the mean and
+        variance term in Eq. (<a href="#eq:simple">8</a>) by their sample estimates:
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-51.png" style="vertical-align: -18.2235px"></img></td>
+          <td align="right">(9)</td>
+        </tr>
+      </table>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-52.png" style="vertical-align: -18.2235px"></img></td>
+          <td align="right">(10)</td>
+        </tr>
+      </table>
+      <p>
+        An estimate obtained in this fashion is asymptotically convergent for
+        large <img src="branching-53.png" style="vertical-align: -1.408px"></img>, i.e. <img src="branching-54.png" style="vertical-align: -1.408px"></img>. For a
+        fixed window size <img src="branching-20.png" style="vertical-align: -0.64px"></img> we can always ensure that
+        our estimate of the variance of <img src="branching-36.png" style="vertical-align: -2.9605px"></img> is within a
+        desired maximum error with a desired minimum probability by increasing
+        <img src="branching-55.png" style="vertical-align: -0.256px"></img> and therefore the number of observations <img
+        src="branching-56.png" style="vertical-align: -0.384px"></img> of <img src="branching-36.png" style="vertical-align: -2.9605px"></img>. Furthermore, we can
+        make Eq. (<a href="#eq:covariance">7</a>) exact by allowing <img src="branching-20.png" style="vertical-align: -0.64px"></img> to
+        be arbitrarily large.
+      </p>
+      <p>
+        Note, however, that for any finite <img src="branching-56.png" style="vertical-align: -0.384px"></img>, the
+        average of <img src="branching-57.png" style="vertical-align: -0.384px"></img> over all possible realisations of
+        the process is in fact <img src="branching-58.png" style="vertical-align: -0.384px"></img>! This is because a
+        value <img src="branching-59.png" style="vertical-align: -3.5955px"></img> is always possible with a non zero
+        probability. For this reason we choose to present the median of our
+        estimates.
+      </p>
+      <h2 id="auto-4">4.<span style="margin-left: 1em"></span>Numerical simulations &amp; Implementation
+      notes</h2>
+      <p>
+        In Fig. <a href="#fig:varying">7</a>, we test the estimation procedure described in
+        the previous section on a number of simulated exponential Hawkes
+        processes with a variety of branching ratios. To do this we fix <img
+        src="branching-60.png" style="vertical-align: -3.584px"></img> but vary <img src="branching-61.png" style="vertical-align: -0.384px"></img> in the range <img
+        src="branching-62.png" style="vertical-align: -2.56px"></img>. We choose a base intensity <img src="branching-63.png" style="vertical-align: -3.968px"></img>
+        such that each process has the same average event rate <img src="branching-64.png"
+        style="vertical-align: -0.256px"></img>. We simulate the process for a time <img src="branching-65.png" style="vertical-align: -0.512px"></img>
+        using simulation Algorithm 1 described in [<a href="#bib-moller2005perfect">23</a>]. This
+        procedure is prone to edge effects so we disregard the initial period
+        of size <img src="branching-66.png" style="vertical-align: -0.512px"></img> to ensure the process is close to
+        stationarity in the period studied.
+      </p>
+      <p>
+        We estimate the branching ratio with a window size <img src="branching-67.png" style="vertical-align: -0.64px"></img>
+        significantly larger than the time-scale of correlation of our process
+        <img src="branching-68.png" style="vertical-align: -3.584px"></img>. However, the window size chosen is also
+        sufficiently small that we have a significant number of independent
+        observations <img src="branching-69.png" style="vertical-align: -4.48px"></img> with which to make a reliable
+        estimate of the variance of <img src="branching-36.png" style="vertical-align: -2.9605px"></img>. We see very good
+        agreement between our branching ratio estimates and the input
+        branching ratio of the simulation, see Fig. <a href="#fig:varying">7</a>.
+      </p>
+      <p>
+        Note however, that our approximation systematically underestimates the
+        branching ratio since our finite window size does not completely cover
+        the region of support of the autocorrelation function. This is
+        particularly visible in Fig. <a href="#fig:varying">7</a> for large <img src="branching-1.png" style="vertical-align: -0.384px"></img>.
+        We now investigate the effect of window size on the estimate obtained.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-70.png" height="254" width="431.8"></img></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 1. </b><a id="auto-5"></a><a id="fig:varying"></a> Applying the
+              mean-variance branching ratio approximation method to a
+              simulated Hawkes process with exponential kernel form and scale
+              parameter <img src="branching-71.png" style="vertical-align: -2.944px"></img>. <img src="branching-72.png" style="vertical-align: -0.384px"></img> is
+              varied to decide the branching ratio, and <img src="branching-73.png" style="vertical-align: -3.2px"></img>
+              is varied to keep the average event rate fixed at <img src="branching-74.png"
+              style="vertical-align: -0.512px"></img>. The process is simulated for <img src="branching-75.png" style="vertical-align: -0.512px"></img>
+              and the branching ratio estimate is made using Equation <a href="#eq:simple">8</a>
+              with a window size <img src="branching-76.png" style="vertical-align: -0.512px"></img>. The mean and
+              [5%,95%] confidence bands are calculated over an ensemble of 100
+              process for each parameter set.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <h3 id="auto-6">4.1.<span style="margin-left: 1em"></span>Choice of window size W</h3>
+      <p>
+        For Eq. (<a href="#eq:covariance">7</a>) to be accurate, we must choose a large <img
+        src="branching-20.png" style="vertical-align: -0.64px"></img>. However for a finite sample size, large <img src="branching-20.png"
+        style="vertical-align: -0.64px"></img> implies small <img src="branching-77.png" style="vertical-align: -4.48px"></img> and therefore less
+        statistical power with which to estimate the variance of the event
+        count <img src="branching-36.png" style="vertical-align: -2.9605px"></img>. This compromise is illustrated in Fig.
+        <a href="#fig:varying">7</a> for which we simulate an ensemble of exponential Hawkes
+        processes with parameters <img src="branching-78.png" style="vertical-align: -0.768px"></img>, <img src="branching-60.png" style="vertical-align: -3.584px"></img>
+        and <img src="branching-79.png" style="vertical-align: -3.968px"></img>. We note that for increasing window size
+        <img src="branching-20.png" style="vertical-align: -0.64px"></img>, the confidence bands of our estimate converge
+        on the expected value of <img src="branching-80.png" style="vertical-align: -0.768px"></img>.
+      </p>
+      <p>
+        However when we make the window size too large, we suffer significant
+        error coming from the estimation of the variance. For the practical
+        implementation of this procedure to empirical data we recommend a
+        choice of window size sufficiently large to capture the bulk of
+        autocorrelation present in the event rate, but sufficiently small that
+        one can expect to obtain reliable estimates of the variance of the
+        event count in that window.
+      </p>
+      <p>
+        One can approximate upper and lower confidence intervals on the
+        branching ratio estimate from a single realisation of a time series by
+        bootstrap re-sampling. Indeed the simple variance estimator of Eq. (<a
+        href="#eq:variance">?</a>) is not optimal and can be improved with the use of
+        over-lapping windows or, for example, a Monte Carlo sampling scheme
+        which selects random windows with replacement.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-81.png" height="254" width="431.8"></img></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 2. </b><a id="auto-7"></a><a id="fig:varying"></a> Applying the
+              mean-variance branching ratio approximation method to simulated
+              data. Shaded area represents the [5%,95%] confidence interval.
+              We note that the branching ratio estimate converges on the
+              expected value of <img src="branching-82.png" style="vertical-align: -0.896px"></img> as the window size
+              increases. For very large W, we lack a sufficient number of
+              event count observations to estimate the variance of <img src="branching-83.png"
+              style="vertical-align: -2.612px"></img> with precision and the confidence interval grows
+              considerably.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <h3 id="auto-8">4.2.<span style="margin-left: 1em"></span>Power-law kernel</h3>
+      <p>
+        Finally we test the estimation procedure on a (near) critical
+        power-law Hawkes process, a type suggested in some recent publications
+        as a good fit to financial event data [<a href="#bib-bacry">15</a>, <a href="#bib-criticalreflexivity">20</a>].
+        Specifically, we consider a kernel with an Omori law form:
+      </p>
+      <table width="100%">
+        <tr>
+          <td width="100%" align="center"><img src="branching-84.png" style="vertical-align: -18.3885px"></img></td>
+          <td align="right">(11)</td>
+        </tr>
+      </table>
+      <p>
+        In the critical case of <img src="branching-19.png" style="vertical-align: -0.384px"></img> with <img src="branching-85.png" style="vertical-align: -0.896px"></img>
+        this process will exhibit long-range dependence, with an
+        autocorrelation function <img src="branching-86.png" style="vertical-align: -4.48px"></img> decaying
+        asymptotically as a power law: <img src="branching-87.png" style="vertical-align: -4.48px"></img> [<a href="#bib-bremaud">24</a>,
+        <a href="#bib-criticalreflexivity">20</a>]. The integral of the autocorrelation function is
+        therefore divergent for large <img src="branching-7.png" style="vertical-align: -0.512px"></img>'s and the
+        variance of the event count in a window of size <img src="branching-20.png" style="vertical-align: -0.64px"></img>
+        grows with as <img src="branching-88.png" style="vertical-align: -3.29px"></img>. The <img src="branching-89.png" style="vertical-align: -13.1595px"></img>
+        term in Eq. <a href="#eq:simple">8</a> will in this case not converge to a finite
+        constant for large <img src="branching-20.png" style="vertical-align: -0.64px"></img> but rather shrink to zero,
+        leading to <img src="branching-90.png" style="vertical-align: -0.64px"></img>.
+      </p>
+      <p>
+        We have simulated such a process with exponent <img src="branching-91.png" style="vertical-align: -0.768px"></img>
+        and cut-off parameter <img src="branching-92.png" style="vertical-align: -2.9605px"></img>. To allow our simulation
+        to attain a stationary state with an average event rate <img src="branching-93.png"
+        style="vertical-align: -0.256px"></img>, we make our process very near critical by choosing <img
+        src="branching-94.png" style="vertical-align: -0.64px"></img> and <img src="branching-95.png" style="vertical-align: -3.968px"></img>. We simulate for a very
+        long period <img src="branching-96.png" style="vertical-align: -0.512px"></img> and discard the first <img src="branching-97.png"
+        style="vertical-align: -0.64px"></img> to ensure the process is close to stationarity (<img
+        src="branching-98.png" style="vertical-align: -0.896px"></img> at <img src="branching-97.png" style="vertical-align: -0.64px"></img>). In Fig. <a href="#fig:power">3</a>
+        we present the results of branching ratio estimation using Eq. (<a
+        href="#eq:simple">8</a>) with a variety of window sizes <img src="branching-20.png" style="vertical-align: -0.64px"></img>.
+      </p>
+      <p>
+        We note that the branching ratio estimate we obtain is very much
+        dependent on the choice of window size used. To capture all the
+        correlation present in the process and obtain estimates close to the
+        the true input value <img src="branching-94.png" style="vertical-align: -0.64px"></img> we must probe the
+        correlation on very large scales, by choosing a very large value for
+        <img src="branching-20.png" style="vertical-align: -0.64px"></img>. The branching ratio obtained indeed varies
+        with window size according to the law <img src="branching-99.png" style="vertical-align: -0.64px"></img>, in a
+        similar way to the integral of the kernel <img src="branching-100.png" style="vertical-align: -4.48px"></img>, see
+        Fig. <a href="#fig:power">3</a>.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-101.png" height="254" width="431.8"></img> </td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 3. </b><a id="auto-9"></a><a id="fig:power"></a> <img src="branching-102.png" style="vertical-align: -0.384px"></img>
+              for simulated near-critical (<img src="branching-103.png" style="vertical-align: -2.944px"></img>) power-law
+              Hawkes processes. The value for <img src="branching-102.png" style="vertical-align: -0.384px"></img> that we
+              obtain approximately scales as <img src="branching-104.png" style="vertical-align: -0.512px"></img> for large
+              <img src="branching-105.png" style="vertical-align: -0.512px"></img>. Note that the simulated process is only
+              &lsquo;near-critical' (with a branching ratio <img src="branching-106.png" style="vertical-align: -0.512px"></img>)
+              so for very large <img src="branching-105.png" style="vertical-align: -0.512px"></img> the curve levels off
+              and converges to <img src="branching-107.png" style="vertical-align: -0.512px"></img>.3
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <h2 id="auto-10">5.<span style="margin-left: 1em"></span>Empirical applications</h2>
+      <h3 id="auto-11">5.1.<span style="margin-left: 1em"></span>Flash-crash revisited</h3>
+      <p>
+        To demonstrate the effectiveness of this simple estimator we have
+        repeated the flash-crash day branching ratio analysis of Filimonov
+        &amp; Sornette [<a href="#bib-filimonov">3</a>]. We consider non-overlapping periods
+        of 10 minutes in the hours of trading before and just after the
+        flash-crash. For each 10-minute period, we calculate the sample mean
+        and variance of the number of mid-price changes in the 60 windows of
+        length <img src="branching-108.png" style="vertical-align: -0.64px"></img> contained. The resulting values are
+        plugged into Eq. (<a href="#eq:simple">8</a>) to obtain an approximation of the
+        branching ratio for each period. The results are presented in Fig. <a
+        href="#fig:flashcrash">4</a>.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-109.png" height="254" width="431.8"></img></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 4. </b><a id="auto-12"></a><a id="fig:flashcrash"></a> Reproduction of the
+              flash-crash branching ratio analysis of Filimonov &amp; Sornette
+              using the mean-variance estimator. Our results compare well with
+              those obtained by maximising the likelihood of the exponential
+              model (with 1-second randomisation). The dashed line is the
+              E-mini S&amp;P price. The points are placed at the end of the
+              10-minute period for which the branching ratio estimate is made.
+              The shaded region is a [10%,90%] confidence interval generated
+              by bootstrap re-sampling.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <p>
+        Note that this simple estimator is biased, and for a general <img src="branching-20.png"
+        style="vertical-align: -0.64px"></img>, will typically underestimate the value of <img src="branching-35.png"
+        style="vertical-align: -7.2455px"></img> and therefore the branching ratio. Since we consider a
+        window size <img src="branching-108.png" style="vertical-align: -0.64px"></img> we have systematically
+        underestimated <img src="branching-1.png" style="vertical-align: -0.384px"></img> in Figure <a href="#fig:flashcrash">4</a> as
+        measurements of <img src="branching-110.png" style="vertical-align: -4.48px"></img> on this data have support
+        outside the interval <img src="branching-111.png" style="vertical-align: -4.48px"></img> <class style="font-family: Times New Roman">&mdash;</class>
+        there is still significant autocorrelation in the event rate at scales
+        longer than <img src="branching-112.png" style="vertical-align: -0.512px"></img>.
+      </p>
+      <p>
+        However, we have identified that a window size
+        <img src="branching-20.png" style="vertical-align: -0.64px"></img>
+        of the order of approximately 10 to 30 seconds produces estimates of
+        the branching ratio on our data in line with those obtained by ML
+        fitting to the exponential model after intra-second randomisation (the
+        method applied in [
+        <a href="#bib-filimonov">3</a>
+        ].) Note that we do not fix
+        <img src="branching-113.png" style="vertical-align: -3.584px"></img>
+        in our ML fit but let it settle naturally at the value which
+        maximises the log-likelihood. We observe that this value
+        <img src="branching-114.png" style="vertical-align: -3.584px"></img>
+        is very much dependent on the period of randomisation
+        <p>
+          <font size="-1"><div align="justify">
+            <div style="margin-left: 0px">
+              <div style="margin-right: 0px">
+                <class style="font-style: normal"><p>
+                  2. To address the limited precision of the event data in [<a
+                  href="#bib-filimonov">3</a>], the authors randomise timestamps uniformly
+                  inside the second that they are reported.
+                </p></class>
+              </div>
+            </div>
+          </div></font>
+        </p>
+        <span style="margin-left: 0em"></span>
+        <a id="footnr-2"></a>
+        <sup><class style="font-style: normal"><a href="#footnote-2">2</a></class></sup>
+        of the timestamps. When we randomise timestamps inside each
+        millisecond we obtain
+        <img src="branching-115.png" style="vertical-align: -3.584px"></img>
+        for periods in 2010 but randomisation at larger intervals (e.g. the
+        intra-second randomisation of Filimonov &amp; Sornette) prevents
+        <img src="branching-116.png" style="vertical-align: -3.584px"></img>
+        from exceeding values of the order of magnitude of the scale of
+        randomisation.
+      </p>
+      <p>
+        Note that since our results with <img src="branching-108.png" style="vertical-align: -0.64px"></img> correspond
+        well with those obtained using the methods of Filimonov &amp; Sornette
+        [<a href="#bib-filimonov">3</a>], their procedure must <em>also</em> underestimate the
+        branching ratio. To converge on the true <img src="branching-1.png" style="vertical-align: -0.384px"></img> in
+        expectation, we must take Eq. (<a href="#eq:simple">8</a>) in the limit of <img
+        src="branching-49.png" style="vertical-align: -0.64px"></img>. We do just this in Fig. <a href="#fig:n">5</a> for
+        mid-price changes of the E-mini S&amp;P Futures contract in 2010. One
+        notes that as the window size increases, the branching ratio converges
+        to <img src="branching-19.png" style="vertical-align: -0.384px"></img> in a non-trivial way. As reported in [<a
+        href="#bib-criticalreflexivity">20</a>] for the structure of the kernel at short and long
+        time-scales, two regimes are detectable with a transition around five
+        minutes. The branching ratio asymptotically tends towards <img src="branching-117.png"
+        style="vertical-align: -0.512px"></img> with a scaling exponent <img src="branching-118.png" style="vertical-align: -0.768px"></img>
+        compatible with the value of <img src="branching-119.png" style="vertical-align: -0.768px"></img> estimated in [<a
+        href="#bib-criticalreflexivity">20</a>] for a 14-year period. Note that in taking the limit <img
+        src="branching-49.png" style="vertical-align: -0.64px"></img> we consider variation in the event rate at
+        significant time-scales to be explained by the stationary Hawkes
+        model.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-120.png" height="254" width="431.8"></img></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 5. </b><a id="auto-13"></a><a id="fig:n"></a> <img src="branching-102.png" style="vertical-align: -0.384px"></img>,
+              the estimate of the branching ratio as a function of window size
+              for E-mini S&amp;P mid-price changes in 2010. The mean and
+              variance of <img src="branching-83.png" style="vertical-align: -2.612px"></img> are estimated on the full
+              year. The change of power-law behaviour occurs around <img src="branching-121.png"
+              style="vertical-align: -0.512px"></img> seconds. Note that we have &lsquo;stitched'
+              together all 5-minute bins of regular trading hours (09:30 to
+              16:00 EST) that contain at least one event (this solves a
+              problem arising from missing data at half-days). We have then
+              de-trended the intra-day seasonality by dividing each 5-minute
+              event count by a normalised average event rate for each
+              5-minutes of the trading day calculated on the full year.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <h3 id="auto-14">5.2.<span style="margin-left: 1em"></span>Reflexivity : 1998 - 2013</h3>
+      <p>
+        Using the mean-variance estimator, we can also easily reproduce the
+        result of [<a href="#bib-filimonov">3</a>] that claims to demonstrate that reflexivity
+        has been increasing in the S&amp;P futures market since 1998. To do
+        this we set our only parameter <img src="branching-122.png" style="vertical-align: -0.768px"></img> and estimate
+        the branching ratio in periods of 15-minutes. In Fig. <a href="#fig:19982013">6</a>
+        we present the 2-month medians of these estimates beside the median of
+        the branching ratio estimate obtained using the exponential maximum
+        likelihood approach after intra-second randomisation.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-123.png" height="254" width="431.8"></img> </td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 6. </b><a id="auto-15"></a><a id="fig:19982013"></a> Estimates of the
+              branching ratio for 15-minute windows using the method of
+              Filimonov &amp; Sornette [<a href="#bib-filimonov">3</a>] and estimates using
+              the mean-variance estimator with a window size of <img src="branching-124.png"
+              style="vertical-align: -0.512px"></img>. Note that our MLE results differ somewhat from
+              the plot presented in [<a href="#bib-filimonov">3</a>]. We attribute this to
+              differences in the data source or identification of mid-price
+              changes.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <p>
+        Since we expect the minimum time-scale of correlation in the data to
+        have decreased over the past decades (due to decreasing latency with
+        advancing technology) we now re-perform the experiment but with a
+        window size <img src="branching-125.png" style="vertical-align: -2.8325px"></img> that follows Moore's law in such a
+        way to keep the average number of events in <img src="branching-125.png" style="vertical-align: -2.8325px"></img>
+        roughly constant. More precisely the window size <img src="branching-125.png" style="vertical-align: -2.8325px"></img>
+        halves every 18 months; this describes well the increase in the high
+        frequency activity of markets, see [<a href="#bib-criticalreflexivity">20</a>]. The results of
+        this experiment are presented in Fig. <a href="#fig:varying">7</a> and confirm that
+        the kernel integral is approximately invariant over time provided that
+        the measurement window <img src="branching-125.png" style="vertical-align: -2.8325px"></img> is appropriately
+        rescaled to account for the changing speed of interactions in the
+        market. We find this quite remarkable, as this suggests that the
+        amount of self-reflexivity in financial markets is <i>scale
+        invariant</i>, and has not significantly increased due to
+        high-frequency trading.
+      </p>
+      <table style="width: 100%">
+        <tbody><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em"><img src="branching-126.png" height="254" width="431.8"></img></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; height: 0.5em"></td>
+        </tr><tr>
+          <td style="text-align: center; padding-left: 0em; padding-right: 0em; padding-left: 1.5em; padding-right: 1.5em"><p>
+            <font size="-1"><p>
+              <b>Figure 7. </b><a id="auto-16"></a><a id="fig:varying"></a> Estimates of the
+              branching ratio on 2-month periods using the mean-variance
+              estimator with a window size that follows Moore's law: <img src="branching-127.png"
+              style="vertical-align: -2.4705px"></img> with <img src="branching-128.png" style="vertical-align: -3.712px"></img> and <img src="branching-129.png" style="vertical-align: -2.4705px"></img>.
+              We again stitch together periods of regular trading hours and
+              de-trend the event count by the intra-day U-shape for each year.
+              When <img src="branching-105.png" style="vertical-align: -0.512px"></img> is appropriately rescaled, the
+              branching ratio estimate is approximately constant through time,
+              for all values of <img src="branching-130.png" style="vertical-align: -2.4705px"></img>, and tends to <img
+              src="branching-131.png" style="vertical-align: -0.512px"></img> for large <img src="branching-130.png" style="vertical-align: -2.4705px"></img>.
+            </p></font>
+          </p></td>
+        </tr></tbody>
+      </table>
+      <h2 id="auto-17">6.<span style="margin-left: 1em"></span>Summary</h2>
+      <p>
+        We have introduced a simple estimator for the branching ratio of
+        Hawkes self-exciting point-process. The method is straight-forward to
+        apply to empirical event data since it requires only a rudimentary
+        calculation on the mean and variance of the event rate. The estimator
+        does not suffer from the bias inherent to the contentious question of
+        the choice of kernel in the likelihood maximisation approach, and
+        furthermore it avoids the need for complicated numerical minimisation
+        techniques.
+      </p>
+      <p>
+        Despite its simplicity, our estimator can accurately reproduce results
+        obtained for the branching ratio using this prior method. The
+        estimator presented is indeed a biased estimator, but it can be made
+        asymptotically unbiased in the limit of large <img src="branching-20.png" style="vertical-align: -0.64px"></img>
+        and <img src="branching-55.png" style="vertical-align: -0.256px"></img>, for which we observe that the branching
+        ratio for empirical mid-price changes of the E-mini S&amp;P futures
+        contract approaches unity in line with previous theoretical and
+        empirical results [<a href="#bib-criticalreflexivity">20</a>].
+      </p>
+      <p>
+        Furthermore we demonstrate that if the window size is allowed to scale
+        with Moore's law and adapt to the changing speed of interaction in the
+        market over the past fifteen years, then the branching ratio
+        approximation recovered is constant supporting prior observations of
+        the invariance of the Hawkes kernel and branching ratio over time in
+        [<a href="#bib-criticalreflexivity">20</a>].
+      </p>
+      <p>
+        Finally, let us reiterate the caveat made above: the Hawkes analysis
+        of the activity in financial markets leads to the conclusion that the
+        process must be critical. However, it might well be that the dynamics
+        of markets is more complicated and requires non-linearities absent
+        from the Hawkes process defined by Eq. (<a href="#eq:hawkes">1</a>)). More work on
+        this issue would be highly interesting, and is in progress in our
+        group.
+      </p>
+      <h2 id="auto-18">Acknowledgements</h2>
+      <p>
+        We thank V. Filimonov for many productive discussions about this
+        topic. We are also indebted to N. Bercot, J. Kockelkoren, M. Potters,
+        I. Mastromatteo, P. Blanc and J. Donier for interesting and useful
+        comments.
+      </p>
+      <h2 id="auto-19">Bibliography</h2>
+      <div style="text-indent: 0em">
+        <div class="compact-block">
+          <font size="-1"><dl>
+            <p>
+              <p>
+                <strong>[1]  </strong><a id="bib-hawkes"></a>A. G. Hawkes, &ldquo;Spectra
+                of some mutually exciting point processes,&rdquo;
+                <i>Biometrika</i> <b>58</b> (1970) 83.
+              </p>
+              <p>
+                <strong>[2]  </strong><a id="bib-hawkes2"></a>A. G. Hawkes, &ldquo;Point
+                spectra of some mutually exciting point processes,&rdquo;
+                <i>Journal of the Royal Statistical Society, Series B</i>
+                <b>33</b> no. 3, (1971) 438&ndash;443.
+              </p>
+              <p>
+                <strong>[3]  </strong><a id="bib-filimonov"></a>V. Filimonov and D. Sornette,
+                &ldquo;Quantifying reflexivity in financial markets: Toward a
+                prediction of flash crashes,&rdquo; <i>Physical Review E</i>
+                <b>85</b> (2012) 056108.
+              </p>
+              <p>
+                <strong>[4]  </strong><a id="bib-ozaki"></a>T. Ozaki, &ldquo;Maximum
+                likelihood estimation of Hawkes self-exciting point
+                process,&rdquo; <i>Annals of the Institute of Statistical
+                Mathematics</i> <b>31</b> (1979) 145&ndash;155. Part B.
+              </p>
+              <p>
+                <strong>[5]  </strong><a id="bib-harris"></a>T. E. Harris, <i>The Theory
+                of Branching Processes</i>. Dover Publications, 2002.
+              </p>
+              <p>
+                <strong>[6]  </strong><a id="bib-commodityreflexivity"></a>V. Filimonov, D. Bicchetti,
+                N. Maystre, and D. Sornette, &ldquo;Quantification of the high
+                level of endogeneity and of structural regime shifts in
+                commodity markets.,&rdquo; <i>Journal of International Money
+                and Finance</i> <b>42</b> (April, 2013) 174&ndash;192.
+              </p>
+              <p>
+                <strong>[7]  </strong><a id="bib-neurobiology"></a>V. Pernice, B. Staude, S.
+                Cardanobile, and S. Rotter, &ldquo;How structure determines
+                correlations in neuronal networks,&rdquo; <i>PLOS
+                Computational Biology</i> <b>7</b> (2011) e1002059.
+              </p>
+              <p>
+                <strong>[8]  </strong><a id="bib-social"></a>R. Crane and D. Sornette,
+                &ldquo;Robust dynamic classes revealed by measuring the
+                response function of a social system,&rdquo; <i>Journal of the
+                American Statistical Association</i> <b>105</b> no. 41,
+                (September, 2008) 15649&ndash;15653.
+              </p>
+              <p>
+                <strong>[9]  </strong><a id="bib-crime"></a>G. O. Mohler, M. B. Short, P.
+                J. Brantingham, F. P. Schoenberg, and G. E. Tita,
+                &ldquo;Self-exciting point process modeling of crime,&rdquo;
+                <i>Journal of the American Statistical Association</i>
+                <b>106</b> (2011) 100&ndash;108.
+              </p>
+              <p>
+                <strong>[10]  </strong><a id="bib-earthquakes1"></a>Y. Ogata, &ldquo;Seismicity
+                analysis through point-process modeling: A review,&rdquo;
+                <i>Pure and Applied Geopysics</i> <b>155</b> no. 2-4, (1999)
+                471&ndash;507.
+              </p>
+              <p>
+                <strong>[11]  </strong><a id="bib-earthquakes2"></a>A. Helmstetter and D.
+                Sornette, &ldquo;Subcritical and supercritical regimes in
+                epidemic models of earthquake aftershocks,&rdquo; <i>Journal
+                of Geophysical Research: Solid Earth</i> <b>107</b> no. B10,
+                (2002) ESE 10&ndash;1&ndash;ESE 10&ndash;21.
+              </p>
+              <p>
+                <strong>[12]  </strong><a id="bib-bormetti"></a>G. Bormetti, L. M.
+                Calcagnile, M. Treccani, F. Corsi, S. Marmi, and F. Lillo,
+                &ldquo;Modelling systemic cojumps with Hawkes factor
+                models,&rdquo; <a href="http://arxiv.org/abs/1301.6141"><tt>arXiv:1301.6141
+                [q-fin.ST]</tt></a>.
+              </p>
+              <p>
+                <strong>[13]  </strong><a id="bib-bauwens"></a>L. Bauwens and N. Hautsch,
+                &ldquo;Modelling financial high frequency data using point
+                processes,&rdquo; in <i>Handbook of Financial Time Series</i>,
+                T. Mikosch, J.-P. Kreiss, R. A. Davis, and T. G. Andersen,
+                eds. Springer Berlin Heidelberg, 2009.
+              </p>
+              <p>
+                <strong>[14]  </strong><a id="bib-hawkesvolatility"></a>P. Embrechts, T. Liniger,
+                and L. Lin, &ldquo;Multivariate Hawkes processes: an
+                application to financial data,&rdquo; <i>Journal of Applied
+                Probability</i> <b>48A</b> (August, 2011) 367&ndash;378.
+              </p>
+              <p>
+                <strong>[15]  </strong><a id="bib-bacry"></a>E. Bacry, K. Dayri, and
+                J.-F. Muzy, &ldquo;Non-parametric kernel estimation for
+                symmetric Hawkes processes. application to high frequency
+                financial data,&rdquo; <i>European Physics Journal B</i>
+                <b>85</b> no. 5, (2012) 157.
+              </p>
+              <p>
+                <strong>[16]  </strong><a id="bib-bacrypricetrades"></a>E. Bacry and J.-F. Muzy,
+                &ldquo;Hawkes model for price and trades high-frequency
+                dynamics,&rdquo; <i>Quantitative Finance</i> <b>14</b> (2014)
+                1147&ndash;1166.
+              </p>
+              <p>
+                <strong>[17]  </strong><a id="bib-toke"></a>I. M. Toke and F. Pomponio,
+                &ldquo;Modelling trades-through in a limit order book using
+                Hawkes processes,&rdquo; <i>Economics: The Open-Access,
+                Open-Assessment E-Journal</i> <b>6</b> (2012) .
+              </p>
+              <p>
+                <strong>[18]  </strong><a id="bib-dafonseca"></a>J. D. Fonseca and R.
+                Zaatour, &ldquo;Hawkes process: Fast calibration, application
+                to trade clustering, and diffusive limit,&rdquo; <i>Journal of
+                Futures Markets</i> (2013) .
+              </p>
+              <p>
+                <strong>[19]  </strong><a id="bib-hawkesmicrostructure"></a>E. Bacry, S. Delattre, M.
+                Hoffmann, and J.-F. Muzy, &ldquo;Modeling microstructure noise
+                with mutually exciting point processes,&rdquo; <i>Quantitative
+                Finance</i> <b>13</b> (2012) 65&ndash;77.
+              </p>
+              <p>
+                <strong>[20]  </strong><a id="bib-criticalreflexivity"></a>S. J. Hardiman, N. Bercot,
+                and J.-P. Bouchaud, &ldquo;Critical reflexivity in financial
+                markets: a Hawkes process analysis,&rdquo; <i>The European
+                Physical Journal B</i> <b>86</b> no. 10, (2013) 1&ndash;9.
+              </p>
+              <p>
+                <strong>[21]  </strong><a id="bib-apparentcriticality"></a>V. Filimonov and D.
+                Sornette, &ldquo;Apparent criticality and calibration issues
+                in the Hawkes self-excited point process model: application to
+                high-frequency financial data,&rdquo; <a href="http://arxiv.org/abs/1308.6756"><tt>arXiv:1308.6756
+                [q-fin.ST]</tt></a>.
+              </p>
+              <p>
+                <strong>[22]  </strong><a id="bib-rubin"></a>I. Rubin, &ldquo;Regular
+                point processes and their detection,&rdquo; <i>IEEE
+                Transactions on Information Theory</i> <b>IT-18</b>
+                (September, 1972) 547&ndash;557.
+              </p>
+              <p>
+                <strong>[23]  </strong><a id="bib-moller2005perfect"></a>J. M&oslash;ller and J. G.
+                Rasmussen, &ldquo;Perfect simulation of hawkes
+                processes,&rdquo; <i>Advances in Applied Probability</i>
+                (2005) 629&ndash;646.
+              </p>
+              <p>
+                <strong>[24]  </strong><a id="bib-bremaud"></a>P. Br&eacute;maud and L.
+                Massouli&eacute;, &ldquo;Hawkes branching point processes
+                without ancestors,&rdquo; <i>Journal of Applied
+                Probabability</i> <b>38</b> no. 1, (2001) 122&ndash;135.
+              </p>
+            </p>
+          </dl></font>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

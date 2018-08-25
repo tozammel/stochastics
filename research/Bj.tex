@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage[american]{babel}
+\geometry{letterpaper}
+
+\begin{document}
+
+$\begin{array}{ll}
+  B_j ( i) & = \sum_{k = 1}^{i - 1} e^{- \beta_j ( t_i - t_k)}\\
+  & = e^{- \beta_j ( t_i - t_{i - 1})}_{} \sum_{k = 1}^{i - 1} e^{- \beta_j (
+  t_{i - 1} - t_k)}\\
+  & = e^{- \beta_j ( t_i - t_{i - 1})}_{}  \left( 1 + \sum_{k = 1}^{i - 2}
+  e^{- \beta_j ( t_{i - 1} - t_k)} \right)\\
+  & = e^{- \beta_j ( t - t_{i - 1})} ( 1 + B_j ( i - 1))
+\end{array}$
+
+\end{document}

@@ -1,0 +1,123 @@
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{10}
+
+\bibitem{hawkes}
+A.~G. {H}awkes, ``Spectra of some mutually exciting point processes,'' {\em
+  Biometrika} {\bfseries 58} (1970) 83.
+
+\bibitem{hawkes2}
+A.~G. {H}awkes, ``Point spectra of some mutually exciting point processes,''
+  {\em Journal of the Royal Statistical Society, Series B} {\bfseries 33}
+  no.~3, (1971) 438--443.
+
+\bibitem{filimonov}
+V.~Filimonov and D.~Sornette, ``Quantifying reflexivity in financial markets:
+  Toward a prediction of flash crashes,'' {\em Physical Review E} {\bfseries
+  85} (2012) 056108.
+
+\bibitem{ozaki}
+T.~Ozaki, ``Maximum likelihood estimation of {H}awkes self-exciting point
+  process,'' {\em Annals of the Institute of Statistical Mathematics}
+  {\bfseries 31} (1979) 145--155. Part B.
+
+\bibitem{harris}
+T.~E. Harris, {\em The Theory of Branching Processes}.
+\newblock Dover Publications, 2002.
+
+\bibitem{commodityreflexivity}
+V.~Filimonov, D.~Bicchetti, N.~Maystre, and D.~Sornette, ``Quantification of
+  the high level of endogeneity and of structural regime shifts in commodity
+  markets.,'' {\em Journal of International Money and Finance} {\bfseries 42}
+  (April, 2013) 174--192.
+
+\bibitem{neurobiology}
+V.~Pernice, B.~Staude, S.~Cardanobile, and S.~Rotter, ``How structure
+  determines correlations in neuronal networks,'' {\em PLOS Computational
+  Biology} {\bfseries 7} (2011) e1002059.
+
+\bibitem{social}
+R.~Crane and D.~Sornette, ``Robust dynamic classes revealed by measuring the
+  response function of a social system,'' {\em Journal of the American
+  Statistical Association} {\bfseries 105} no.~41, (September, 2008)
+  15649--15653.
+
+\bibitem{crime}
+G.~O. Mohler, M.~B. Short, P.~J. Brantingham, F.~P. Schoenberg, and G.~E. Tita,
+  ``Self-exciting point process modeling of crime,'' {\em Journal of the
+  American Statistical Association} {\bfseries 106} (2011) 100--108.
+
+\bibitem{earthquakes1}
+Y.~Ogata, ``Seismicity analysis through point-process modeling: A review,''
+  {\em Pure and Applied Geopysics} {\bfseries 155} no.~2-4, (1999) 471--507.
+
+\bibitem{earthquakes2}
+A.~Helmstetter and D.~Sornette, ``Subcritical and supercritical regimes in
+  epidemic models of earthquake aftershocks,'' {\em Journal of Geophysical
+  Research: Solid Earth} {\bfseries 107} no.~B10, (2002) ESE 10--1--ESE 10--21.
+
+\bibitem{bormetti}
+G.~Bormetti, L.~M. Calcagnile, M.~Treccani, F.~Corsi, S.~Marmi, and F.~Lillo,
+  ``Modelling systemic cojumps with {H}awkes factor models,''
+  \href{http://arxiv.org/abs/1301.6141}{{\ttfamily arXiv:1301.6141
+  [q-fin.ST]}}.
+
+\bibitem{bauwens}
+L.~Bauwens and N.~Hautsch, ``Modelling financial high frequency data using
+  point processes,'' in {\em Handbook of Financial Time Series}, T.~Mikosch,
+  J.-P. Kreiss, R.~A. Davis, and T.~G. Andersen, eds.
+\newblock Springer Berlin Heidelberg, 2009.
+
+\bibitem{hawkesvolatility}
+P.~Embrechts, T.~Liniger, and L.~Lin, ``Multivariate {H}awkes processes: an
+  application to financial data,'' {\em Journal of Applied Probability}
+  {\bfseries 48A} (August, 2011) 367--378.
+
+\bibitem{bacry}
+E.~Bacry, K.~Dayri, and J.-F. Muzy, ``Non-parametric kernel estimation for
+  symmetric {H}awkes processes. application to high frequency financial data,''
+  {\em European Physics Journal B} {\bfseries 85} no.~5, (2012) 157.
+
+\bibitem{bacrypricetrades}
+E.~Bacry and J.-F. Muzy, ``{H}awkes model for price and trades high-frequency
+  dynamics,'' {\em Quantitative Finance} {\bfseries 14} (2014) 1147--1166.
+
+\bibitem{toke}
+I.~M. Toke and F.~Pomponio, ``Modelling trades-through in a limit order book
+  using {H}awkes processes,'' {\em Economics: The Open-Access, Open-Assessment
+  E-Journal} {\bfseries 6} (2012) .
+
+\bibitem{dafonseca}
+J.~D. Fonseca and R.~Zaatour, ``{H}awkes process: Fast calibration, application
+  to trade clustering, and diffusive limit,'' {\em Journal of Futures Markets}
+  (2013) .
+
+\bibitem{hawkesmicrostructure}
+E.~Bacry, S.~Delattre, M.~Hoffmann, and J.-F. Muzy, ``Modeling microstructure
+  noise with mutually exciting point processes,'' {\em Quantitative Finance}
+  {\bfseries 13} (2012) 65--77.
+
+\bibitem{criticalreflexivity}
+S.~J. Hardiman, N.~Bercot, and J.-P. Bouchaud, ``Critical reflexivity in
+  financial markets: a {H}awkes process analysis,'' {\em The European Physical
+  Journal B} {\bfseries 86} no.~10, (2013) 1--9.
+
+\bibitem{apparentcriticality}
+V.~Filimonov and D.~Sornette, ``Apparent criticality and calibration issues in
+  the {H}awkes self-excited point process model: application to high-frequency
+  financial data,'' \href{http://arxiv.org/abs/1308.6756}{{\ttfamily
+  arXiv:1308.6756 [q-fin.ST]}}.
+
+\bibitem{rubin}
+I.~Rubin, ``Regular point processes and their detection,'' {\em IEEE
+  Transactions on Information Theory} {\bfseries IT-18} (September, 1972)
+  547--557.
+
+\bibitem{moller2005perfect}
+J.~M{\o}ller and J.~G. Rasmussen, ``Perfect simulation of hawkes processes,''
+  {\em Advances in Applied Probability} (2005) 629--646.
+
+\bibitem{bremaud}
+P.~Br\'emaud and L.~Massouli\'e, ``{H}awkes branching point processes without
+  ancestors,'' {\em Journal of Applied Probabability} {\bfseries 38} no.~1,
+  (2001) 122--135.
+
+\end{thebibliography}\endgroup

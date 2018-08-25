@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{letterpaper}
+
+\begin{document}
+
+\begin{tabular}{|l|l|l|l|l|l|}
+  \hline
+  Type Index & Submit or Cancel & Buy or Sell & Immediate Execution & Moves
+  Price & Description\\
+  \hline
+  1 & S & B & Y(MO) & Y & Buy@mkt moves ask\\
+  \hline
+  2 & S & S & Y(MO) & Y & Sale@mkt moves bid\\
+  \hline
+  3 & S & B & N(LO) & Y & Bid between quotes\\
+  \hline
+  4 & S & S & N(LO) & Y & Ask between the quotes\\
+  \hline
+  5 & S & B & Y(MO) & N & Buy@mkt does NOT move ask\\
+  \hline
+  6 & S & S & Y(MO) & N & Sale@mkt does NOT move bid\\
+  \hline
+  7 & S & B & N(LO) & N & Bid at or below inside bid\\
+  \hline
+  8 & S & S & N(LO) & N & Ask at or above inside ask\\
+  \hline
+  9 & C & B & - & - & Cancelled \ bid\\
+  \hline
+  10 & C & S & - & - & Cancelled ask\\
+  \hline
+\end{tabular}
+
+\
+
+\end{document}
