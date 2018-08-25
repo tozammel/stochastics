@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import fastmath.Vector;
 
-public class TradeTick extends ArchivableEvent implements Serializable
+public class TradeTick extends MarkedPoint implements Serializable
 {
   @Override
   public void setStrings()

@@ -25,7 +25,7 @@ import fastmath.Vector;
 import stochastic.annotations.Units;
 import util.DateUtils;
 
-public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<ArchivableEvent>, Comparable<TradingProcess>
+public class TradingProcess implements Iterable<MarkedPoint>, Iterator<MarkedPoint>, Comparable<TradingProcess>
 {
   public static double openTime = 9.5;
 
@@ -77,7 +77,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     date = new GregorianCalendar(year, month, day).getTime();
   }
 
-  private ArchivableEvent
+  private MarkedPoint
           getNextEvent(String symbol,
                        Vector points,
                        RandomAccessFile indices) throws IOException
@@ -85,13 +85,13 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     i++;
     try
     {
-      ArchivableEvent.EventType type = ArchivableEvent.EventType.values()[indices.readByte()];
+      MarkedPoint.EventType type = MarkedPoint.EventType.values()[indices.readByte()];
       int pos = indices.readInt();
       int len = indices.readInt();
 
       Vector point = points.slice(pos, pos + len);
 
-      ArchivableEvent ae = null;
+      MarkedPoint ae = null;
       switch (type)
       {
       case TwoSidedQuote:
@@ -112,7 +112,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     }
   }
 
-  public <E extends ArchivableEvent>
+  public <E extends MarkedPoint>
          Stream<E>
          eventStream(Class<E> eventClass)
   {
@@ -131,7 +131,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
     return eventStream(TwoSidedQuote.class);
   }
 
-  public Stream<ArchivableEvent>
+  public Stream<MarkedPoint>
          tradeAndQuoteStream()
   {
     return stream().filter(event -> event instanceof TradeTick || event instanceof TwoSidedQuote);
@@ -145,7 +145,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   }
 
   @Override
-  public ArchivableEvent
+  public MarkedPoint
          next()
   {
     try
@@ -159,7 +159,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   }
 
   @Override
-  public Iterator<ArchivableEvent>
+  public Iterator<MarkedPoint>
          iterator()
   {
     reset();
@@ -175,7 +175,7 @@ public class TradingProcess implements Iterable<ArchivableEvent>, Iterator<Archi
   }
 
   @SuppressWarnings("unchecked")
-  public <E extends ArchivableEvent>
+  public <E extends MarkedPoint>
          Stream<E>
          stream()
   {

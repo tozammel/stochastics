@@ -2,7 +2,7 @@ package stochastic.pointprocesses.finance;
 
 import fastmath.Vector;
 
-public class TwoSidedQuote extends ArchivableEvent
+public class TwoSidedQuote extends MarkedPoint
 {
   /**
    * 

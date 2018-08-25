@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class LevelDetails extends ArchivableEvent implements Cloneable, Serializable
+public abstract class LevelDetails extends MarkedPoint implements Cloneable, Serializable
 {
   public static final int FIELDCNT = 6;
   

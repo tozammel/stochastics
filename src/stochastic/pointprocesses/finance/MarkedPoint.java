@@ -12,7 +12,7 @@ import util.ThreadLocalDateFormat;
  * 
  * @author crow
  */
-public abstract class ArchivableEvent implements HasSymbol, Serializable
+public abstract class MarkedPoint implements HasSymbol, Serializable
 {
 
   private static final long serialVersionUID = 1L;
@@ -55,12 +55,12 @@ public abstract class ArchivableEvent implements HasSymbol, Serializable
    */
   private static final long MILLISECONDS_IN_SECOND = 1000;
 
-  protected <E extends ArchivableEvent> ArchivableEvent(Class<E> eventClass, int n)
+  protected <E extends MarkedPoint> MarkedPoint(Class<E> eventClass, int n)
   {
     marks = new Vector( n );
   }
 
-  protected <E extends ArchivableEvent> ArchivableEvent(Class<E> eventClass, Vector point)
+  protected <E extends MarkedPoint> MarkedPoint(Class<E> eventClass, Vector point)
   {
     marks = point;
     setStrings();

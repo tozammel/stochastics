@@ -2,7 +2,7 @@ package stochastic.pointprocesses.finance;
 
 import java.io.Serializable;
 
-public class ClosePrice extends ArchivableEvent implements Serializable
+public class ClosePrice extends MarkedPoint implements Serializable
 {
   public static enum Fields
   {

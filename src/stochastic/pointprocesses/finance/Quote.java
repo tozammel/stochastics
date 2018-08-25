@@ -2,7 +2,7 @@ package stochastic.pointprocesses.finance;
 
 import java.io.Serializable;
 
-public abstract class Quote extends ArchivableEvent implements Serializable
+public abstract class Quote extends MarkedPoint implements Serializable
 {
   public static final int FIELDCNT = 7;
   
